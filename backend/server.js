@@ -167,17 +167,19 @@ app.post("/update-donation", authenticateRole(["NGO"]), async (req, res) => {
     );
 
     // If donation is accepted, create a notification for the donor
-    if (status === "Accepted") {
-      const donorEmail = updatedDonation.donorEmail;
-      const message = `Your donation has been accepted by ${ngoName} at ${ngoContact}. Thank you for your generosity!`;
+    const donorEmail = updatedDonation.donorEmail;
+    const message =
+      status === "Accepted"
+        ? `Your donation has been accepted by ${ngoName} at ${ngoContact}. Thank you for your generosity!`
+        : `Your donation has been rejected by ${ngoName} at ${ngoContact}. Please consider donating again in the future.`;
 
-      const notification = new Notification({
-        donorEmail,
-        message,
-      });
+    // Create notification for the donor
+    const notification = new Notification({
+      donorEmail,
+      message,
+    });
 
-      await notification.save();
-    }
+    await notification.save();
 
     res.status(200).json({ message: "Donation updated successfully", updatedDonation });
   } catch (error) {
@@ -185,6 +187,27 @@ app.post("/update-donation", authenticateRole(["NGO"]), async (req, res) => {
     res.status(500).json({ message: "Error updating donation" });
   }
 });
+
+
+    // If donation is accepted, create a notification for the donor
+//     if (status === "Accepted") {
+//       const donorEmail = updatedDonation.donorEmail;
+//       const message = `Your donation has been accepted by ${ngoName} at ${ngoContact}. Thank you for your generosity!`;
+
+//       const notification = new Notification({
+//         donorEmail,
+//         message,
+//       });
+
+//       await notification.save();
+//     }
+
+//     res.status(200).json({ message: "Donation updated successfully", updatedDonation });
+//   } catch (error) {
+//     console.error("❌ Error updating donation:", error);
+//     res.status(500).json({ message: "Error updating donation" });
+//   }
+// });
 
 // ✅ Get Donor Notifications
 app.get("/donor-notifications", authenticateRole(["Donor"]), async (req, res) => {
