@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "./Navbar.css"; // Import your CSS file
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -12,13 +13,28 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-800 p-4">
-      <div className="flex justify-between items-center">
-        <div className="text-white text-xl">Food Donation System</div>
-        <div>
-          {role === "Donor" && <Link to="/donor-dashboard" className="text-white mr-4">Donor Dashboard</Link>}
-          {role === "NGO" && <Link to="/ngo-dashboard" className="text-white mr-4">NGO Dashboard</Link>}
-          <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded">
+    <nav className="navbar">
+      <div className="nav-content">
+        <div className="logo">MealMate 🤮</div>
+        <div className="dashboard-link">
+          {role === "Donor" && (
+            <Link to="/donor-dashboard" className="dashboard-item">
+              Donor Dashboard
+            </Link>
+          )}
+          {role === "NGO" && (
+            <Link to="/ngo-dashboard" className="dashboard-item">
+              NGO Dashboard
+            </Link>
+          )}
+        </div>
+        <div className="profile-logout">
+          <img
+            src="https://www.w3schools.com/howto/img_avatar.png"
+            alt="Profile"
+            className="profile-icon"
+          />
+          <button onClick={handleLogout} className="logout-btn">
             Logout
           </button>
         </div>
