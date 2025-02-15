@@ -188,6 +188,37 @@ app.post("/update-donation", authenticateRole(["NGO"]), async (req, res) => {
   }
 });
 
+// ✅ NGO - Request Food (Send Notification to All Donors)
+app.post("/request-food", authenticateRole(["NGO"]), async (req, res) => {
+  try {
+    const { ngoName, ngoEmail, ngoContact } = req.body;
+
+    if (!ngoName || !ngoEmail || !ngoContact) {
+      return res.status(400).json({ message: "NGO details are required" });
+    }
+
+    // Create a notification for all donors
+    const message = `${ngoName} needs food donations. Please consider donating! Contact: ${ngoContact}`;
+
+    // Fetch all donors and send them a notification
+    const donors = await User.find({ role: "Donor" });
+
+    for (const donor of donors) {
+      const notification = new Notification({
+        donorEmail: donor.email,
+        message,
+      });
+      await notification.save();
+    }
+
+    res.status(200).json({ message: "Food request sent to all donors" });
+  } catch (error) {
+    console.error("❌ Error sending food request:", error);
+    res.status(500).json({ message: "Error sending food request" });
+  }
+});
+
+
 
     // If donation is accepted, create a notification for the donor
 //     if (status === "Accepted") {
