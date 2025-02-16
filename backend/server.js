@@ -32,8 +32,8 @@ const DonationSchema = new mongoose.Schema({
   expiryDate: { type: Date, required: true },
   location: { type: String, required: true },
   status: { type: String, default: "Pending" },
-  ngoDetails: { ngoName: String, ngoEmail: String, ngoContact: String },
-  rating: { type: Number, min: 1, max: 5, default: 0 }, // Rating field (0 for not rated)
+  // ngoDetails: { ngoName: String, ngoEmail: String, ngoContact: String },
+  // rating: { type: Number, min: 0, max: 5, default: 0 },
 });
 
 
