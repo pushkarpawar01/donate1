@@ -33,7 +33,9 @@ const DonationSchema = new mongoose.Schema({
   location: { type: String, required: true },
   status: { type: String, default: "Pending" },
   ngoDetails: { ngoName: String, ngoEmail: String, ngoContact: String },
+  rating: { type: Number, min: 1, max: 5, default: 0 }, // Rating field (0 for not rated)
 });
+
 
 const Donation = mongoose.model("Donation", DonationSchema);
 
@@ -139,16 +141,73 @@ app.post("/donate", authenticateRole(["Donor"]), async (req, res) => {
   }
 });
 
-// ✅ NGO - Fetch Pending Donations
-app.get("/ngo-donations", authenticateRole(["NGO"]), async (req, res) => {
+// ✅ Get Donor's Accepted Donations
+app.get("/my-donations", authenticateRole(["Donor"]), async (req, res) => {
   try {
-    const donations = await Donation.find({ status: "Pending" });
+    const donorEmail = req.user.email; // Get donor's email from token
+
+    // Fetch donations with status 'Accepted' for the logged-in donor
+    const donations = await Donation.find({
+      donorEmail,
+      status: "Accepted",
+    }).sort({ date: -1 }); // Sort by most recent donation
+
     res.status(200).json(donations);
   } catch (error) {
     console.error("❌ Error fetching donations:", error);
     res.status(500).json({ message: "Error fetching donations" });
   }
 });
+
+
+// ✅ NGO - Fetch Pending Donations
+app.get("/ngo-donations", authenticateRole(["NGO"]), async (req, res) => {
+  try {
+    const ngoEmail = req.user.email; // Get the logged-in NGO's email from the token
+    const donations = await Donation.find({
+      "ngoDetails.ngoEmail": ngoEmail,
+      status: "Accepted"
+    });
+    res.status(200).json(donations);
+  } catch (error) {
+    console.error("❌ Error fetching accepted donations:", error);
+    res.status(500).json({ message: "Error fetching accepted donations" });
+  }
+});
+
+// ✅ Rate Donation (Allow NGOs to rate donations they've accepted)
+app.post("/rate-donation", authenticateRole(["NGO"]), async (req, res) => {
+  try {
+    const { donationId, rating } = req.body;
+
+    if (!donationId || !rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ message: "Invalid rating" });
+    }
+
+    // Ensure that the rating is updated only for donations accepted by the NGO
+    const donation = await Donation.findById(donationId);
+
+    if (!donation) {
+      return res.status(404).json({ message: "Donation not found" });
+    }
+
+    // Make sure the logged-in NGO is the one that accepted the donation
+    if (donation.ngoDetails.ngoEmail !== req.user.email) {
+      return res.status(403).json({ message: "You cannot rate this donation" });
+    }
+
+    // Update the rating
+    donation.rating = rating;
+    await donation.save();
+
+    res.status(200).json({ message: "Rating updated successfully", donation });
+  } catch (error) {
+    console.error("❌ Error rating donation:", error);
+    res.status(500).json({ message: "Error rating donation" });
+  }
+});
+
+
 
 // ✅ Update Donation Status
 app.post("/update-donation", authenticateRole(["NGO"]), async (req, res) => {

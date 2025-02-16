@@ -6,6 +6,8 @@ import DonorDashboard from "./pages/DonorDashboard";
 import NGODashboard from "./pages/NGODashboard";
 import DonorNotifications from "./pages/DonorNotifications";
 import Navbar from "./components/Navbar";
+import MyDonations from "./pages/MyDonations";
+import NGODonations from "./pages/NGODonations";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const token = localStorage.getItem("token");
@@ -41,6 +43,14 @@ const App = () => {
           }
         />
         <Route
+          path="/my-donations"
+          element={
+            <ProtectedRoute allowedRoles={["Donor"]}>
+              <MyDonations />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/ngo-dashboard"
           element={
             <ProtectedRoute allowedRoles={["NGO"]}>
@@ -48,6 +58,17 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/ngo-donations"
+          element={
+            <ProtectedRoute allowedRoles={["NGO"]}>
+              <NGODonations />
+            </ProtectedRoute>
+          }
+        />
+
+
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
