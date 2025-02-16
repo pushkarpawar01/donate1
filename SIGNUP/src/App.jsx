@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import DonorDashboard from "./pages/DonorDashboard";
 import NGODashboard from "./pages/NGODashboard";
+import DonorNotifications from "./pages/DonorNotifications";
 import Navbar from "./components/Navbar";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -19,15 +20,23 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 const App = () => {
   return (
     <Router>
-      {/* <Navbar/> */}
+      <Navbar />
       <Routes>
-      <Route path="/signup" element={<Signup />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route
           path="/donor-dashboard"
           element={
             <ProtectedRoute allowedRoles={["Donor"]}>
               <DonorDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/donor-notifications"
+          element={
+            <ProtectedRoute allowedRoles={["Donor"]}>
+              <DonorNotifications />
             </ProtectedRoute>
           }
         />

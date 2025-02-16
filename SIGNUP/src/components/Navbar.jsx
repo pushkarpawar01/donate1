@@ -17,15 +17,34 @@ const Navbar = () => {
       <div className="nav-content">
         <div className="logo">MealMate 🤮</div>
         <div className="dashboard-link">
+          {/* Donor-specific links */}
           {role === "Donor" && (
-            <Link to="/donor-dashboard" className="dashboard-item">
-              Donor Dashboard
-            </Link>
+            <>
+              <Link to="/donor-dashboard" className="dashboard-item">
+                Donor Dashboard
+              </Link>
+              <Link to="/donor-notifications" className="dashboard-item">
+                Notifications
+              </Link>
+              <Link to="/my-donations" className="dashboard-item">
+                My Donations
+              </Link>
+            </>
           )}
+          
+          {/* NGO-specific links */}
           {role === "NGO" && (
-            <Link to="/ngo-dashboard" className="dashboard-item">
-              NGO Dashboard
-            </Link>
+            <>
+              <Link to="/ngo-dashboard" className="dashboard-item">
+                NGO Dashboard
+              </Link>
+              <Link to="/ngo-donations" className="dashboard-item">
+                Donations
+              </Link>
+              <Link to="/request-food" className="dashboard-item">
+                Request Food
+              </Link>
+            </>
           )}
         </div>
         <div className="profile-logout">

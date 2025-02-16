@@ -53,22 +53,6 @@ const DonorDashboard = () => {
       <div className="p-6">
         <h1 className="text-2xl font-bold mb-4">Donor Dashboard</h1>
 
-        {/* Display Notifications */}
-        <div className="mb-4">
-          <h2 className="text-xl font-bold mb-2">Notifications</h2>
-          {notifications.length === 0 ? (
-            <p>No notifications</p>
-          ) : (
-            <ul>
-              {notifications.map((notification) => (
-                <li key={notification._id} className={`p-2 ${notification.isRead ? "bg-gray-100" : "bg-yellow-100"}`}>
-                  {notification.message}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
         {/* Donation Form */}
         <div className="grid grid-cols-2 gap-4">
           <input
