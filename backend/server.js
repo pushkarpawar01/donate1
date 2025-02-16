@@ -37,6 +37,16 @@ const DonationSchema = new mongoose.Schema({
 
 const Donation = mongoose.model("Donation", DonationSchema);
 
+// Notification Schema
+const NotificationSchema = new mongoose.Schema({
+  donorEmail: { type: String, required: true },
+  message: { type: String, required: true },
+  date: { type: Date, default: Date.now },
+  isRead: { type: Boolean, default: false }, // To track whether the donor has read the notification
+});
+
+const Notification = mongoose.model("Notification", NotificationSchema);
+
 // Middleware for Role-Based Access
 const authenticateRole = (allowedRoles) => {
   return (req, res, next) => {
@@ -140,17 +150,6 @@ app.get("/ngo-donations", authenticateRole(["NGO"]), async (req, res) => {
   }
 });
 
-// Notification Schema
-const NotificationSchema = new mongoose.Schema({
-  donorEmail: { type: String, required: true },
-  message: { type: String, required: true },
-  date: { type: Date, default: Date.now },
-  isRead: { type: Boolean, default: false }, // To track whether the donor has read the notification
-});
-
-const Notification = mongoose.model("Notification", NotificationSchema);
-
-
 // ✅ Update Donation Status
 app.post("/update-donation", authenticateRole(["NGO"]), async (req, res) => {
   try {
@@ -218,28 +217,6 @@ app.post("/request-food", authenticateRole(["NGO"]), async (req, res) => {
   }
 });
 
-
-
-    // If donation is accepted, create a notification for the donor
-//     if (status === "Accepted") {
-//       const donorEmail = updatedDonation.donorEmail;
-//       const message = `Your donation has been accepted by ${ngoName} at ${ngoContact}. Thank you for your generosity!`;
-
-//       const notification = new Notification({
-//         donorEmail,
-//         message,
-//       });
-
-//       await notification.save();
-//     }
-
-//     res.status(200).json({ message: "Donation updated successfully", updatedDonation });
-//   } catch (error) {
-//     console.error("❌ Error updating donation:", error);
-//     res.status(500).json({ message: "Error updating donation" });
-//   }
-// });
-
 // ✅ Get Donor Notifications
 app.get("/donor-notifications", authenticateRole(["Donor"]), async (req, res) => {
   try {
@@ -272,6 +249,44 @@ app.post("/mark-notification-read", authenticateRole(["Donor"]), async (req, res
   } catch (error) {
     console.error("❌ Error marking notification as read:", error);
     res.status(500).json({ message: "Error marking notification as read" });
+  }
+});
+
+// ✅ Clear All Notifications for Donor
+app.delete("/clear-all-notifications", authenticateRole(["Donor"]), async (req, res) => {
+  try {
+    const donorEmail = req.user.email; // Get donor's email from token
+
+    // Delete all notifications related to the donor
+    await Notification.deleteMany({ donorEmail });
+
+    res.status(200).json({ message: "All notifications cleared" });
+  } catch (error) {
+    console.error("❌ Error clearing notifications:", error);
+    res.status(500).json({ message: "Error clearing notifications" });
+  }
+});
+
+
+// ✅ Delete Individual Notification
+app.delete("/delete-notification", authenticateRole(["Donor"]), async (req, res) => {
+  try {
+    const { notificationId } = req.body; // Notification ID to delete
+
+    if (!notificationId) {
+      return res.status(400).json({ message: "Notification ID is required" });
+    }
+
+    const deletedNotification = await Notification.findByIdAndDelete(notificationId);
+
+    if (!deletedNotification) {
+      return res.status(404).json({ message: "Notification not found" });
+    }
+
+    res.status(200).json({ message: "Notification deleted successfully", deletedNotification });
+  } catch (error) {
+    console.error("❌ Error deleting notification:", error);
+    res.status(500).json({ message: "Error deleting notification" });
   }
 });
 
