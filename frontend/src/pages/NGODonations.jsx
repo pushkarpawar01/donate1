@@ -31,26 +31,24 @@ const NGODonations = () => {
   // Handle rating submission
   const handleRating = async (donationId, rating) => {
     try {
-      // Make a request to the backend to update the rating for this donation
-      await axios.post(
-        "http://localhost:5000/rate-donation",
-        { donationId, rating },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      // Update the state with the new rating
+      // Update the rating in the local state for immediate feedback
       setRatings((prevRatings) => ({
         ...prevRatings,
         [donationId]: rating,
       }));
+  
+      // Send the rating to the backend
+      const token = localStorage.getItem("token");
+      await axios.post(
+        "http://localhost:5000/update-donation-rating",
+        { donationId, rating },  // Ensure `rating` is a number
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
     } catch (error) {
-      console.error("Error submitting rating", error);
+      alert("Failed to update rating. Please try again.");
     }
   };
+  
 
   return (
     <div>
@@ -62,31 +60,31 @@ const NGODonations = () => {
       ) : (
         <ul>
           {donations.map((donation) => (
-            <li key={donation._id}>
-              <h3>{donation.donorEmail}</h3>
-              <p>People Fed: {donation.peopleFed}</p>
-              <p>Location: {donation.location}</p>
-              <p>Expiry Date: {new Date(donation.expiryDate).toLocaleDateString()}</p>
+        <li key={donation._id}>
+          <h3>{donation.donorEmail}</h3>
+          <p>People Fed: {donation.peopleFed}</p>
+          <p>Location: {donation.location}</p>
+          <p>Expiry Date: {new Date(donation.expiryDate).toLocaleDateString()}</p>
 
-              {/* Rating Section */}
-              <div>
-                <p>Rate this donation:</p>
-                <div>
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      onClick={() => handleRating(donation._id, star)}
-                      style={{
-                        color: ratings[donation._id] >= star ? "gold" : "gray",
-                      }}
-                    >
-                      ★
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </li>
-          ))}
+          {/* Rating Section */}
+          <div>
+            <p>Rate this donation:</p>
+            <div>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  onClick={() => handleRating(donation._id, star)}
+                  style={{
+                    color: ratings[donation._id] >= star ? "gold" : "gray",
+                  }}
+                >
+                  ★
+                </button>
+              ))}
+            </div>
+          </div>
+        </li>
+      ))}
         </ul>
       )}
     </div>

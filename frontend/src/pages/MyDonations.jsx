@@ -35,7 +35,7 @@ const MyDonations = () => {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">My Donations</h1>
-
+  
       {donations.length === 0 ? (
         <p>No accepted donations yet.</p>
       ) : (
@@ -46,6 +46,26 @@ const MyDonations = () => {
               <p><strong>People Fed:</strong> {donation.peopleFed}</p>
               <p><strong>Contact:</strong> {donation.contact}</p>
               <p><strong>Expiry Date:</strong> {new Date(donation.expiryDate).toLocaleDateString()}</p>
+  
+              {/* Display Rating */}
+              <div className="mt-2">
+                <p><strong>Rating:</strong></p>
+                <div className="flex">
+                  {/* Render stars for rating */}
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                      key={star}
+                      style={{
+                        color: donation.rating >= star ? "gold" : "gray",  // Highlight stars based on rating
+                        fontSize: "1.5rem",
+                      }}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+              </div>
+  
               <div className="mt-2">
                 <button
                   onClick={() => handleTrack(donation._id)}
@@ -66,6 +86,7 @@ const MyDonations = () => {
       )}
     </div>
   );
-};
+};  
+      
 
 export default MyDonations;

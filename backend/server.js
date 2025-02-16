@@ -196,6 +196,44 @@ app.get("/ngo-acceptedDonations", authenticateRole(["NGO"]), async (req, res) =>
   }
 });
 
+// ✅ NGO - Update Donation Rating
+// ✅ NGO - Update Donation Rating
+app.post("/update-donation-rating", authenticateRole(["NGO"]), async (req, res) => {
+  try {
+    const { donationId, rating } = req.body;
+
+    // Check if donationId and rating are provided
+    if (!donationId || rating === undefined) {
+      return res.status(400).json({ message: "Donation ID and rating are required" });
+    }
+
+    // Validate donationId (should be a valid MongoDB ObjectId)
+    if (!mongoose.Types.ObjectId.isValid(donationId)) {
+      return res.status(400).json({ message: "Invalid donation ID" });
+    }
+
+    // Validate the rating (make sure it is between 0 and 5)
+    if (rating < 0 || rating > 5) {
+      return res.status(400).json({ message: "Rating must be between 0 and 5" });
+    }
+
+    // Find the donation and update the rating field
+    const updatedDonation = await Donation.findByIdAndUpdate(
+      donationId,
+      { rating },
+      { new: true }
+    );
+
+    if (!updatedDonation) {
+      return res.status(404).json({ message: "Donation not found" });
+    }
+
+    res.status(200).json({ message: "Donation rating updated successfully", updatedDonation });
+  } catch (error) {
+    console.error("❌ Error updating donation rating:", error);
+    res.status(500).json({ message: "Error updating donation rating" });
+  }
+});
 
 
 // ✅ Rate Donation (Allow NGOs to rate donations they've accepted)
