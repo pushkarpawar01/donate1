@@ -24,7 +24,6 @@ const UserSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", UserSchema);
 
-// Donation Schema
 const DonationSchema = new mongoose.Schema({
   donorEmail: { type: String, required: true },
   peopleFed: { type: Number, required: true },
@@ -33,17 +32,19 @@ const DonationSchema = new mongoose.Schema({
   location: { type: String, required: true },
   status: { type: String, default: "Pending" },
   ngoDetails: {
-    ngoName: { type: String, required: false },
-    ngoEmail: { type: String, required: false },
-    ngoContact: { type: String, required: false },
+    ngoName: { type: String },  // Optional field, no need to specify `required: false`
+    ngoEmail: { type: String }, // Optional field
+    ngoContact: { type: String }, // Optional field
   },
-  donorLocation: { type: { type: String, default: "Point" }, coordinates: [Number], required: false }, // Donor's location
-  volunteerLocation: { type: { type: String, default: "Point" }, coordinates: [Number], required: false }, // Volunteer’s location
-  rating: { type: Number, min: 0, max: 5, default: 0 , required: false},
+  donorLocation: { type: { type: String, default: "Point" }, coordinates: [Number] }, // Optional field, no `required: false`
+  volunteerLocation: { type: { type: String, default: "Point" }, coordinates: [Number] }, // Optional field
+  rating: { type: Number, min: 0, max: 5, default: 0 }, // Optional field, no `required: false`
 });
 
+// Add geospatial indexes
 DonationSchema.index({ donorLocation: "2dsphere" });
 DonationSchema.index({ volunteerLocation: "2dsphere" });
+
 
 
 
