@@ -25,6 +25,7 @@ const Signup = () => {
       <select onChange={(e) => setRole(e.target.value)}>
         <option value="Donor">Donor</option>
         <option value="NGO">NGO</option>
+        <option value="Volunteer">Volunteer</option>
       </select>
       <button onClick={handleSignup}>Signup</button>
     </div>
