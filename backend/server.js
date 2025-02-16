@@ -179,12 +179,15 @@ app.get("/ngo-donations", authenticateRole(["NGO"]), async (req, res) => {
 // ✅ NGO - Fetch Accepted Donations
 app.get("/ngo-acceptedDonations", authenticateRole(["NGO"]), async (req, res) => {
   try {
-    const ngoEmail = req.user.email; // Get the logged-in NGO's email from the token
-    // Fetch donations where status is "Accepted" and the NGO details match the logged-in NGO
+    const ngoEmail = req.user.email;
+    console.log("Logged-in NGO email: ", ngoEmail); // Log the NGO's email for debugging
+    
     const donations = await Donation.find({
       "ngoDetails.ngoEmail": ngoEmail,
       status: "Accepted"
     }).select('donorEmail peopleFed location expiryDate status ngoDetails'); // Only select necessary fields
+    
+    console.log("Fetched donations: ", donations); // Log the donations to ensure correct data
     
     res.status(200).json(donations); // Return the donations to the frontend
   } catch (error) {
@@ -192,6 +195,7 @@ app.get("/ngo-acceptedDonations", authenticateRole(["NGO"]), async (req, res) =>
     res.status(500).json({ message: "Error fetching accepted donations" });
   }
 });
+
 
 
 // ✅ Rate Donation (Allow NGOs to rate donations they've accepted)
@@ -228,19 +232,26 @@ app.post("/rate-donation", authenticateRole(["NGO"]), async (req, res) => {
 
 
 
-// ✅ Update Donation Status
+// ✅ NGO - Update Donation Status (Accept/Reject)
 app.post("/update-donation", authenticateRole(["NGO"]), async (req, res) => {
   try {
-    const { donationId, status, ngoName, ngoEmail, ngoContact } = req.body;
+    const { donationId, status } = req.body;
+    const ngoEmail = req.user.email; // Get the logged-in NGO's email from the token
+    const ngoName = req.user.name;  // Assuming 'name' field is part of the logged-in NGO details
+    const ngoContact = req.user.contact; // Assuming 'contact' field is part of the logged-in NGO details
 
     if (!donationId || !status) {
       return res.status(400).json({ message: "Donation ID and status are required" });
     }
 
+    // Update the donation with the new status and NGO details
     const updatedDonation = await Donation.findByIdAndUpdate(
       donationId,
-      { status, ngoDetails: { ngoName, ngoEmail, ngoContact } },
-      { new: true }
+      { 
+        status,
+        ngoDetails: { ngoName, ngoEmail, ngoContact } // Set ngo details here
+      },
+      { new: true } // Return the updated document
     );
 
     // If donation is accepted, create a notification for the donor
@@ -250,7 +261,7 @@ app.post("/update-donation", authenticateRole(["NGO"]), async (req, res) => {
         ? `Your donation has been accepted by ${ngoName} at ${ngoContact}. Thank you for your generosity!`
         : `Your donation has been rejected by ${ngoName} at ${ngoContact}. Please consider donating again in the future.`;
 
-    // Create notification for the donor
+    // Create a notification for the donor
     const notification = new Notification({
       donorEmail,
       message,
@@ -264,6 +275,7 @@ app.post("/update-donation", authenticateRole(["NGO"]), async (req, res) => {
     res.status(500).json({ message: "Error updating donation" });
   }
 });
+
 
 // ✅ NGO - Request Food (Send Notification to All Donors)
 app.post("/request-food", authenticateRole(["NGO"]), async (req, res) => {
