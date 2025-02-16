@@ -24,6 +24,7 @@ const MyDonations = () => {
   const handleTrack = (donationId) => {
     // Implement the logic to track the donation (for example, open a map or detailed page)
     console.log("Tracking donation:", donationId);
+    window.location.href = `/track-donation/${donationId}`;
   };
 
   const handleDonateAgain = (donation) => {

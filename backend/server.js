@@ -33,12 +33,19 @@ const DonationSchema = new mongoose.Schema({
   location: { type: String, required: true },
   status: { type: String, default: "Pending" },
   ngoDetails: {
-    ngoName: { type: String, required: false },  // Optional field
-    ngoEmail: { type: String, required: false }, // Optional field
-    ngoContact: { type: String, required: false }, // Optional field
+    ngoName: { type: String, required: false },
+    ngoEmail: { type: String, required: false },
+    ngoContact: { type: String, required: false },
   },
-  rating: { type: Number, min: 0, max: 5, default: 0 } // Optional field, defaults to 0 if not provided
+  donorLocation: { type: { type: String, default: "Point" }, coordinates: [Number] }, // Donor's location
+  volunteerLocation: { type: { type: String, default: "Point" }, coordinates: [Number] }, // Volunteer’s location
+  rating: { type: Number, min: 0, max: 5, default: 0 },
 });
+
+DonationSchema.index({ donorLocation: "2dsphere" });
+DonationSchema.index({ volunteerLocation: "2dsphere" });
+
+
 
 
 
@@ -122,6 +129,87 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ message: "Error logging in" });
   }
 });
+
+app.get("/volunteer-acceptedDonations", authenticateRole(["Volunteer"]), async (req, res) => {
+  try {
+    const { ngoEmail } = req.query;  // Get NGO email from query params
+    const { page = 1, limit = 10 } = req.query;  // Default page to 1 and limit to 10
+
+    if (!ngoEmail) {
+      return res.status(400).json({ message: "NGO email is required" });
+    }
+
+    // Fetch donations where status is "Accepted" and the NGO email matches, with pagination
+    const donations = await Donation.find({
+      "ngoDetails.ngoEmail": ngoEmail,
+      status: "Accepted",
+    })
+      .skip((page - 1) * limit)  // Pagination skip
+      .limit(limit)  // Pagination limit
+      .select('donorEmail peopleFed location expiryDate status ngoDetails');
+
+    // Get the total number of donations to return pagination info
+    const totalDonations = await Donation.countDocuments({
+      "ngoDetails.ngoEmail": ngoEmail,
+      status: "Accepted",
+    });
+
+    res.status(200).json({
+      donations,
+      totalDonations,
+      totalPages: Math.ceil(totalDonations / limit),
+      currentPage: page,
+    });
+  } catch (error) {
+    console.error("❌ Error fetching accepted donations:", error);
+    res.status(500).json({ message: "Error fetching accepted donations" });
+  }
+});
+
+// ✅ Volunteer - Deliver Donation and Notify Donor
+app.post("/volunteer-deliver-donation", authenticateRole(["Volunteer"]), async (req, res) => {
+  try {
+    const { donationId, volunteerLocation } = req.body;
+    const { email: volunteerEmail } = req.user; // Get volunteer email from the logged-in user
+    
+    // Ensure valid donationId and volunteer location
+    if (!donationId || !volunteerLocation) {
+      return res.status(400).json({ message: "Donation ID and volunteer location are required" });
+    }
+
+    // Find the donation
+    const donation = await Donation.findById(donationId);
+
+    if (!donation || donation.status !== "Accepted") {
+      return res.status(404).json({ message: "Donation not found or not accepted" });
+    }
+
+    // Update the donation with volunteer's location
+    donation.volunteerLocation = { coordinates: [volunteerLocation.longitude, volunteerLocation.latitude] };
+    
+    // Create a notification for the donor
+    const donorEmail = donation.donorEmail;
+    const message = `Your donation is on its way! The volunteer is now heading towards your location.`;
+
+    const notification = new Notification({
+      donorEmail,
+      message,
+    });
+
+    await notification.save();
+    
+    // Save the donation with updated location
+    await donation.save();
+
+    res.status(200).json({ message: "Donation marked for delivery and notification sent" });
+
+  } catch (error) {
+    console.error("❌ Error delivering donation:", error);
+    res.status(500).json({ message: "Error delivering donation" });
+  }
+});
+
+
 
 // ✅ Donor - Submit Food Donation
 app.post("/donate", authenticateRole(["Donor"]), async (req, res) => {

@@ -17,6 +17,8 @@ const Login = () => {
         navigate("/donor-dashboard");
       } else if (response.data.role === "NGO") {
         navigate("/ngo-dashboard");
+      } else if (response.data.role === "Volunteer") {
+        navigate("/volunteer-dashboard");
       }
     } catch (error) {
       alert("Login failed. Please check your credentials.");
