@@ -11,7 +11,7 @@ const NGODonations = () => {
     const fetchDonations = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:5000/ngo-donations", {
+        const response = await axios.get("http://localhost:5000/ngo-acceptedDonations", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

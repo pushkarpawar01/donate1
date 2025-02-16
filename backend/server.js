@@ -32,9 +32,14 @@ const DonationSchema = new mongoose.Schema({
   expiryDate: { type: Date, required: true },
   location: { type: String, required: true },
   status: { type: String, default: "Pending" },
-  // ngoDetails: { ngoName: String, ngoEmail: String, ngoContact: String },
-  // rating: { type: Number, min: 0, max: 5, default: 0 },
+  ngoDetails: {
+    ngoName: { type: String, required: false },  // Optional field
+    ngoEmail: { type: String, required: false }, // Optional field
+    ngoContact: { type: String, required: false }, // Optional field
+  },
+  rating: { type: Number, min: 0, max: 5, default: 0 } // Optional field, defaults to 0 if not provided
 });
+
 
 
 const Donation = mongoose.model("Donation", DonationSchema);
@@ -159,21 +164,35 @@ app.get("/my-donations", authenticateRole(["Donor"]), async (req, res) => {
   }
 });
 
-
-// ✅ NGO - Fetch Pending Donations
 app.get("/ngo-donations", authenticateRole(["NGO"]), async (req, res) => {
   try {
+    // Assuming you want to fetch donations that are in "Pending" status
+    const donations = await Donation.find({ status: "Pending" }).sort({ _id: -1 }); // Fetch only "Pending" donations
+    res.status(200).json(donations); // Sending donations as the response
+  } catch (error) {
+    console.error("❌ Error fetching donations:", error);
+    res.status(500).json({ message: "Error fetching donations" });
+  }
+});
+
+
+// ✅ NGO - Fetch Accepted Donations
+app.get("/ngo-acceptedDonations", authenticateRole(["NGO"]), async (req, res) => {
+  try {
     const ngoEmail = req.user.email; // Get the logged-in NGO's email from the token
+    // Fetch donations where status is "Accepted" and the NGO details match the logged-in NGO
     const donations = await Donation.find({
       "ngoDetails.ngoEmail": ngoEmail,
       status: "Accepted"
-    });
-    res.status(200).json(donations);
+    }).select('donorEmail peopleFed location expiryDate status ngoDetails'); // Only select necessary fields
+    
+    res.status(200).json(donations); // Return the donations to the frontend
   } catch (error) {
     console.error("❌ Error fetching accepted donations:", error);
     res.status(500).json({ message: "Error fetching accepted donations" });
   }
 });
+
 
 // ✅ Rate Donation (Allow NGOs to rate donations they've accepted)
 app.post("/rate-donation", authenticateRole(["NGO"]), async (req, res) => {
