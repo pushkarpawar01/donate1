@@ -37,9 +37,9 @@ const DonationSchema = new mongoose.Schema({
     ngoEmail: { type: String, required: false },
     ngoContact: { type: String, required: false },
   },
-  donorLocation: { type: { type: String, default: "Point" }, coordinates: [Number] }, // Donor's location
-  volunteerLocation: { type: { type: String, default: "Point" }, coordinates: [Number] }, // Volunteer’s location
-  rating: { type: Number, min: 0, max: 5, default: 0 },
+  donorLocation: { type: { type: String, default: "Point" }, coordinates: [Number], required: false }, // Donor's location
+  volunteerLocation: { type: { type: String, default: "Point" }, coordinates: [Number], required: false }, // Volunteer’s location
+  rating: { type: Number, min: 0, max: 5, default: 0 , required: false},
 });
 
 DonationSchema.index({ donorLocation: "2dsphere" });
