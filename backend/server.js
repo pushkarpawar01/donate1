@@ -75,10 +75,6 @@ DonationSchema.index({ donorLocation: "2dsphere" });
 DonationSchema.index({ volunteerLocation: "2dsphere" });
 
 
-
-
-
-
 const Donation = mongoose.model("Donation", DonationSchema);
 
 // Notification Schema
