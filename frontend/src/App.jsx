@@ -5,7 +5,7 @@ import './App.css'; // Make sure this is imported
 import MissionSection from './pages/MissionSection'
 import HeroSection from './pages/HeroSection'
 import HowItWorks from './pages/HowItWorks'
-import Footer from './pages/Footer'
+import Footer from './components/Footer'
 import SupportNGOs from './pages/SupportNGOs'
 import HomePage from './pages/HomePage'
 import ContactSection from './pages/ContactSection'
@@ -107,6 +107,7 @@ const App = () => {
         <Route path="/support-form" element={<SupportForm/>} />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
+      <Footer/>
     </Router>
   );
 };
