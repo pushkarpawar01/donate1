@@ -17,12 +17,24 @@ mongoose
 
 // User Schema (Donor & NGO Authentication)
 const UserSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ["Donor", "NGO","Volunteer"], required: true },
+  role: { type: String, enum: ["Donor", "NGO", "Volunteer"], required: true },
+  address: { type: String, required: function() { return this.role === "Donor" || this.role === "NGO"; } },
+  ngo_mail: { type: String, required: function() { return this.role === "Volunteer"; }, validate: {
+    validator: async function(value) {
+      // Validate if the ngo_mail exists
+      const ngoUser = await User.findOne({ email: value });
+      return ngoUser ? true : false; // Returns true if ngo_mail exists
+    },
+    message: "The provided NGO email does not exist."
+  }},
 });
 
 const User = mongoose.model("User", UserSchema);
+module.exports = User;
 
 const DonationSchema = new mongoose.Schema({
   donorEmail: { type: String, required: true },
@@ -84,21 +96,40 @@ const authenticateRole = (allowedRoles) => {
   };
 };
 
+
 // ✅ Signup Routes
 app.post("/signup", async (req, res) => {
   try {
-    const { email, password, role } = req.body;
-    if (!email || !password || !role) {
+    const { name, username, email, password, role, address, ngo_mail } = req.body;
+
+    // Check if all required fields are provided
+    if (!name || !username || !email || !password || !role) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    // Handle additional validation based on role
+    if (role === "Donor" || role === "NGO") {
+      if (!address) {
+        return res.status(400).json({ message: "Address is required for Donor and NGO" });
+      }
+    }
+    if (role === "Volunteer") {
+      if (!ngo_mail) {
+        return res.status(400).json({ message: "NGO Email is required for Volunteer" });
+      }
+    }
+
+    // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ email, password: hashedPassword, role });
+
+    // Create the new user
+    const user = new User({ name, username, email, password: hashedPassword, role, address, ngo_mail });
     await user.save();
 
     res.status(201).json({ message: "Signup successful" });
@@ -107,6 +138,7 @@ app.post("/signup", async (req, res) => {
     res.status(500).json({ message: "Error registering user" });
   }
 });
+
 
 // ✅ Login Route
 app.post("/login", async (req, res) => {
