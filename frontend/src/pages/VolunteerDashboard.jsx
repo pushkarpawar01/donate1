@@ -5,21 +5,28 @@ const VolunteerDashboard = () => {
   const [ngoEmail, setNgoEmail] = useState("");
   const [donations, setDonations] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // New loading state
+  const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const [totalPages, setTotalPages] = useState(1); // Track total pages
 
-  const fetchDonations = async () => {
+  const fetchDonations = async (page = 1) => {
     try {
+      setLoading(true); // Set loading to true while fetching
       const token = localStorage.getItem("token"); // Get the token from localStorage
       const response = await axios.get("http://localhost:5000/volunteer-acceptedDonations", {
-        params: { ngoEmail }, // Send NGO email as query parameter
+        params: { ngoEmail, page }, // Send NGO email and page as query parameters
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the Authorization header
         },
       });
-      setDonations(response.data); // Update donations state with the response data
+      setDonations(response.data.donations); // Update donations state with the response data
+      setTotalPages(response.data.totalPages); // Update totalPages with the response data
       setError(""); // Clear any previous error
+      setLoading(false); // Set loading to false after fetching is complete
     } catch (err) {
       setError("Failed to fetch donations. Please try again.");
       console.error("❌ Error fetching donations:", err);
+      setLoading(false); // Set loading to false even if there's an error
     }
   };
 
@@ -32,7 +39,7 @@ const VolunteerDashboard = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       alert(response.data.message); // Show a success message
-      fetchDonations(); // Refresh the list of donations
+      fetchDonations(currentPage); // Refresh the list of donations
     } catch (err) {
       console.error("❌ Error delivering donation:", err);
       alert("Failed to deliver the donation. Please try again.");
@@ -46,6 +53,11 @@ const VolunteerDashboard = () => {
     } else {
       setError("Please enter a valid NGO email.");
     }
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    fetchDonations(newPage); // Fetch donations for the new page
   };
 
   return (
@@ -69,6 +81,9 @@ const VolunteerDashboard = () => {
       {/* Error Message */}
       {error && <p className="text-red-500">{error}</p>}
 
+      {/* Loading State */}
+      {loading && <p>Loading donations...</p>}
+
       {/* Display Donations */}
       {donations.length === 0 ? (
         <p>No accepted donations found for the provided NGO email.</p>
@@ -91,6 +106,27 @@ const VolunteerDashboard = () => {
             </li>
           ))}
         </ul>
+      )}
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="mt-4">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+            className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+          >
+            Previous
+          </button>
+          <span>{currentPage} of {totalPages}</span>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => handlePageChange(currentPage + 1)}
+            className="bg-gray-500 text-white px-4 py-2 rounded ml-2"
+          >
+            Next
+          </button>
+        </div>
       )}
     </div>
   );

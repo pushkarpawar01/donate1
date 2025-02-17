@@ -70,6 +70,9 @@ const DonationSchema = new mongoose.Schema({
   rating: { type: Number, min: 0, max: 5, default: 0 }, // Optional field, no `required: false`
 });
 
+DonationSchema.index({ "ngoDetails.ngoEmail": 1, status: 1 });
+
+
 // Add geospatial indexes
 DonationSchema.index({ donorLocation: "2dsphere" });
 DonationSchema.index({ volunteerLocation: "2dsphere" });
@@ -185,14 +188,30 @@ app.get("/volunteer-acceptedDonations", authenticateRole(["Volunteer"]), async (
       return res.status(400).json({ message: "NGO email is required" });
     }
 
+    // Sanitize page and limit parameters (Ensure they're valid numbers)
+    const pageNumber = parseInt(page, 10);
+    const limitNumber = parseInt(limit, 10);
+
+    if (isNaN(pageNumber) || pageNumber <= 0) {
+      return res.status(400).json({ message: "Invalid page number" });
+    }
+
+    if (isNaN(limitNumber) || limitNumber <= 0) {
+      return res.status(400).json({ message: "Invalid limit value" });
+    }
+
     // Fetch donations where status is "Accepted" and the NGO email matches, with pagination
     const donations = await Donation.find({
       "ngoDetails.ngoEmail": ngoEmail,
       status: "Accepted",
     })
-      .skip((page - 1) * limit)  // Pagination skip
-      .limit(limit)  // Pagination limit
+      .skip((pageNumber - 1) * limitNumber)  // Pagination skip
+      .limit(limitNumber)  // Pagination limit
       .select('donorEmail peopleFed location expiryDate status ngoDetails');
+
+    if (donations.length === 0) {
+      return res.status(404).json({ message: "No accepted donations found for the provided NGO email" });
+    }
 
     // Get the total number of donations to return pagination info
     const totalDonations = await Donation.countDocuments({
@@ -203,8 +222,8 @@ app.get("/volunteer-acceptedDonations", authenticateRole(["Volunteer"]), async (
     res.status(200).json({
       donations,
       totalDonations,
-      totalPages: Math.ceil(totalDonations / limit),
-      currentPage: page,
+      totalPages: Math.ceil(totalDonations / limitNumber),
+      currentPage: pageNumber,
     });
   } catch (error) {
     console.error("❌ Error fetching accepted donations:", error);
