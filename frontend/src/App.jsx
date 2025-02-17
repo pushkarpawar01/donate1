@@ -9,7 +9,6 @@ import Footer from './pages/Footer'
 import SupportNGOs from './pages/SupportNGOs'
 import HomePage from './pages/HomePage'
 import ContactSection from './pages/ContactSection'
-import Sustainability from './pages/Sustainability'
 import HeroSection2 from './pages/HeroSection2'
 import FeaturesSection from './pages/FeaturesSection'
 import Contact_form from './pages/SupportForm'
@@ -101,7 +100,6 @@ const App = () => {
         <Route path="/footer" element={<Footer />} />
         <Route path="/support-ngos" element={<SupportNGOs />} />
         <Route path="/contact" element={<ContactSection />} />
-
         <Route path="/hero-2" element={<HeroSection2 />} />
         <Route path="/features" element={<FeaturesSection />} />
         <Route path="/contact-form" element={<Contact_form />} />

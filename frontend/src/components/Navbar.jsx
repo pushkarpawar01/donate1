@@ -15,7 +15,8 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="nav-content">
-        <div className="logo">MealMate 🤮</div>
+        <Link to="/"> <div className="logo">MealMate 🤮</div> </Link>
+        
         <div className="dashboard-link">
           {/* Donor-specific links */}
           <Link to="/mission"> Mission </Link>

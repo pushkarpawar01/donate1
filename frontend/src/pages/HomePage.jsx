@@ -1,10 +1,17 @@
 import React from "react";
 import { motion } from "framer-motion";
 import "./HomePage.css";
+import HeroSection from "./HeroSection";
+import MissionSection from "./MissionSection";
+import SupportNGOs from "./SupportNGOs";
+import FeaturesSection from "./FeaturesSection";
 
 const HomePage = () => {
   return (
     <div className="homepage">
+      <HeroSection/>
+      <MissionSection/>
+      <SupportNGOs/>
       {/* Supporting NGOs Section */}
       <motion.section 
         className="support-section"
@@ -99,6 +106,7 @@ const HomePage = () => {
           Reach Out
         </motion.button>
       </motion.section>
+      <FeaturesSection/>
     </div>
   );
 };
