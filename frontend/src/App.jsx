@@ -22,6 +22,7 @@ import Navbar from "./components/Navbar";
 import MyDonations from "./pages/MyDonations";
 import NGODonations from "./pages/NGODonations";
 import AboutUs from "./pages/AboutUs";
+import SupportForm from "./pages/SupportForm";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const token = localStorage.getItem("token");
@@ -103,6 +104,7 @@ const App = () => {
         <Route path="/hero-2" element={<HeroSection2 />} />
         <Route path="/features" element={<FeaturesSection />} />
         <Route path="/contact-form" element={<Contact_form />} />
+        <Route path="/support-form" element={<SupportForm/>} />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "./ContactSection.css";
+import SupportForm from "./SupportForm";
 
 const ContactSection = () => {
   const sectionRef = useRef(null);
@@ -28,6 +29,7 @@ const ContactSection = () => {
   }, []);
 
   return (
+    <div>
     <div className="contact-container hidden" ref={sectionRef}>
             <h4>GET IN TOUCH</h4>
 
@@ -67,6 +69,8 @@ const ContactSection = () => {
           </p>
         </div>
       </div>
+    </div>
+    <SupportForm/>
     </div>
   );
 };
