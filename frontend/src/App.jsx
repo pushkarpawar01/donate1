@@ -22,6 +22,7 @@ import DonorNotifications from "./pages/DonorNotifications";
 import Navbar from "./components/Navbar";
 import MyDonations from "./pages/MyDonations";
 import NGODonations from "./pages/NGODonations";
+import AboutUs from "./pages/AboutUs";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const token = localStorage.getItem("token");
@@ -93,13 +94,14 @@ const App = () => {
         />
         
         <Route path="/" element={<HomePage />} />
+        <Route path="/about-us" element={<AboutUs/>}/>
         <Route path="/mission" element={<MissionSection />} />
         <Route path="/hero" element={<HeroSection />} />
         <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/footer" element={<Footer />} />
         <Route path="/support-ngos" element={<SupportNGOs />} />
         <Route path="/contact" element={<ContactSection />} />
-        <Route path="/sustainability" element={<Sustainability />} />
+
         <Route path="/hero-2" element={<HeroSection2 />} />
         <Route path="/features" element={<FeaturesSection />} />
         <Route path="/contact-form" element={<Contact_form />} />

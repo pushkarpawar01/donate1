@@ -1,9 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
 import "./HowItWorks.css";
+import HeroSection2 from "./HeroSection2";
 
 const HowItWorks = () => {
   return (
+    <div>
     <motion.div
       className="how-it-works-container"
       initial={{ opacity: 0, scale: 0.9 }}
@@ -60,6 +62,8 @@ const HowItWorks = () => {
         </motion.div>
       </div>
     </motion.div>
+    <HeroSection2/>
+    </div>
   );
 };
 

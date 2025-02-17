@@ -19,9 +19,9 @@ const Navbar = () => {
         <div className="dashboard-link">
           {/* Donor-specific links */}
           <Link to="/mission"> Mission </Link>
-          <Link to="/mission"> Notifications </Link>
-          <Link to="/mission"> Notifications </Link>
-          <Link to="/mission"> Notifications </Link>
+          <Link to="/about-us"> About Us </Link>
+          <Link to="/contact"> Contact Us </Link>
+          <Link to="/how-it-works"> How it works </Link>
           {role === "Donor" && (
             <>
               <Link to="/donor-dashboard" className="dashboard-item">
