@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import img2 from './assets/tc3.webp';
-import img3 from './assets/poor_child.jpg';
+import img2 from '../assets/tc3.webp';
+import img3 from '../assets/poor_child.jpg';
 import "./Sustainability.css";
 
 const statsData = [

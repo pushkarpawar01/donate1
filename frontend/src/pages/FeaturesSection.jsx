@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./FeaturesSection.css";
-import img4 from './assets/tc4.webp'
-import img5 from './assets/tc5.webp'
-import img6 from './assets/tc6.webp'
+import img4 from '../assets/tc4.webp'
+import img5 from '../assets/tc5.webp'
+import img6 from '../assets/tc6.webp'
 
 
 const features = [

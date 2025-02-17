@@ -1,6 +1,6 @@
 import React from "react";
 import "./HeroSection.css";
-import img1 from './assets/tc1.webp'
+import img1 from '../assets/tc1.webp'
 // import heroImage from "/images/hero.jpg"; // Replace with your actual image path
 
 const HeroSection = () => {
