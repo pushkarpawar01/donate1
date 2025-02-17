@@ -22,16 +22,33 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, enum: ["Donor", "NGO", "Volunteer"], required: true },
-  address: { type: String, required: function() { return this.role === "Donor" || this.role === "NGO"; } },
-  ngo_mail: { type: String, required: function() { return this.role === "Volunteer"; }, validate: {
-    validator: async function(value) {
-      // Validate if the ngo_mail exists
-      const ngoUser = await User.findOne({ email: value });
-      return ngoUser ? true : false; // Returns true if ngo_mail exists
-    },
-    message: "The provided NGO email does not exist."
-  }},
+  address: { 
+    type: String, 
+    validate: {
+      validator: function(value) {
+        if (this.role === "Donor" || this.role === "NGO") {
+          return !!value; // Ensures value is not empty
+        }
+        return true; // If not Donor/NGO, no validation needed
+      },
+      message: "Address is required for Donor and NGO"
+    }
+  },
+  ngo_mail: { 
+    type: String, 
+    validate: {
+      validator: async function(value) {
+        if (this.role === "Volunteer") {
+          const ngoUser = await User.findOne({ email: value });
+          return !!ngoUser; // Ensures NGO email exists
+        }
+        return true; // If not Volunteer, no validation needed
+      },
+      message: "The provided NGO email does not exist."
+    }
+  }
 });
+
 
 const User = mongoose.model("User", UserSchema);
 module.exports = User;
@@ -48,8 +65,8 @@ const DonationSchema = new mongoose.Schema({
     ngoEmail: { type: String }, // Optional field
     ngoContact: { type: String }, // Optional field
   },
-  donorLocation: { type: { type: String, default: "Point" }, coordinates: [Number] }, // Optional field, no `required: false`
-  volunteerLocation: { type: { type: String, default: "Point" }, coordinates: [Number] }, // Optional field
+  // donorLocation: { type: { type: String, default: "Point" }, coordinates: [Number] }, // Optional field, no `required: false`
+  // volunteerLocation: { type: { type: String, default: "Point" }, coordinates: [Number] }, // Optional field
   rating: { type: Number, min: 0, max: 5, default: 0 }, // Optional field, no `required: false`
 });
 
