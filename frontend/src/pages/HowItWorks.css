@@ -1,0 +1,66 @@
+.how-it-works-container {
+  text-align: center;
+  padding: 60px 20px; /* Increased padding for better spacing */
+  background-color: #fff;
+  color: black;
+}
+
+.how-it-works-text {
+  max-width: 800px;
+  margin: 10px auto;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.steps-container {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-top: 30px;
+  flex-wrap: wrap; /* Ensures responsiveness */
+}
+
+.step {
+  max-width: 300px;
+  min-width: 250px;
+  text-align: center;
+  background: #f9f9f9; /* Light background */
+  padding: 20px;
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: transform 0.3s ease-in-out;
+}
+
+.step:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.step-icon {
+  font-size: 2.5rem;
+  color: #f39c12; /* Orange color */
+  margin-bottom: 10px;
+}
+
+.step h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.step p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .steps-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .step {
+    width: 80%;
+  }
+}
+

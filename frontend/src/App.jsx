@@ -1,5 +1,18 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import './App.css'; // Make sure this is imported
+
+import MissionSection from './pages/MissionSection'
+import HeroSection from './pages/HeroSection'
+import HowItWorks from './pages/HowItWorks'
+import Footer from './pages/Footer'
+import SupportNGOs from './pages/SupportNGOs'
+import HomePage from './pages/HomePage'
+import ContactSection from './pages/ContactSection'
+import Sustainability from './pages/Sustainability'
+import HeroSection2 from './pages/HeroSection2'
+import FeaturesSection from './pages/FeaturesSection'
+import Contact_form from './pages/SupportForm'
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import DonorDashboard from "./pages/DonorDashboard";
@@ -78,8 +91,18 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
-
+        
+        <Route path="/" element={<HomePage />} />
+        <Route path="/mission" element={<MissionSection />} />
+        <Route path="/hero" element={<HeroSection />} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
+        <Route path="/footer" element={<Footer />} />
+        <Route path="/support-ngos" element={<SupportNGOs />} />
+        <Route path="/contact" element={<ContactSection />} />
+        <Route path="/sustainability" element={<Sustainability />} />
+        <Route path="/hero-2" element={<HeroSection2 />} />
+        <Route path="/features" element={<FeaturesSection />} />
+        <Route path="/contact-form" element={<Contact_form />} />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>

@@ -1,0 +1,120 @@
+/* Global Styles */
+.homepage {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 40px;
+}
+
+/* Supporting NGOs Section */
+.support-section h1 {
+  font-size: 2.2rem;
+  font-weight: bold;
+}
+
+.support-section p {
+  max-width: 800px;
+  margin: 10px auto;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Features Section */
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 30px;
+  flex-wrap: wrap; /* Ensures responsiveness */
+}
+
+.feature {
+  max-width: 300px;
+  text-align: left; /* Align feature text */
+  padding: 15px;
+}
+
+.icon {
+  font-size: 2rem;
+  color: orange;
+}
+
+.feature h2 {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.feature p {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Join Our Mission Section */
+.mission-section {
+  margin-top: 60px;
+}
+
+.mission-section h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.mission-section p {
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 10px auto;
+}
+
+.contact-btn {
+  background-color: green;
+  color: white;
+  border: none;
+  padding: 15px 30px; /* Improved button size */
+  font-size: 1rem;
+  margin-top: 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.contact-btn:hover {
+  background-color: darkgreen;
+}
+
+/* Get in Touch Section */
+.contact-section {
+  background-color: #f4f4f4;
+  padding: 40px 0;
+  margin-top: 50px;
+}
+
+.contact-section h4 {
+  font-size: 1rem;
+  color: #777;
+}
+
+.contact-section h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.contact-section p {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .features {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .feature {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .mission-section,
+  .contact-section {
+    padding: 20px;
+  }
+}

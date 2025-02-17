@@ -1,0 +1,129 @@
+/* Contact Section Container */
+.contact-container {
+  text-align: center;
+  padding: 50px 20px;
+  background-color: #f4f4f4;
+}
+
+/* Headings and Paragraph Alignment */
+.contact-container h4,
+.contact-container h2,
+.contact-container p {
+  display: block;
+  text-align: center;
+  margin-bottom: 10px; /* Adjust spacing */
+  width: 100%;
+}
+
+.contact-container h4 {
+  font-size: 1rem;
+  color: #444;
+  font-family: 'Poppins', sans-serif;
+}
+
+.contact-container h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+}
+
+.contact-container p {
+  font-size: 1rem;
+  color: #666;
+  font-family: 'Roboto', sans-serif;
+  max-width: 600px; /* Keeps paragraph readable */
+  margin: 0 auto 30px auto; /* Center align with margin */
+}
+
+/* Contact Options (Flex for cards) */
+.contact-options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Contact Cards */
+.contact-item {
+  text-align: center;
+  flex: 1;
+  flex-basis: calc(33.333% - 30px); /* Ensures 3 equal columns with spacing */
+  max-width: 320px;
+  min-width: 280px;
+  padding: 20px;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, background 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* Hover Effect */
+.contact-item:hover {
+  background-color: #e0ffe0;
+  transform: scale(1.05);
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Icons */
+.contact-icon {
+  font-size: 2rem;
+  color: black;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Contact Headings */
+.contact-item h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Contact Paragraph */
+.contact-item p {
+  font-size: 0.95rem;
+  color: #555;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Email Link */
+.contact-item a {
+  color: green;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+  font-family: 'Roboto', sans-serif;
+}
+
+.contact-item a:hover {
+  color: #005700;
+  text-decoration: underline;
+}
+
+/* Fade-in Animation */
+.hidden {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive Fixes */
+@media (max-width: 768px) {
+  .contact-options {
+    flex-direction: column; /* Stacks cards on smaller screens */
+    align-items: center;
+  }
+
+  .contact-item {
+    flex-basis: 100%;
+    max-width: 90%;
+  }
+}

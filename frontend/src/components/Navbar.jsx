@@ -18,6 +18,10 @@ const Navbar = () => {
         <div className="logo">MealMate 🤮</div>
         <div className="dashboard-link">
           {/* Donor-specific links */}
+          <Link to="/mission"> Mission </Link>
+          <Link to="/mission"> Notifications </Link>
+          <Link to="/mission"> Notifications </Link>
+          <Link to="/mission"> Notifications </Link>
           {role === "Donor" && (
             <>
               <Link to="/donor-dashboard" className="dashboard-item">

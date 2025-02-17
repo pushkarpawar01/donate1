@@ -1,0 +1,97 @@
+.features-section {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 40px;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.feature-card {
+  max-width: 320px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 20px;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.feature-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+h3 {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #333;
+}
+
+p {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.5;
+}
+
+
+.features-section {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 40px;
+  text-align: center;
+  background-color: #f9f9f9;
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.hidden {
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.feature-card {
+  max-width: 320px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 20px;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.feature-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+h3 {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #333;
+}
+
+p {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.5;
+}
