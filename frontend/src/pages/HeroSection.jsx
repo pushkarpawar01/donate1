@@ -1,7 +1,6 @@
 import React from "react";
 import "./HeroSection.css";
 import img1 from '../assets/tc1.webp'
-// import heroImage from "/images/hero.jpg"; // Replace with your actual image path
 
 const HeroSection = () => {
   return (
@@ -26,9 +25,7 @@ const HeroSection = () => {
           We are committed to protecting your data and ensuring your privacy.
         </p>
       </div>
-      <div className="hero-image">
-        <img  src={img1} alt="People sorting food donations" />
-      </div>
+     
     </div>
   );
 };

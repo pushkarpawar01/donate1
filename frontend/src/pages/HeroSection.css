@@ -5,7 +5,10 @@
   height: 100vh;
   padding: 50px;
   border-radius: 5px;
-  background-color: #000;
+  width: 100%;
+  background-image: url('../assets/child_hidding.avif'); /* Set background image here */
+  background-size: cover; /* Ensures the image covers the entire container */
+  background-position: center; /* Centers the image */
   color: white;
 }
 
@@ -93,21 +96,7 @@
   cursor: pointer;
 }
 
-/* Ensuring the image takes full height */
-.hero-image {
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.hero-image img {
-  height: 100%;
-  width: auto;
-  max-width: 500px;
-  border-radius: 10px;
-  object-fit: cover; /* Ensures the image scales properly */
-}
-
+/* No need for .hero-image now, since the image is the background */
 @media (max-width: 768px) {
   .hero-container {
     flex-direction: column;
@@ -120,13 +109,15 @@
     max-width: 100%;
   }
 
-  .hero-image {
-    height: auto;
+  .hero-text h1 {
+    font-size: 2rem; /* Adjust for smaller screens */
   }
 
-  .hero-image img {
-    width: 90%;
-    height: auto;
-    margin-top: 20px;
+  .hero-input input {
+    width: 200px; /* Adjust input width for smaller screens */
+  }
+
+  .signup-btn {
+    padding: 10px 18px; /* Adjust button size */
   }
 }

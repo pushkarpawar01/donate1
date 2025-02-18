@@ -1,238 +1,107 @@
-/* Navbar.css */
-
-/* Importing a Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-
-/* General Styles */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 30px;
-  background-color: #1a1a1a;
-  color: white;
-  font-family: 'Roboto', sans-serif;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 15px 50px;
+  background: white;
+  border-radius: 20px;
+  position: sticky;
+  top: 0;
+  width: 87%;
+  max-width: 1200px; /* Prevents it from becoming too wide on large screens */
+  z-index: 1000;
+  margin: 0 auto; /* Centers the navbar */
 }
 
-.navbar h2 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin: 0;
-  color: #f7f7f7;
+.logo {
+  font-size: 34px;
+  font-weight: bolder;
+  font-style: italic;
+  color: black;
 }
 
-.profile {
+.logo span {
+  color: #2c7c31;
+}
+
+/* Navigation Links */
+.dashboard-link {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.dashboard-link a {
+  text-decoration: none;
+  color: black;
+  font-size: 16px;
+  transition: color 0.3s ease-in-out;
+}
+
+.dashboard-link a:hover {
+  color: #2c7c31;
+}
+
+/* Profile Icon and Logout */
+.profile-logout {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
 }
 
-.profilePic {
-  width: 45px;
-  height: 45px;
+.profile-icon {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  border: 2px solid #f7f7f7;
-  object-fit: cover;
 }
 
-.logoutBtn {
-  background-color: #e74c3c;
+.logout-btn {
+  background: #2c7c31;
   color: white;
-  border: none;
-  padding: 6px 12px;
+  padding: 10px 20px;
   border-radius: 5px;
+  font-size: 16px;
+  border: none;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
+  transition: background 0.3s ease-in-out;
 }
 
-.logoutBtn:hover {
-  background-color: #c0392b;
+.logout-btn:hover {
+  background: #256b2b;
 }
 
-.logoutBtn:focus {
-  outline: none;
+/* Mobile Menu Icon */
+.menu-icon {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
 }
 
-/* Media Query for Small Screens */
+/* Responsive Navbar */
 @media (max-width: 768px) {
-  .navbar {
+  .menu-icon {
+    display: block;
+  }
+
+  .dashboard-link {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: white;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 15px;
+    text-align: center;
+    gap: 10px;
+    display: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
 
-  .profile {
-    margin-top: 10px;
-    width: 100%;
-    justify-content: space-between;
+  .dashboard-link.open {
+    display: flex;
+    padding: 20px 0;
   }
 
-  .logoutBtn {
-    margin-top: 10px;
-    width: 100%;
+  .profile-logout {
+    display: none; /* Hide on mobile to avoid clutter */
   }
 }
-
-/* Navbar.css */
-
-/* General Navbar Styling */
-.navbar {
-    position: fixed; /* Fix navbar to the top of the page */
-    top: 0;
-    left: 0;
-    width: 100%; /* Ensure the navbar spans the full width */
-    background-color: #2c3e50;
-    padding: 15px 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000; /* Ensure the navbar is above other elements */
-  }
-  
-  .navbar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .navbar-logo {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #fff;
-  }
-  
-  .navbar-links {
-    display: flex;
-    align-items: center;
-  }
-  
-  .navbar-link {
-    color: #fff;
-    margin-right: 20px;
-    font-size: 1rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  
-  .navbar-link:hover {
-    color: #f39c12; /* Hover effect on links */
-  }
-  
-  .logout-btn {
-    background-color: #e74c3c;
-    margin-right: 30px;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-  }
-  
-  .logout-btn:hover {
-    background-color: #c0392b; /* Hover effect on button */
-  }
-  
-  .logout-btn:focus {
-    outline: none;
-  }
-  
-  /* Add padding to the body so content isn't hidden under the navbar */
-  body {
-    padding-top: 80px; /* Adjust based on your navbar height */
-  }
-  
-  /* Responsive Design for Mobile */
-  @media (max-width: 768px) {
-    .navbar-container {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .navbar-logo {
-      margin-bottom: 10px;
-    }
-  
-    .navbar-links {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .navbar-link {
-      margin-right: 0;
-      margin-bottom: 10px;
-    }
-  }
-/* Navbar Styles */
-.navbar {
-    width: 100%;
-    background-color: #333;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    z-index: 100;
-  }
-  
-  .nav-content {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .logo {
-    font-size: 1.5rem;
-    color: white;
-  }
-  
-  .dashboard-link {
-    display: flex;
-    justify-content: center;
-    flex-grow: 1; /* Ensures the dashboard buttons are centered */
-  }
-  
-  .dashboard-item {
-    text-decoration: none;
-    color: white;
-    margin: 0 15px;
-    font-size: 1rem;
-    padding: 5px;
-  }
-  
-  .dashboard-item:hover {
-    text-decoration: underline;
-  }
-  
-  .profile-logout {
-    display: flex;
-    align-items: center;
-  }
-  
-  .profile-icon {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    margin-right: 10px;
-    border: 2px solid white;
-  }
-  
-  .logout-btn {
-    background-color: red;
-    color: white;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .logout-btn:hover {
-    background-color: #cc0000;
-  }
-    
