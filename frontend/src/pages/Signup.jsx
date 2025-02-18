@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import "./Signup.css";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -22,30 +23,55 @@ const Signup = () => {
   };
 
   return (
-    <div>
-      <h2>Signup</h2>
-      <input type="text" placeholder="Name" onChange={(e) => setName(e.target.value)} />
-      <input type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
-      <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-      <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-      
-      <select onChange={(e) => setRole(e.target.value)}>
-        <option value="Donor">Donor</option>
-        <option value="NGO">NGO</option>
-        <option value="Volunteer">Volunteer</option>
-      </select>
-      
-      {/* Address field for Donor and NGO */}
-      {(role === "Donor" || role === "NGO") && (
-        <input type="text" placeholder="Address" onChange={(e) => setAddress(e.target.value)} />
-      )}
+    <div className="signup-container">
+      <div className="signup-box">
+        <h2>Signup</h2>
+        
+        <div className="form-group">
+          <label>Name</label>
+          <input type="text" placeholder="Enter your name" onChange={(e) => setName(e.target.value)} />
+        </div>
 
-      {/* ngo_mail field for Volunteer */}
-      {role === "Volunteer" && (
-        <input type="email" placeholder="NGO Email" onChange={(e) => setNgoMail(e.target.value)} />
-      )}
+        <div className="form-group">
+          <label>Username</label>
+          <input type="text" placeholder="Enter username" onChange={(e) => setUsername(e.target.value)} />
+        </div>
 
-      <button onClick={handleSignup}>Signup</button>
+        <div className="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
+        </div>
+
+        <div className="form-group">
+          <label>Password</label>
+          <input type="password" placeholder="Enter password" onChange={(e) => setPassword(e.target.value)} />
+        </div>
+
+        <div className="form-group">
+          <label>Role</label>
+          <select onChange={(e) => setRole(e.target.value)}>
+            <option value="Donor">Donor</option>
+            <option value="NGO">NGO</option>
+            <option value="Volunteer">Volunteer</option>
+          </select>
+        </div>
+
+        {(role === "Donor" || role === "NGO") && (
+          <div className="form-group">
+            <label>Address</label>
+            <input type="text" placeholder="Enter address" onChange={(e) => setAddress(e.target.value)} />
+          </div>
+        )}
+
+        {role === "Volunteer" && (
+          <div className="form-group">
+            <label>NGO Email</label>
+            <input type="email" placeholder="Enter NGO email" onChange={(e) => setNgoMail(e.target.value)} />
+          </div>
+        )}
+
+        <button onClick={handleSignup}>Signup</button>
+      </div>
     </div>
   );
 };

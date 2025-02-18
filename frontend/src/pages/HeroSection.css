@@ -5,7 +5,8 @@
   height: 100vh;
   padding: 50px;
   border-radius: 5px;
-  background-color: #000;
+  width: 100%;
+  background-color: #000; /* Black background color */
   color: white;
 }
 

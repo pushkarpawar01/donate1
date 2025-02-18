@@ -12,12 +12,15 @@ const HomePage = () => {
 
   return (
     <div className="homepage">
+      {/* Hero Section */}
       <HeroSection />
+
+      {/* Mission Section */}
       <MissionSection />
-      <SupportNGOs />
+      <SupportNGOs/>
 
       {/* Supporting NGOs Section */}
-      <motion.section 
+      <motion.section
         className="support-section"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -38,15 +41,12 @@ const HomePage = () => {
           transition={{ duration: 0.7, ease: "easeOut" }}
           viewport={{ once: true }}
         >
-          SurplusLink is dedicated to empowering NGOs with the resources and tools they need 
-          to efficiently manage food distribution. Our platform offers real-time connections, 
-          ensuring that surplus food is quickly identified, matched, and delivered to those who 
-          need it most. By partnering with us, NGOs can enhance their mission to reduce hunger 
-          and minimize food waste.
+          SurplusLink is dedicated to empowering NGOs with the resources and tools they need to efficiently manage food distribution. Our platform offers real-time connections, ensuring that surplus food is quickly identified, matched, and delivered to those who need it most. By partnering with us, NGOs can enhance their mission to reduce hunger and minimize food waste.
         </motion.p>
 
+        {/* Features List */}
         <div className="features">
-          {[
+          {[ 
             { icon: "🚚", title: "Efficient Distribution", desc: "Streamline your food distribution process with our advanced logistics tools." },
             { icon: "📈", title: "Resource Management", desc: "Optimize your resources with our comprehensive management solutions." },
             { icon: "🔄", title: "Real-Time Connections", desc: "Connect instantly with food sources to reduce waste and feed communities." },
@@ -72,23 +72,13 @@ const HomePage = () => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => navigate("/donate")}
-          style={{
-            padding: "12px 24px",
-            fontSize: "18px",
-            backgroundColor: "#FF5733",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            marginTop: "20px",
-          }}
         >
           Donate Now
         </motion.button>
       </motion.section>
 
       {/* Join Our Mission Section */}
-      <motion.section 
+      <motion.section
         className="mission-section"
         initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 1, scale: 1 }}
@@ -104,13 +94,14 @@ const HomePage = () => {
           className="contact-btn"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
+          onClick={() => navigate("/contact")}
         >
           Contact Us
         </motion.button>
       </motion.section>
 
       {/* Get in Touch Section */}
-      <motion.section 
+      <motion.section
         className="contact-section"
         initial={{ opacity: 0, x: -50 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -126,11 +117,13 @@ const HomePage = () => {
           className="contact-btn"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
+          onClick={() => navigate("/contact")}
         >
           Reach Out
         </motion.button>
       </motion.section>
-      
+
+      {/* Features Section */}
       <FeaturesSection />
     </div>
   );
