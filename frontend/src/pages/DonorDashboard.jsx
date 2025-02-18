@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./DonorDashboard.css";  // Importing the CSS file
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const DonorDashboard = () => {
   const [donation, setDonation] = useState({
@@ -49,6 +51,7 @@ const DonorDashboard = () => {
 
   return (
     <div className="donor-dashboard-container">
+      <Navbar/>
       <div className="donor-dashboard-form">
         <h1 className="title">Donor Dashboard</h1>
 
@@ -123,6 +126,7 @@ const DonorDashboard = () => {
           Submit Donation
         </button>
       </div>
+      <Footer/>
     </div>
   );
 };
