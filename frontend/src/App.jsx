@@ -45,7 +45,7 @@ const App = () => {
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-      
+
         <Route
           path="/donor-dashboard"
           element={
@@ -96,9 +96,9 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route path="/" element={<HomePage />} />
-        <Route path="/about-us" element={<AboutUs/>}/>
+        <Route path="/about-us" element={<AboutUs />} />
         <Route path="/donate" element={<Donate />} />
         <Route path="/donation-drives" element={<DonationDrives />} />
         <Route path="/mission" element={<MissionSection />} />
@@ -110,11 +110,11 @@ const App = () => {
         <Route path="/hero-2" element={<HeroSection2 />} />
         <Route path="/features" element={<FeaturesSection />} />
         <Route path="/contact-form" element={<Contact_form />} />
-        <Route path="/support-form" element={<SupportForm/>} />
+        <Route path="/support-form" element={<SupportForm />} />
         <Route path="*" element={<Navigate to="/login" />} />
         <Route path="/map" element={<MapPage />} />s
       </Routes>
-      <Footer/>
+      <Footer />
     </Router>
   );
 };
