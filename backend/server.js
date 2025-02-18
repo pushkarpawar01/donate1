@@ -492,14 +492,18 @@ app.post("/update-donation", authenticateRole(["NGO"]), async (req, res) => {
 // ✅ NGO - Request Food (Send Notification to All Donors)
 app.post("/request-food", authenticateRole(["NGO"]), async (req, res) => {
   try {
-    const { ngoName, ngoEmail, ngoContact } = req.body;
+    const { ngoName, ngoEmail, ngoContact, quantity } = req.body;
 
-    if (!ngoName || !ngoEmail || !ngoContact) {
-      return res.status(400).json({ message: "NGO details are required" });
+    if (!ngoName || !ngoEmail || !ngoContact || !quantity) {
+      return res.status(400).json({ message: "NGO details and quantity are required" });
+    }
+
+    if (isNaN(quantity) || quantity <= 0) {
+      return res.status(400).json({ message: "Invalid quantity value" });
     }
 
     // Create a notification for all donors
-    const message = `${ngoName} needs food donations. Please consider donating! Contact: ${ngoContact}`;
+    const message = `${ngoName} needs ${quantity} food items. Please consider donating! Contact: ${ngoContact}`;
 
     // Fetch all donors and send them a notification
     const donors = await User.find({ role: "Donor" });
@@ -518,6 +522,7 @@ app.post("/request-food", authenticateRole(["NGO"]), async (req, res) => {
     res.status(500).json({ message: "Error sending food request" });
   }
 });
+
 
 // ✅ Get Donor Notifications
 app.get("/donor-notifications", authenticateRole(["Donor"]), async (req, res) => {
