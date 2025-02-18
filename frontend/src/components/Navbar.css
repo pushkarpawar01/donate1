@@ -6,14 +6,17 @@
   background: white;
   border-radius: 20px;
   position: sticky;
+  height: 100px;
   top: 0;
-  width: 87%;
-  max-width: 1200px; /* Prevents it from becoming too wide on large screens */
+  width: 99%;
+  max-width: 1400px; /* Prevents it from becoming too wide on large screens */
   z-index: 1000;
   margin: 0 auto; /* Centers the navbar */
 }
 
 .logo {
+  margin-bottom: 50px;
+  height:10px;
   font-size: 34px;
   font-weight: bolder;
   font-style: italic;
