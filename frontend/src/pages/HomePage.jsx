@@ -20,7 +20,7 @@ const HomePage = () => {
       <HeroSection />
 
       {/* Mission Section */}
-      <MissionSection />
+
       <SupportNGOs/>
 
       {/* Supporting NGOs Section */}

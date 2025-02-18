@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./DonorDashboard.css";  // Importing the CSS file
+import Donate from "./Donate"; // Import the Donate Component
+import "./DonorDashboard.css";  
 
 const DonorDashboard = () => {
   const [donation, setDonation] = useState({
@@ -123,6 +124,13 @@ const DonorDashboard = () => {
           Submit Donation
         </button>
       </div>
+
+      {/* ✅ Add Donate Component Here
+      <div className="donate-section">
+        <h2>Donate to an NGO</h2>
+        <Donate />
+      </div> */}
+
     </div>
   );
 };

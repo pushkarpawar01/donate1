@@ -2,10 +2,13 @@ import React from "react";
 import { motion } from "framer-motion";
 import "./HowItWorks.css";
 import HeroSection2 from "./HeroSection2";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const HowItWorks = () => {
   return (
     <div>
+      <Navbar/>
     <motion.div
       className="how-it-works-container"
       initial={{ opacity: 0, scale: 0.9 }}
@@ -63,6 +66,7 @@ const HowItWorks = () => {
       </div>
     </motion.div>
     <HeroSection2/>
+    <Footer/>
     </div>
   );
 };

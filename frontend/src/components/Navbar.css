@@ -8,8 +8,8 @@
   position: sticky;
   height: 100px;
   top: 0;
-  width: 99%;
-  max-width: 1400px; /* Prevents it from becoming too wide on large screens */
+  width: 100%;
+  max-width: 1460px; /* Prevents it from becoming too wide on large screens */
   z-index: 1000;
   margin: 0 auto; /* Centers the navbar */
 }

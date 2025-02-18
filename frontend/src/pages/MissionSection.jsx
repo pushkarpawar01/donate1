@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import "./MissionSection.css";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const MissionSection = () => {
   return (
@@ -71,6 +72,7 @@ const MissionSection = () => {
         </motion.div>
       </div>
     </motion.div>
+    <Footer/>
     </div>
   );
 };
