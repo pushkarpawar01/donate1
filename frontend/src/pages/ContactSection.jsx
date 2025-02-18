@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./ContactSection.css";
 import SupportForm from "./SupportForm";
+import Navbar from "../components/Navbar";
 
 const ContactSection = () => {
   const sectionRef = useRef(null);
@@ -30,6 +31,7 @@ const ContactSection = () => {
 
   return (
     <div>
+      <Navbar/>
     <div className="contact-container hidden" ref={sectionRef}>
             <h4>GET IN TOUCH</h4>
 
