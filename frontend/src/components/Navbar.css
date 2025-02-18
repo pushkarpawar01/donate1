@@ -7,7 +7,7 @@
   border-radius: 20px;
   position: sticky;
   top: 0;
-  width: 87%;
+  width: 99%;
   max-width: 1200px; /* Prevents it from becoming too wide on large screens */
   z-index: 1000;
   margin: 0 auto; /* Centers the navbar */
