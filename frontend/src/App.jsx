@@ -18,7 +18,6 @@ import DonorDashboard from "./pages/DonorDashboard";
 import NGODashboard from "./pages/NGODashboard";
 import VolunteerDashboard from "./pages/VolunteerDashboard";
 import DonorNotifications from "./pages/DonorNotifications";
-import Navbar from "./components/Navbar";
 import MyDonations from "./pages/MyDonations";
 import NGODonations from "./pages/NGODonations";
 import AboutUs from "./pages/AboutUs";
@@ -41,7 +40,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 const App = () => {
   return (
     <Router>
-      <Navbar />
+      {/* <Navbar /> */}
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
@@ -114,7 +113,6 @@ const App = () => {
         <Route path="*" element={<Navigate to="/login" />} />
         <Route path="/map" element={<MapPage />} />s
       </Routes>
-      <Footer />
     </Router>
   );
 };
