@@ -29,22 +29,28 @@ const Navbar = () => {
         ☰
       </div>
 
-      <div className={`dashboard-link ${isMenuOpen ? 'open' : ''}`}>
-        {/* Public links visible to all */}
-        <Link to="/mission" onClick={() => setIsMenuOpen(false)}>Mission</Link>
-        <Link to="/about-us" onClick={() => setIsMenuOpen(false)}>About Us</Link>
-        <Link to="/contact" onClick={() => setIsMenuOpen(false)}>Contact Us</Link>
-        <Link to="/how-it-works" onClick={() => setIsMenuOpen(false)}>How it works</Link>
+      <div className={`dashboard-link ${isMenuOpen ? "open" : ""}`}>
+        {/* ✅ Public Links (Visible to All Except Donors) */}
+        {(!token || role !== "Donor") && (
+          <>
+            <Link to="/mission" onClick={() => setIsMenuOpen(false)}>Mission</Link>
+            <Link to="/about-us" onClick={() => setIsMenuOpen(false)}>About Us</Link>
+            <Link to="/contact" onClick={() => setIsMenuOpen(false)}>Contact Us</Link>
+            <Link to="/how-it-works" onClick={() => setIsMenuOpen(false)}>How it works</Link>
+          </>
+        )}
 
-        {/* Protected routes only visible when logged in */}
+        {/* ✅ Donor-Specific Links */}
         {token && role === "Donor" && (
           <>
             <Link to="/donor-dashboard" onClick={() => setIsMenuOpen(false)}>Donor Dashboard</Link>
             <Link to="/donor-notifications" onClick={() => setIsMenuOpen(false)}>Notifications</Link>
             <Link to="/my-donations" onClick={() => setIsMenuOpen(false)}>My Donations</Link>
+            <Link to="/donate" onClick={() => setIsMenuOpen(false)}>Donate NGO</Link> {/* ✅ Added */}
           </>
         )}
         
+        {/* ✅ NGO-Specific Links */}
         {token && role === "NGO" && (
           <>
             <Link to="/ngo-dashboard" onClick={() => setIsMenuOpen(false)}>NGO Dashboard</Link>
@@ -67,7 +73,6 @@ const Navbar = () => {
         ) : (
           <div className="auth-buttons">
             <Link to="/login" className="login-btn">Login</Link>
-            {/* <Link to="/signup" className="signup-btn">Signup</Link> */}
           </div>
         )}
       </div>
