@@ -1,4 +1,6 @@
 /* Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto:wght@400;500;700&display=swap');
+
 body, html {
     font-family: "Poppins", sans-serif;
     margin: 0;
@@ -14,7 +16,6 @@ body, html {
 /* Centered Signup Box */
 .signup-container {
     margin-top: 15px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -23,7 +24,6 @@ body, html {
     min-height: 100vh;
 }
 
-/* Signup Box with Google-like Styling */
 .signup-box {
     background: #ffffff;
     padding: 40px;
@@ -69,7 +69,7 @@ body, html {
 .signup-box select {
     width: 100%;
     padding: 10px;
-    border: 1px solid #dadce0;
+    border: 1px solid #5f6368;
     border-radius: 4px;
     font-size: 1rem;
     font-family: "Roboto", sans-serif;
@@ -117,3 +117,8 @@ body, html {
     margin-bottom: 2rem;
     color: #333;
   }
+
+  .signup-heading{
+    font-family:"Poppins";
+  }
+

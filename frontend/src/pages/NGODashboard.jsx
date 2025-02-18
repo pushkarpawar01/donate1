@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import axios from "axios";
 
 const NGODashboard = () => {
@@ -60,6 +61,7 @@ const NGODashboard = () => {
   return (
     <div>
       {/* <Navbar /> */}
+      <Navbar/>
       <div className="p-6">
         <h1 className="text-2xl font-bold mb-4">NGO Dashboard</h1>
         
@@ -105,6 +107,7 @@ const NGODashboard = () => {
           </tbody>
         </table>
       </div>
+      <Footer/>
     </div>
   );
 };

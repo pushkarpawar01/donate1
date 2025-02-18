@@ -1,5 +1,6 @@
 import React from "react";
 import "./HeroSection.css";
+import { Link, useNavigate } from "react-router-dom";
 import img1 from '../assets/tc1.webp'
 
 const HeroSection = () => {
@@ -16,7 +17,8 @@ const HeroSection = () => {
         
         <div className="hero-input">
           <input type="email" placeholder="Enter your email" />
-          <button className="signup-btn">Sign up</button>
+          <Link to="/signup"><button className="signup-btn">Sign up</button></Link>
+          
         </div>
         <br />
         

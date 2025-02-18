@@ -27,6 +27,11 @@
   color: #2c7c31;
 }
 
+.logo span:hover{
+  color: rgb(78, 78, 222);
+}
+
+
 /* Navigation Links */
 .dashboard-link {
   display: flex;
@@ -136,7 +141,8 @@
 }
 
 .login-btn:hover {
-  background: rgba(44, 124, 49, 0.1);
+  background: #2c7c31;
+  color: white;
 }
 
 .signup-btn:hover {
