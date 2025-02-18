@@ -1,0 +1,93 @@
+/* Global styling for the body and container */
+body {
+    font-family: 'Roboto', sans-serif;  /* Changed to a more formal font similar to Google's */
+    margin: 0;
+    background-color: #f4f4f4;  /* Softer background color */
+  }
+  
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+  }
+  
+  .login-box {
+    background-color: #ffffff;
+    padding: 3rem 2rem;
+    border-radius: 12px;  /* Smoother corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    border: 1px solid #e0e0e0;  /* Light border for clean look */
+  }
+  
+  .login-heading {
+    font-size: 2rem;  /* Larger heading for a more formal look */
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+  
+  .input-group {
+    margin-bottom: 1.5rem;  /* Increased margin for cleaner spacing */
+  }
+  
+  .input-label {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #555;  /* Lighter label color for a softer look */
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  
+  .login-input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;  /* Rounded corners */
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+  }
+  
+  .login-input:focus {
+    border-color: #4285f4;  /* Google's blue focus color */
+    outline: none;
+  }
+  
+  .login-button {
+    width: 100%;
+    padding: 1rem;
+    background-color: #4285f4;  /* Google's blue color */
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;  /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 500;
+  }
+  
+  .login-button:hover {
+    background-color: #357ae8;  /* Darker blue on hover */
+  }
+  
+  .signup-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: #555;  /* Soft text color */
+  }
+  
+  .signup-link a {
+    color: #4285f4;  /* Same blue as the button */
+    text-decoration: none;
+  }
+  
+  .signup-link a:hover {
+    text-decoration: underline;
+  }
+  

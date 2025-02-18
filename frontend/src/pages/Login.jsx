@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Signup from "./Signup";
+import "./Login.css";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -27,32 +28,38 @@ const Login = () => {
   };
 
   return (
-    <div>
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h1 className="text-xl font-semibold mb-4">Login</h1>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 mb-4 w-full"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border p-2 mb-4 w-full"
-        />
-        <button onClick={handleLogin} className="bg-blue-500 text-white p-2 rounded w-full">
+    <div className="login-container">
+      <div className="login-box">
+        <h1 className="login-heading">Login</h1>
+        <div className="input-group">
+          <label htmlFor="email" className="input-label">Email</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="login-input"
+          />
+        </div>
+        <div className="input-group">
+          <label htmlFor="password" className="input-label">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="login-input"
+          />
+        </div>
+        <button onClick={handleLogin} className="login-button">
           Login
         </button>
+        <p className="signup-link">
+          Don't have an account? <a href="/signup">Sign Up</a>
+        </p>
       </div>
-
-      <a href="/signup">Sign In</a>
-    </div>
-    
     </div>
   );
 };
