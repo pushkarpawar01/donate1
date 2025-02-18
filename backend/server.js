@@ -4,6 +4,8 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
+const Razorpay = require("razorpay");
+
 
 const app = express();
 app.use(express.json());
@@ -46,6 +48,25 @@ const UserSchema = new mongoose.Schema({
       },
       message: "The provided NGO email does not exist."
     }
+  }
+});
+
+const razorpay = new Razorpay({
+  key_id: "rzp_test_BFlJZGyBOvGkkx",  // Replace with your Razorpay Test Key ID
+  key_secret: "kZlfisR8ju5SKoTfMbMJkb82",  // Replace with your Razorpay Test Secret Key
+});
+
+app.post("/create-order", async (req, res) => {
+  const { amount, ngoName } = req.body; // Amount and NGO name from frontend
+  try {
+      const order = await razorpay.orders.create({
+          amount: amount * 100,  // Amount in paise
+          currency: "INR",
+          payment_capture: 1, // Automatically capture the payment
+      });
+      res.json({ orderId: order.id, key: "rzp_test_BFlJZGyBOvGkkx" }); // Send Razorpay Key ID to frontend
+  } catch (error) {
+      res.status(500).json({ error: error.message });
   }
 });
 

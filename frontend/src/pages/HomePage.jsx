@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./HomePage.css";
 import HeroSection from "./HeroSection";
@@ -7,11 +8,14 @@ import SupportNGOs from "./SupportNGOs";
 import FeaturesSection from "./FeaturesSection";
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="homepage">
-      <HeroSection/>
-      <MissionSection/>
-      <SupportNGOs/>
+      <HeroSection />
+      <MissionSection />
+      <SupportNGOs />
+
       {/* Supporting NGOs Section */}
       <motion.section 
         className="support-section"
@@ -61,6 +65,26 @@ const HomePage = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* Donate Button */}
+        <motion.button
+          className="donate-btn"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => navigate("/donate")}
+          style={{
+            padding: "12px 24px",
+            fontSize: "18px",
+            backgroundColor: "#FF5733",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            marginTop: "20px",
+          }}
+        >
+          Donate Now
+        </motion.button>
       </motion.section>
 
       {/* Join Our Mission Section */}
@@ -106,7 +130,8 @@ const HomePage = () => {
           Reach Out
         </motion.button>
       </motion.section>
-      <FeaturesSection/>
+      
+      <FeaturesSection />
     </div>
   );
 };
