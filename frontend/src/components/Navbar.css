@@ -6,14 +6,17 @@
   background: white;
   border-radius: 20px;
   position: sticky;
+  height: 100px;
   top: 0;
   width: 99%;
-  max-width: 1200px; /* Prevents it from becoming too wide on large screens */
+  max-width: 1400px; /* Prevents it from becoming too wide on large screens */
   z-index: 1000;
   margin: 0 auto; /* Centers the navbar */
 }
 
 .logo {
+  margin-bottom: 50px;
+  height:10px;
   font-size: 34px;
   font-weight: bolder;
   font-style: italic;
@@ -103,5 +106,63 @@
 
   .profile-logout {
     display: none; /* Hide on mobile to avoid clutter */
+  }
+}
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.login-btn,
+.signup-btn {
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: background 0.3s ease-in-out;
+}
+
+.login-btn {
+  color: #2c7c31;
+  border: 2px solid #2c7c31;
+  background: transparent;
+}
+
+.signup-btn {
+  background: #2c7c31;
+  color: white;
+  border: none;
+}
+
+.login-btn:hover {
+  background: rgba(44, 124, 49, 0.1);
+}
+
+.signup-btn:hover {
+  background: #256b2b;
+}
+
+/* Update the mobile styles to include auth buttons */
+@media (max-width: 768px) {
+  .profile-logout {
+    display: none;
+  }
+
+  .dashboard-link.open {
+    display: flex;
+    padding: 20px 0;
+  }
+
+  /* Add auth buttons to mobile menu */
+  .dashboard-link.open .auth-buttons {
+    flex-direction: column;
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  /* Show auth buttons in mobile menu when not logged in */
+  .dashboard-link.open:not(.logged-in) .auth-buttons {
+    display: flex;
   }
 }

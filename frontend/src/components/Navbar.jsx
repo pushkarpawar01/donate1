@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./Navbar.css"; // Import your CSS file
+import "./Navbar.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -12,41 +14,62 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <nav className="navbar">
-      <Link to="/" className="logo">SurplusLink</Link>
+      <Link to="/" className="logo">
+        Surplus<span>Link</span>
+      </Link>
       
-      <div className="dashboard-link">
-        {/* Donor-specific links */}
-        <Link to="/mission">Mission</Link>
-        <Link to="/about-us">About Us</Link>
-        <Link to="/contact">Contact Us</Link>
-        <Link to="/how-it-works">How it works</Link>
-        {role === "Donor" && (
+      {/* Mobile Menu Icon */}
+      <div className="menu-icon" onClick={toggleMenu}>
+        ☰
+      </div>
+
+      <div className={`dashboard-link ${isMenuOpen ? 'open' : ''}`}>
+        {/* Public links visible to all */}
+        <Link to="/mission" onClick={() => setIsMenuOpen(false)}>Mission</Link>
+        <Link to="/about-us" onClick={() => setIsMenuOpen(false)}>About Us</Link>
+        <Link to="/contact" onClick={() => setIsMenuOpen(false)}>Contact Us</Link>
+        <Link to="/how-it-works" onClick={() => setIsMenuOpen(false)}>How it works</Link>
+
+        {/* Protected routes only visible when logged in */}
+        {token && role === "Donor" && (
           <>
-            <Link to="/donor-dashboard" className="dashboard-item">Donor Dashboard</Link>
-            <Link to="/donor-notifications" className="dashboard-item">Notifications</Link>
-            <Link to="/my-donations" className="dashboard-item">My Donations</Link>
+            <Link to="/donor-dashboard" onClick={() => setIsMenuOpen(false)}>Donor Dashboard</Link>
+            <Link to="/donor-notifications" onClick={() => setIsMenuOpen(false)}>Notifications</Link>
+            <Link to="/my-donations" onClick={() => setIsMenuOpen(false)}>My Donations</Link>
           </>
         )}
         
-        {/* NGO-specific links */}
-        {role === "NGO" && (
+        {token && role === "NGO" && (
           <>
-            <Link to="/ngo-dashboard" className="dashboard-item">NGO Dashboard</Link>
-            <Link to="/ngo-donations" className="dashboard-item">Donations</Link>
-            <Link to="/request-food" className="dashboard-item">Request Food</Link>
+            <Link to="/ngo-dashboard" onClick={() => setIsMenuOpen(false)}>NGO Dashboard</Link>
+            <Link to="/ngo-donations" onClick={() => setIsMenuOpen(false)}>Donations</Link>
+            <Link to="/request-food" onClick={() => setIsMenuOpen(false)}>Request Food</Link>
           </>
         )}
       </div>
       
       <div className="profile-logout">
-        <img
-          src="https://www.w3schools.com/howto/img_avatar.png"
-          alt="Profile"
-          className="profile-icon"
-        />
-        <button onClick={handleLogout} className="logout-btn">Logout</button>
+        {token ? (
+          <>
+            <img
+              src="https://www.w3schools.com/howto/img_avatar.png"
+              alt="Profile"
+              className="profile-icon"
+            />
+            <button onClick={handleLogout} className="logout-btn">Logout</button>
+          </>
+        ) : (
+          <div className="auth-buttons">
+            <Link to="/login" className="login-btn">Login</Link>
+            <Link to="/signup" className="signup-btn">Signup</Link>
+          </div>
+        )}
       </div>
     </nav>
   );
