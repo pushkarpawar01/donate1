@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import DonateDriveButton from "./DonateDriveButton"; // Import the new button
+import "./Donate.css"; // Import the CSS file for styling
 
 const Donate = () => {
     const [amount, setAmount] = useState("");
@@ -36,7 +37,7 @@ const Donate = () => {
     };
 
     return (
-        <div>
+        <div className="donate-container">
             <h2>Donate to an NGO</h2>
             <input
                 type="text"
