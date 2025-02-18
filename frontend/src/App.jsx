@@ -23,6 +23,7 @@ import MyDonations from "./pages/MyDonations";
 import NGODonations from "./pages/NGODonations";
 import AboutUs from "./pages/AboutUs";
 import SupportForm from "./pages/SupportForm";
+import MapPage from "./pages/MapPage";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const token = localStorage.getItem("token");
@@ -106,6 +107,7 @@ const App = () => {
         <Route path="/contact-form" element={<Contact_form />} />
         <Route path="/support-form" element={<SupportForm/>} />
         <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="/map" element={<MapPage />} />s
       </Routes>
       <Footer/>
     </Router>

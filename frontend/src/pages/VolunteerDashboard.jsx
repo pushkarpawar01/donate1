@@ -1,45 +1,82 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const VolunteerDashboard = () => {
   const [ngoEmail, setNgoEmail] = useState("");
   const [donations, setDonations] = useState([]);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // New loading state
-  const [currentPage, setCurrentPage] = useState(1); // Track current page
-  const [totalPages, setTotalPages] = useState(1); // Track total pages
+  const [volunteerLocation, setVolunteerLocation] = useState(null); // Track volunteer's location
+  const navigate = useNavigate();
 
-  const fetchDonations = async (page = 1) => {
+  // Get volunteer's current location on component mount
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setVolunteerLocation({ latitude, longitude });  // Store location in state
+        },
+        (error) => {
+          let errorMessage = "Failed to get your location.";
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage = "Permission denied. Please enable location services.";
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMessage = "Location information is unavailable.";
+              break;
+            case error.TIMEOUT:
+              errorMessage = "The request to get your location timed out.";
+              break;
+            default:
+              errorMessage = "An unknown error occurred while fetching the location.";
+          }
+          setError(errorMessage); // Set a specific error message
+          console.error("❌ Geolocation error:", error);
+        }
+      );
+    } else {
+      setError("Geolocation is not supported by this browser.");
+    }
+  }, []);
+
+  const fetchDonations = async () => {
     try {
-      setLoading(true); // Set loading to true while fetching
       const token = localStorage.getItem("token"); // Get the token from localStorage
       const response = await axios.get("http://localhost:5000/volunteer-acceptedDonations", {
-        params: { ngoEmail, page }, // Send NGO email and page as query parameters
+        params: { ngoEmail }, // Send NGO email as query parameter
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the Authorization header
         },
       });
       setDonations(response.data.donations); // Update donations state with the response data
-      setTotalPages(response.data.totalPages); // Update totalPages with the response data
       setError(""); // Clear any previous error
-      setLoading(false); // Set loading to false after fetching is complete
     } catch (err) {
       setError("Failed to fetch donations. Please try again.");
       console.error("❌ Error fetching donations:", err);
-      setLoading(false); // Set loading to false even if there's an error
     }
   };
 
   const handleDeliverDonation = async (donationId) => {
+    if (!volunteerLocation) {
+      alert("Please wait while we fetch your location.");
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:5000/volunteer-deliver-donation", // Make sure this matches your backend route
-        { donationId },
+        "http://localhost:5000/volunteer-deliver-donation", // API route for delivering donation
+        {
+          donationId,
+          volunteerLocation, // Pass the volunteer's location from the state
+        },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      alert(response.data.message); // Show a success message
-      fetchDonations(currentPage); // Refresh the list of donations
+
+      alert(response.data.message); // Show success message
+      navigate("/map", { state: { volunteerLocation } }); // Pass the location to the map page
     } catch (err) {
       console.error("❌ Error delivering donation:", err);
       alert("Failed to deliver the donation. Please try again.");
@@ -53,11 +90,6 @@ const VolunteerDashboard = () => {
     } else {
       setError("Please enter a valid NGO email.");
     }
-  };
-
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-    fetchDonations(newPage); // Fetch donations for the new page
   };
 
   return (
@@ -81,9 +113,6 @@ const VolunteerDashboard = () => {
       {/* Error Message */}
       {error && <p className="text-red-500">{error}</p>}
 
-      {/* Loading State */}
-      {loading && <p>Loading donations...</p>}
-
       {/* Display Donations */}
       {donations.length === 0 ? (
         <p>No accepted donations found for the provided NGO email.</p>
@@ -106,27 +135,6 @@ const VolunteerDashboard = () => {
             </li>
           ))}
         </ul>
-      )}
-
-      {/* Pagination Controls */}
-      {totalPages > 1 && (
-        <div className="mt-4">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
-            className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
-          >
-            Previous
-          </button>
-          <span>{currentPage} of {totalPages}</span>
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => handlePageChange(currentPage + 1)}
-            className="bg-gray-500 text-white px-4 py-2 rounded ml-2"
-          >
-            Next
-          </button>
-        </div>
       )}
     </div>
   );
