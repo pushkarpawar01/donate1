@@ -1,0 +1,126 @@
+/* Main container for the My Donations page */
+.my-donations-container {
+    padding: 30px;
+    background-color: #f4f4f9;
+    min-height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: flex-start; /* Align items to the top */
+    flex-direction: column; /* Stack items vertically */
+    gap: 20px; /* Adds space between items */
+  }
+  
+  /* Title of the page */
+  .title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #2c7c31;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Message when no donations are present */
+  .no-donations-text {
+    font-size: 1.2rem;
+    color: #555;
+    text-align: center;
+  }
+  
+  /* Styling the list of donations */
+  .donation-list {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    max-width: 800px; /* Set a max width for the donation cards */
+    margin: 0 auto; /* Center the list horizontally */
+  }
+  
+  /* Each donation item */
+  .donation-item {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+  }
+  
+  .donation-item:hover {
+    transform: translateY(-5px); /* Slight raise on hover */
+  }
+  
+  .donation-location {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c7c31;
+    margin-bottom: 10px;
+  }
+  
+  .donation-item p {
+    margin: 5px 0;
+    color: #333;
+  }
+  
+  .rating-container {
+    margin-top: 15px;
+  }
+  
+  .stars {
+    display: flex;
+  }
+  
+  .star {
+    font-size: 1.5rem;
+    color: gray;
+    margin-right: 3px;
+  }
+  
+  .star.rated {
+    color: gold;
+  }
+  
+  .donation-actions {
+    margin-top: 15px;
+  }
+  
+  .btn {
+    padding: 10px 15px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+  }
+  
+  .track-btn {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .track-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .donate-again-btn {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .donate-again-btn:hover {
+    background-color: #218838;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .my-donations-container {
+      padding: 15px;
+    }
+  
+    .donation-item {
+      padding: 15px;
+    }
+  }
+  

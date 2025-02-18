@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./DonorNotifications.css"; // Importing the CSS file
 
 const DonorNotifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -52,30 +53,27 @@ const DonorNotifications = () => {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Your Notifications</h1>
+    <div className="notifications-container">
+      <h1 className="title">Your Notifications</h1>
       {notifications.length === 0 ? (
-        <p>No notifications</p>
+        <p className="no-notifications">No notifications</p>
       ) : (
         <div>
           {/* Clear All Button */}
-          <button
-            onClick={handleClearAll}
-            className="bg-red-500 text-white p-2 mb-4 rounded"
-          >
+          <button onClick={handleClearAll} className="clear-all-btn">
             Clear All Notifications
           </button>
 
-          <ul>
+          <ul className="notification-list">
             {notifications.map((notification) => (
               <li
                 key={notification._id}
-                className={`p-2 ${notification.isRead ? "bg-gray-100" : "bg-yellow-100"}`}
+                className={`notification-item ${notification.isRead ? "read" : "unread"}`}
               >
-                {notification.message}
+                <span>{notification.message}</span>
                 <button
                   onClick={() => handleDeleteNotification(notification._id)}
-                  className="text-red-500 ml-2"
+                  className="delete-btn"
                 >
                   ❌
                 </button>

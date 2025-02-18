@@ -1,0 +1,80 @@
+/* Container for the notifications page */
+.notifications-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+  }
+  
+  /* Title for the notifications section */
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c7c31;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* No notifications message */
+  .no-notifications {
+    font-size: 1.2rem;
+    color: #555;
+    text-align: center;
+  }
+  
+  /* Button to clear all notifications */
+  .clear-all-btn {
+    background-color: #e53935;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
+    transition: background-color 0.3s ease;
+  }
+  
+  .clear-all-btn:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* List of notifications */
+  .notification-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .notification-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+  }
+  
+  .notification-item.unread {
+    background-color: #fff9c4;
+  }
+  
+  .notification-item.read {
+    background-color: #f0f0f0;
+  }
+  
+  /* Delete button on each notification */
+  .delete-btn {
+    background: none;
+    border: none;
+    color: #e53935;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .delete-btn:hover {
+    color: #c62828;
+  }
+  

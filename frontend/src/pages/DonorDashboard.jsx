@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
 import axios from "axios";
+import "./DonorDashboard.css";  // Importing the CSS file
 
 const DonorDashboard = () => {
   const [donation, setDonation] = useState({
@@ -48,54 +48,78 @@ const DonorDashboard = () => {
   };
 
   return (
-    <div>
-      {/* <Navbar /> */}
-      <div className="p-6">
-        <h1 className="text-2xl font-bold mb-4">Donor Dashboard</h1>
+    <div className="donor-dashboard-container">
+      <div className="donor-dashboard-form">
+        <h1 className="title">Donor Dashboard</h1>
 
         {/* Donation Form */}
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            type="email"
-            name="donorEmail"
-            placeholder="Donor Email"
-            value={donation.donorEmail}
-            onChange={handleInputChange}
-            className="border p-2"
-          />
-          <input
-            type="number"
-            name="peopleFed"
-            placeholder="People Fed"
-            value={donation.peopleFed}
-            onChange={handleInputChange}
-            className="border p-2"
-          />
-          <input
-            type="text"
-            name="contact"
-            placeholder="Contact"
-            value={donation.contact}
-            onChange={handleInputChange}
-            className="border p-2"
-          />
-          <input
-            type="date"
-            name="expiryDate"
-            value={donation.expiryDate}
-            onChange={handleInputChange}
-            className="border p-2"
-          />
-          <input
-            type="text"
-            name="location"
-            placeholder="Location"
-            value={donation.location}
-            onChange={handleInputChange}
-            className="border p-2"
-          />
+        <div className="donation-form">
+          <div className="form-group">
+            <label htmlFor="donorEmail" className="form-label">Donor Email</label>
+            <input
+              type="email"
+              name="donorEmail"
+              id="donorEmail"
+              placeholder="Enter Donor Email"
+              value={donation.donorEmail}
+              onChange={handleInputChange}
+              className="input-field"
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="peopleFed" className="form-label">People Fed</label>
+            <input
+              type="number"
+              name="peopleFed"
+              id="peopleFed"
+              placeholder="Enter Number of People Fed"
+              value={donation.peopleFed}
+              onChange={handleInputChange}
+              className="input-field"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="contact" className="form-label">Contact</label>
+            <input
+              type="text"
+              name="contact"
+              id="contact"
+              placeholder="Enter Contact Number"
+              value={donation.contact}
+              onChange={handleInputChange}
+              className="input-field"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="expiryDate" className="form-label">Expiry Date</label>
+            <input
+              type="date"
+              name="expiryDate"
+              id="expiryDate"
+              value={donation.expiryDate}
+              onChange={handleInputChange}
+              className="input-field"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="location" className="form-label">Location</label>
+            <input
+              type="text"
+              name="location"
+              id="location"
+              placeholder="Enter Location"
+              value={donation.location}
+              onChange={handleInputChange}
+              className="input-field"
+            />
+          </div>
         </div>
-        <button onClick={handleSubmit} className="bg-green-500 text-white p-2 mt-4 rounded">
+        
+        <button onClick={handleSubmit} className="submit-button">
           Submit Donation
         </button>
       </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./MyDonations.css"; // Importing the CSS file
 
 const MyDonations = () => {
   const [donations, setDonations] = useState([]);
@@ -13,7 +14,7 @@ const MyDonations = () => {
         });
         const sortedDonations = response.data.sort((a, b) => new Date(b.expiryDate) - new Date(a.expiryDate));
 
-        setDonations(response.data);
+        setDonations(sortedDonations);
       } catch (error) {
         console.error("Error fetching donations", error);
       }
@@ -22,61 +23,53 @@ const MyDonations = () => {
   }, []);
 
   const handleTrack = (donationId) => {
-    // Implement the logic to track the donation (for example, open a map or detailed page)
     console.log("Tracking donation:", donationId);
     window.location.href = `/track-donation/${donationId}`;
   };
 
   const handleDonateAgain = (donation) => {
-    // Pre-fill the donation form with the existing data and allow the donor to donate again
     console.log("Donate again with details:", donation);
-    // Redirect to the donor dashboard to pre-fill the donation form (if needed)
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">My Donations</h1>
-  
+    <div className="my-donations-container">
+      <h1 className="title">My Donations</h1>
+
       {donations.length === 0 ? (
-        <p>No accepted donations yet.</p>
+        <p className="no-donations-text">No accepted donations yet.</p>
       ) : (
-        <ul>
+        <ul className="donation-list">
           {donations.map((donation) => (
-            <li key={donation._id} className="p-4 border-b">
-              <h2 className="text-xl font-semibold">{donation.location}</h2>
+            <li key={donation._id} className="donation-item">
+              <h2 className="donation-location">{donation.location}</h2>
               <p><strong>People Fed:</strong> {donation.peopleFed}</p>
               <p><strong>Contact:</strong> {donation.contact}</p>
               <p><strong>Expiry Date:</strong> {new Date(donation.expiryDate).toLocaleDateString()}</p>
-  
-              {/* Display Rating */}
-              <div className="mt-2">
+
+              <div className="rating-container">
                 <p><strong>Rating:</strong></p>
-                <div className="flex">
-                  {/* Render stars for rating */}
+                <div className="stars">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <span
                       key={star}
-                      style={{
-                        color: donation.rating >= star ? "gold" : "gray",  // Highlight stars based on rating
-                        fontSize: "1.5rem",
-                      }}
+                      className={`star ${donation.rating >= star ? "rated" : ""}`}
                     >
                       ★
                     </span>
                   ))}
                 </div>
               </div>
-  
-              <div className="mt-2">
+
+              <div className="donation-actions">
                 <button
                   onClick={() => handleTrack(donation._id)}
-                  className="bg-blue-500 text-white p-2 rounded mr-2"
+                  className="btn track-btn"
                 >
                   Track
                 </button>
                 <button
                   onClick={() => handleDonateAgain(donation)}
-                  className="bg-green-500 text-white p-2 rounded"
+                  className="btn donate-again-btn"
                 >
                   Donate Again
                 </button>
@@ -87,7 +80,6 @@ const MyDonations = () => {
       )}
     </div>
   );
-};  
-      
+};
 
 export default MyDonations;
