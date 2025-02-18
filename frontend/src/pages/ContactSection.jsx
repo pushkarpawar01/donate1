@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import "./ContactSection.css";
 import SupportForm from "./SupportForm";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const ContactSection = () => {
   const sectionRef = useRef(null);
@@ -73,6 +74,7 @@ const ContactSection = () => {
       </div>
     </div>
     <SupportForm/>
+    <Footer/>
     </div>
   );
 };

@@ -7,6 +7,7 @@ import MissionSection from "./MissionSection";
 import SupportNGOs from "./SupportNGOs";
 import FeaturesSection from "./FeaturesSection";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -129,6 +130,7 @@ const HomePage = () => {
       {/* Features Section */}
       <FeaturesSection />
     </div>
+    <Footer/>
     </div>
   );
 };
