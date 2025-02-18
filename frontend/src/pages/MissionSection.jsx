@@ -1,9 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import "./MissionSection.css";
+import Navbar from "../components/Navbar";
 
 const MissionSection = () => {
   return (
+    <div>
+      <Navbar/>
     <motion.div
       className="mission-container"
       initial={{ opacity: 0, y: 30 }}
@@ -68,6 +71,7 @@ const MissionSection = () => {
         </motion.div>
       </div>
     </motion.div>
+    </div>
   );
 };
 

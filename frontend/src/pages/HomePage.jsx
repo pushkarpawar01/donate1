@@ -6,11 +6,14 @@ import HeroSection from "./HeroSection";
 import MissionSection from "./MissionSection";
 import SupportNGOs from "./SupportNGOs";
 import FeaturesSection from "./FeaturesSection";
+import Navbar from "../components/Navbar";
 
 const HomePage = () => {
   const navigate = useNavigate();
 
   return (
+    <div>
+      <Navbar/>
     <div className="homepage">
       {/* Hero Section */}
       <HeroSection />
@@ -125,6 +128,7 @@ const HomePage = () => {
 
       {/* Features Section */}
       <FeaturesSection />
+    </div>
     </div>
   );
 };
