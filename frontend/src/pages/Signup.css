@@ -1,20 +1,27 @@
 /* Global Styles */
-body {
+body, html {
     font-family: "Poppins", sans-serif;
     margin: 0;
+    padding: 0;
+    width: 100vw;
+    min-height: 100vh;  /* Ensure it takes full screen height */
     background-color: #f4f4f4;
-    min-height: 100vh;
+    overflow-x: hidden;  /* Prevents horizontal scrolling */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Centering the Signup Form */
+/* Full-width Signup Page */
 .signup-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    background-color: #f4f4f4;
-    padding: 20px;
+    width: 100vw;
+    min-height: 100vh;  /* Ensures it doesn't get cut off */
+    padding: 10vh 20px 20px; /* Prevent top cut-off */
+    box-sizing: border-box;
 }
 
 /* Signup Form Box */
@@ -116,5 +123,10 @@ body {
     .signup-box {
         width: 90%;
         padding: 25px;
+    }
+
+    /* Reduce padding to prevent cutoff on small screens */
+    .signup-container {
+        padding-top: 5vh;
     }
 }
