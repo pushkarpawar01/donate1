@@ -71,14 +71,14 @@ const HomePage = () => {
         </div>
 
         {/* Donate Button */}
-        <motion.button
+        {/* <motion.button
           className="donate-btn"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => navigate("/donate")}
         >
           Donate Now
-        </motion.button>
+        </motion.button> */}
       </motion.section>
 
       {/* Join Our Mission Section */}
