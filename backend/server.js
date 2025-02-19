@@ -523,18 +523,33 @@ app.post("/update-donation", authenticateRole(["NGO"]), async (req, res) => {
   }
 });
 
+// Backend - Get logged-in user info
+app.get("/user", authenticateRole(["NGO"]), async (req, res) => {
+  try {
+    // Get the logged-in user from the authenticated request (assuming `req.user` holds the user data)
+    const user = req.user;  // Assuming the user info is in `req.user`
+    
+    // Return the relevant details based on the user's role (NGO)
+    const { name, email, ngo_mail } = user;
+    res.status(200).json({ name, email, ngo_mail });
+  } catch (error) {
+    console.error("❌ Error fetching user details:", error);
+    res.status(500).json({ message: "Error fetching user details" });
+  }
+});
 
-// ✅ NGO - Request Food (Send Notification to All Donors)
+
+
 app.post("/request-food", authenticateRole(["NGO"]), async (req, res) => {
   try {
-    const { ngoName, ngoEmail, ngoContact } = req.body;
+    const { ngoName, ngoEmail, ngoContact, numPeople } = req.body;
 
-    if (!ngoName || !ngoEmail || !ngoContact) {
-      return res.status(400).json({ message: "NGO details are required" });
+    if (!ngoName || !ngoEmail || !ngoContact || !numPeople) {
+      return res.status(400).json({ message: "Missing required fields" });
     }
 
     // Create a notification for all donors
-    const message = `${ngoName} needs food donations. Please consider donating! Contact: ${ngoContact}`;
+    const message = `${ngoName} needs food donations for ${numPeople} people. Please consider donating! Contact: ${ngoContact}`;
 
     // Fetch all donors and send them a notification
     const donors = await User.find({ role: "Donor" });
@@ -553,6 +568,7 @@ app.post("/request-food", authenticateRole(["NGO"]), async (req, res) => {
     res.status(500).json({ message: "Error sending food request" });
   }
 });
+
 
 // ✅ Get Donor Notifications
 app.get("/donor-notifications", authenticateRole(["Donor"]), async (req, res) => {
