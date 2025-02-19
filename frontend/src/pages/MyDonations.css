@@ -6,13 +6,16 @@
     font-family: 'Roboto', sans-serif;
     display: flex;
     justify-content: center; /* Center the content horizontally */
-    align-items: flex-start; /* Align items to the top */
+    /* align-items: flex-start; Align items to the top */
     flex-direction: column; /* Stack items vertically */
     gap: 20px; /* Adds space between items */
   }
   
   /* Title of the page */
   .title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 2rem;
     font-weight: 600;
     color: #2c7c31;

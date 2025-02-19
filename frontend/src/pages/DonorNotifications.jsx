@@ -57,6 +57,7 @@ const DonorNotifications = () => {
   return (
     <div className="notifications-container">
       <Navbar/>
+      <br />
       <h1 className="title">Your Notifications</h1>
       {notifications.length === 0 ? (
         <p className="no-notifications">No notifications</p>
@@ -85,6 +86,7 @@ const DonorNotifications = () => {
           </ul>
         </div>
       )}
+      <br />
       <Footer/>
     </div>
   );
