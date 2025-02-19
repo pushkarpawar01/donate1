@@ -25,7 +25,7 @@ import SupportForm from "./pages/SupportForm";
 import Donate from "./pages/Donate";
 import DonationDrives from "./pages/DonationDrives";
 import MapPage from "./pages/MapPage";
-
+import RequestFoodForm from "./pages/RequestFoodForm";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const token = localStorage.getItem("token");
@@ -74,6 +74,14 @@ const App = () => {
           element={
             <ProtectedRoute allowedRoles={["NGO"]}>
               <NGODashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/request-food-form"
+          element={
+            <ProtectedRoute allowedRoles={["NGO"]}>
+              <RequestFoodForm />
             </ProtectedRoute>
           }
         />
