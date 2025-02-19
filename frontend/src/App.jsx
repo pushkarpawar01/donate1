@@ -25,6 +25,7 @@ import SupportForm from "./pages/SupportForm";
 import Donate from "./pages/Donate";
 import DonationDrives from "./pages/DonationDrives";
 import MapPage from "./pages/MapPage";
+import FoodRequestForm from "./pages/FoodRequestForm";
 
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -74,6 +75,14 @@ const App = () => {
           element={
             <ProtectedRoute allowedRoles={["NGO"]}>
               <NGODashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/food-request-form"
+          element={
+            <ProtectedRoute allowedRoles={["NGO"]}>
+              <FoodRequestForm />
             </ProtectedRoute>
           }
         />
