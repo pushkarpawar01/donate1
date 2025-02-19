@@ -86,12 +86,12 @@ const Donate = () => {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
             />
-            <input
+            {/* <input
                 type="text"
                 placeholder="Your UPI ID (optional)"
                 value={upiId}
                 onChange={(e) => setUpiId(e.target.value)}
-            />
+            /> */}
             <button onClick={handleDonate}>Donate with Razorpay</button>
             <DonateDriveButton />
         </div>
