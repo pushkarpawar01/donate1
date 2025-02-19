@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./DonorNotifications.css"; // Importing the CSS file
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const DonorNotifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -54,6 +56,7 @@ const DonorNotifications = () => {
 
   return (
     <div className="notifications-container">
+      <Navbar/>
       <h1 className="title">Your Notifications</h1>
       {notifications.length === 0 ? (
         <p className="no-notifications">No notifications</p>
@@ -82,6 +85,7 @@ const DonorNotifications = () => {
           </ul>
         </div>
       )}
+      <Footer/>
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./MyDonations.css"; // Importing the CSS file
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const MyDonations = () => {
   const [donations, setDonations] = useState([]);
@@ -33,6 +35,7 @@ const MyDonations = () => {
 
   return (
     <div className="my-donations-container">
+      <Navbar/>
       <h1 className="title">My Donations</h1>
 
       {donations.length === 0 ? (
@@ -78,6 +81,7 @@ const MyDonations = () => {
           ))}
         </ul>
       )}
+      <Footer/>
     </div>
   );
 };
