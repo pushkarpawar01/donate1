@@ -542,10 +542,26 @@ app.get("/user", authenticateRole(["NGO"]), async (req, res) => {
 
 app.post("/request-food", authenticateRole(["NGO"]), async (req, res) => {
   try {
+    console.log("✅ Received food request:", req.body); // Log incoming request body
+
     const { ngoName, ngoEmail, ngoContact, numPeople } = req.body;
 
+    // Log each field separately to debug missing values
+    console.log("🔹 ngoName:", ngoName);
+    console.log("🔹 ngoEmail:", ngoEmail);
+    console.log("🔹 ngoContact:", ngoContact);
+    console.log("🔹 numPeople:", numPeople);
+
+    // Ensure all required fields are present
     if (!ngoName || !ngoEmail || !ngoContact || !numPeople) {
+      console.log("❌ Missing required fields");
       return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // Ensure numPeople is a number
+    if (isNaN(numPeople) || numPeople <= 0) {
+      console.log("❌ Invalid numPeople:", numPeople);
+      return res.status(400).json({ message: "Invalid number of people" });
     }
 
     // Create a notification for all donors
@@ -555,13 +571,14 @@ app.post("/request-food", authenticateRole(["NGO"]), async (req, res) => {
     const donors = await User.find({ role: "Donor" });
 
     for (const donor of donors) {
+      console.log(`📩 Sending notification to donor: ${donor.email}`);
       const notification = new Notification({
         donorEmail: donor.email,
         message,
       });
       await notification.save();
     }
-
+    console.log("✅ Food request sent successfully!");
     res.status(200).json({ message: "Food request sent to all donors" });
   } catch (error) {
     console.error("❌ Error sending food request:", error);
