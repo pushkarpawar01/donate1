@@ -57,18 +57,25 @@ const razorpay = new Razorpay({
 });
 
 app.post("/create-order", async (req, res) => {
-  const { amount, ngoName } = req.body; // Amount and NGO name from frontend
+  const { amount, ngoName } = req.body;
+
+  if (!amount || !ngoName) {
+      return res.status(400).json({ error: "Amount and NGO name are required" });
+  }
+
   try {
       const order = await razorpay.orders.create({
-          amount: amount * 100,  // Amount in paise
+          amount: amount * 100, // Convert INR to paise
           currency: "INR",
-          payment_capture: 1, // Automatically capture the payment
+          payment_capture: 1,
       });
-      res.json({ orderId: order.id, key: "rzp_test_BFlJZGyBOvGkkx" }); // Send Razorpay Key ID to frontend
+
+      res.json({ orderId: order.id, key: "rzp_test_BFlJZGyBOvGkkx" });
   } catch (error) {
       res.status(500).json({ error: error.message });
   }
 });
+
 
 
 const User = mongoose.model("User", UserSchema);

@@ -1,39 +1,74 @@
-import React, { useState } from "react";
-import DonateDriveButton from "./DonateDriveButton"; // Import the new button
-import "./Donate.css"; // Import the CSS file for styling
+import React, { useState, useEffect } from "react";
+import DonateDriveButton from "./DonateDriveButton";
+import "./Donate.css";
 
 const Donate = () => {
     const [amount, setAmount] = useState("");
     const [ngoName, setNgoName] = useState("");
+    const [upiId, setUpiId] = useState(""); // Added UPI ID input (optional)
+
+    useEffect(() => {
+        // Load Razorpay script dynamically
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script); // Clean up script on component unmount
+        };
+    }, []);
 
     const handleDonate = async () => {
-        // Making a POST request to the backend to create an order
+        if (!amount || !ngoName) {
+            alert("Please enter both NGO name and donation amount.");
+            return;
+        }
+
         const response = await fetch("http://localhost:5000/create-order", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ amount, ngoName }), // Send the amount and NGO name to the backend
+            body: JSON.stringify({ amount, ngoName }),
         });
 
-        const { orderId, key } = await response.json(); // Get the orderId and Razorpay key from the backend response
+        const data = await response.json();
+        if (!data.orderId || !data.key) {
+            alert("Error creating order. Please try again.");
+            return;
+        }
 
         const options = {
-            key: key, // Razorpay Key ID
-            amount: amount * 100, // Amount in paise (multiply by 100)
+            key: data.key,
+            amount: amount * 100,
             currency: "INR",
             name: "Food Donation",
             description: `Donation to ${ngoName}`,
-            order_id: orderId, // Order ID from the backend
+            order_id: data.orderId,
             handler: function (response) {
                 alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
             },
+            prefill: {
+                name: "Donor Name",
+                email: "donor@example.com",
+                contact: "9999999999",
+            },
             theme: { color: "#3399cc" },
+            method: {
+                netbanking: true,
+                card: true,
+                upi: true, // Enables UPI
+                wallet: true,
+            },
         };
 
-        // Open the Razorpay checkout modal
-        const rzp = new window.Razorpay(options);
-        rzp.open();
+        if (window.Razorpay) {
+            const rzp = new window.Razorpay(options);
+            rzp.open();
+        } else {
+            alert("Razorpay SDK not loaded. Please refresh and try again.");
+        }
     };
 
     return (
@@ -50,6 +85,12 @@ const Donate = () => {
                 placeholder="Amount (INR)"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
+            />
+            <input
+                type="text"
+                placeholder="Your UPI ID (optional)"
+                value={upiId}
+                onChange={(e) => setUpiId(e.target.value)}
             />
             <button onClick={handleDonate}>Donate with Razorpay</button>
             <DonateDriveButton />
