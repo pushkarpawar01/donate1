@@ -58,9 +58,13 @@
 }
 
 .profile-icon {
+  padding-left: 1px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
+}
+.tp{
+  margin-right: 4px;
 }
 
 .logout-btn {
