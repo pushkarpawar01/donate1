@@ -540,51 +540,46 @@ app.get("/user", authenticateRole(["NGO"]), async (req, res) => {
 
 
 
+// POST request to send food request to all donors
 app.post("/request-food", authenticateRole(["NGO"]), async (req, res) => {
   try {
-    console.log("✅ Received food request:", req.body); // Log incoming request body
+    const { numPeople } = req.body;  // Now we only need the number of people
 
-    const { ngoName, ngoEmail, ngoContact, numPeople } = req.body;
+    if (!numPeople || numPeople <= 0) {
+      return res.status(400).json({ message: "Number of people is required" });
+    }
 
-    // Log each field separately to debug missing values
+    // Fetch the logged-in NGO details using JWT token (User schema)
+    const ngo = await User.findOne({ email: req.user.email, role: "NGO" });
+    if (!ngo) {
+      return res.status(404).json({ message: "NGO not found" });
+    }
     console.log("🔹 ngoName:", ngoName);
     console.log("🔹 ngoEmail:", ngoEmail);
     console.log("🔹 ngoContact:", ngoContact);
     console.log("🔹 numPeople:", numPeople);
 
-    // Ensure all required fields are present
-    if (!ngoName || !ngoEmail || !ngoContact || !numPeople) {
-      console.log("❌ Missing required fields");
-      return res.status(400).json({ message: "Missing required fields" });
-    }
+    // Create a message to notify all donors
+    const message = `${ngo.name} needs food donations for ${numPeople} people. Contact: ${ngo.contact}. Email: ${ngo.email}`;
 
-    // Ensure numPeople is a number
-    if (isNaN(numPeople) || numPeople <= 0) {
-      console.log("❌ Invalid numPeople:", numPeople);
-      return res.status(400).json({ message: "Invalid number of people" });
-    }
-
-    // Create a notification for all donors
-    const message = `${ngoName} needs food donations for ${numPeople} people. Please consider donating! Contact: ${ngoContact}`;
-
-    // Fetch all donors and send them a notification
+    // Find all donors and send them a notification
     const donors = await User.find({ role: "Donor" });
 
     for (const donor of donors) {
-      console.log(`📩 Sending notification to donor: ${donor.email}`);
       const notification = new Notification({
         donorEmail: donor.email,
         message,
       });
-      await notification.save();
+      await notification.save();  // Save notification to the DB
     }
-    console.log("✅ Food request sent successfully!");
+
     res.status(200).json({ message: "Food request sent to all donors" });
   } catch (error) {
     console.error("❌ Error sending food request:", error);
     res.status(500).json({ message: "Error sending food request" });
   }
 });
+
 
 
 // ✅ Get Donor Notifications
