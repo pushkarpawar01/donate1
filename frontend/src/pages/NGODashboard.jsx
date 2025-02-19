@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import axios from "axios";
+import "./NGODashboard.css"; // Import external CSS
 
 const NGODashboard = () => {
   const [donations, setDonations] = useState([]);
   const token = localStorage.getItem("token");
-  const ngoEmail = "ngo@example.com"; // You should get this from your auth context or user profile
+  const ngoEmail = "ngo@example.com"; // Fetch dynamically from auth context
 
   // Fetch pending donations
   const fetchDonations = async () => {
@@ -29,8 +30,8 @@ const NGODashboard = () => {
           donationId,
           status,
           ngoEmail,
-          ngoName: "NGO Example", // Should come from user profile
-          ngoContact: "1234567890" // Should come from user profile
+          ngoName: "NGO Example",
+          ngoContact: "1234567890",
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -46,49 +47,47 @@ const NGODashboard = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="dashboard-container">
+      <br />
       <Navbar />
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h1 className="text-3xl font-bold mb-6">NGO Dashboard</h1>
-          
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">Pending Donations</h2>
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white border border-gray-300">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Donor</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">People Fed</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+      <div className="dashboard-content">
+        <div className="dashboard-card">
+          <h1 className="dashboard-title">NGO Dashboard</h1>
+          <h2 className="section-title">Pending Donations</h2>
+          <div className="table-container">
+            <table className="donation-table">
+              <thead>
+                <tr>
+                  <th>Donor</th>
+                  <th>People Fed</th>
+                  <th>Location</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {donations.map((donation) => (
+                  <tr key={donation._id}>
+                    <td>{donation.donorEmail}</td>
+                    <td>{donation.peopleFed}</td>
+                    <td>{donation.location}</td>
+                    <td>
+                      <button
+                        onClick={() => updateDonationStatus(donation._id, "Accepted")}
+                        className="accept-button"
+                      >
+                        Accept
+                      </button>
+                      <button
+                        onClick={() => updateDonationStatus(donation._id, "Rejected")}
+                        className="reject-button"
+                      >
+                        Reject
+                      </button>
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {donations.map((donation) => (
-                    <tr key={donation._id}>
-                      <td className="px-6 py-4 whitespace-nowrap">{donation.donorEmail}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{donation.peopleFed}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{donation.location}</td>
-                      <td className="px-6 py-4 whitespace-nowrap space-x-2">
-                        <button
-                          onClick={() => updateDonationStatus(donation._id, "Accepted")}
-                          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm"
-                        >
-                          Accept
-                        </button>
-                        <button
-                          onClick={() => updateDonationStatus(donation._id, "Rejected")}
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
-                        >
-                          Reject
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
