@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import DonateDriveButton from "./DonateDriveButton";
 import "./Donate.css";
+import "../components/Footer.jsx"
+import Footer from "../components/Footer.jsx";
+import Navbar from "../components/Navbar.jsx";
 
 const Donate = () => {
     const [amount, setAmount] = useState("");
@@ -72,6 +75,8 @@ const Donate = () => {
     };
 
     return (
+        <div>
+            <Navbar/>
         <div className="donate-container">
             <h2>Donate to an NGO</h2>
             <input
@@ -94,7 +99,12 @@ const Donate = () => {
             /> */}
             <button onClick={handleDonate}>Donate with Razorpay</button>
             <DonateDriveButton />
+
         </div>
+        <Footer/>
+
+        </div>
+
     );
 };
 
