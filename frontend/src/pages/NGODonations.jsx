@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./NGODonations.css"; // Import CSS file
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
 
 const NGODonations = () => {
   const [donations, setDonations] = useState([]);
@@ -47,7 +50,12 @@ const NGODonations = () => {
   };
 
   return (
+    <div>
+<br />
+<Navbar/>
+{/* <br /> */}
     <div className="ngo-donations-container">
+      
       <h1 className="title">Accepted Donations</h1>
       {loading ? (
         <p className="loading-text">Loading...</p>
@@ -81,6 +89,8 @@ const NGODonations = () => {
           ))}
         </ul>
       )}
+      <Footer/>
+    </div>
     </div>
   );
 };
