@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./VolunteerDashboard.css"; // Import the CSS file
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const VolunteerDashboard = () => {
   const [ngoEmail, setNgoEmail] = useState("");
@@ -89,6 +91,7 @@ const VolunteerDashboard = () => {
 
   return (
     <div className="volunteer-dashboard">
+      <Navbar/>
       <h1 className="dashboard-title">Volunteer Dashboard</h1>
 
       {/* Form Section */}
@@ -137,6 +140,7 @@ const VolunteerDashboard = () => {
           ))
         )}
       </div>
+      <Footer/>
     </div>
   );
 };
