@@ -47,8 +47,8 @@ const Navbar = () => {
             <Link to="/ngo-dashboard" onClick={() => setIsMenuOpen(false)}>NGO Dashboard</Link>
             <Link to="/ngo-donations" onClick={() => setIsMenuOpen(false)}>Donations</Link>
             <Link to="/request-food" onClick={() => setIsMenuOpen(false)}>Request Food</Link>
-            <Link to="/accepted-donations" onClick={() => setIsMenuOpen(false)}>Accepted Donations</Link>
-            <Link to="/donation-history" onClick={() => setIsMenuOpen(false)}>History</Link>
+            {/* <Link to="/accepted-donations" onClick={() => setIsMenuOpen(false)}>Accepted Donations</Link>
+            <Link to="/donation-history" onClick={() => setIsMenuOpen(false)}>History</Link> */}
           </>
         )}
 
