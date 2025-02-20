@@ -1,73 +1,49 @@
-import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import React, { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Icon } from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 const MapPage = () => {
-  const [volunteerLocation, setVolunteerLocation] = useState(null);
-  const [locationError, setLocationError] = useState(null);
-
-  const defaultLocation = [51.505, -0.09]; // Default coordinates (London) or any fallback location
+  const [userLocation, setUserLocation] = useState(null);
 
   useEffect(() => {
-    // Use the browser's Geolocation API to get the current location
+    // Get user's current location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          setVolunteerLocation([latitude, longitude]);
+          setUserLocation([latitude, longitude]);
         },
         (error) => {
-          let errorMessage = "Failed to get location.";
-          if (error.code === error.PERMISSION_DENIED) {
-            errorMessage = "Permission denied. Please enable location services.";
-          } else if (error.code === error.POSITION_UNAVAILABLE) {
-            errorMessage = "Location information is unavailable.";
-          } else if (error.code === error.TIMEOUT) {
-            errorMessage = "The request to get user location timed out.";
-          }
-          setLocationError(errorMessage);
-          console.error("Geolocation error:", error);  // Log the error to the console for more details
-          setVolunteerLocation(defaultLocation); // Set default location if geolocation fails
+          console.error("Error getting location: ", error);
         }
       );
     } else {
-      setLocationError("Geolocation is not supported by this browser.");
-      setVolunteerLocation(defaultLocation); // Set default location if geolocation is not supported
+      console.error("Geolocation is not supported by this browser.");
     }
   }, []);
 
-  // If location is still being fetched or there's an error, show loading/error message
-  if (locationError) {
-    return <div>{locationError}</div>;
+  if (!userLocation) {
+    return <div>Loading your location...</div>;
   }
 
-  if (!volunteerLocation) {
-    return <div>Loading map...</div>;
-  }
-
-  // Set up the map center based on the volunteer's location
-  const MapCenter = ({ location }) => {
-    const map = useMap();
-    map.setView(location, map.getZoom()); // Update the map's center based on the user's location
-    return null;
-  };
+  // Custom icon for the user location marker
+  const userIcon = new Icon({
+    iconUrl: 'https://cdn-icons-png.flaticon.com/512/25/25694.png',
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+  });
 
   return (
-    <div style={{ height: "100vh" }}>
-      <MapContainer
-        center={volunteerLocation} // Center the map based on the fetched location
-        zoom={13}
-        style={{ height: "100%", width: "100%" }}
-        scrollWheelZoom={true}
-      >
+    <div style={{ height: '100vh', width: '100%' }}>
+      <MapContainer center={userLocation} zoom={13} style={{ height: '100%', width: '100%' }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {/* Dynamically update the map's center */}
-        <MapCenter location={volunteerLocation} />
-        <Marker position={volunteerLocation}>
+        <Marker position={userLocation} icon={userIcon}>
           <Popup>
-            Volunteer is here!
+            You are here!
           </Popup>
         </Marker>
       </MapContainer>
