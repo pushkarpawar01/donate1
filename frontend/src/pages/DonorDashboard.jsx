@@ -140,10 +140,10 @@ const DonorDashboard = () => {
               name="location"
               id="location"
               placeholder="Location will be auto-filled"
-              value={donation.location}
-              onChange={handleInputChange}
+              // value={donation.location}
+              // onChange={handleInputChange}
               className="input-field"
-              disabled
+              //disabled
             />
           </div>
         </div>
