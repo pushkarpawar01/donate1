@@ -308,25 +308,25 @@ app.get("/volunteer-acceptedDonations", authenticateRole(["Volunteer"]), async (
 // ✅ Volunteer - Deliver Donation and Notify Donor
 app.post("/volunteer-deliver-donation", authenticateRole(["Volunteer"]), async (req, res) => {
   try {
-    const { donationId, volunteerLocation } = req.body;
+    const { donationId } = req.body;
     const { email: volunteerEmail } = req.user; // Get volunteer email from the logged-in user
     
-    // Ensure valid donationId and volunteer location
-    if (!donationId || !volunteerLocation) {
-      return res.status(400).json({ message: "Donation ID and volunteer location are required" });
+
+    if (!donationId) {
+      return res.status(400).json({ message: "Donation ID is required" });
     }
 
-    // Find the donation
+
     const donation = await Donation.findById(donationId);
 
     if (!donation || donation.status !== "Accepted") {
       return res.status(404).json({ message: "Donation not found or not accepted" });
     }
 
-    // Update the donation with volunteer's location
-    donation.volunteerLocation = { coordinates: [volunteerLocation.longitude, volunteerLocation.latitude] };
+
+    // donation.volunteerLocation = { coordinates: [volunteerLocation.longitude, volunteerLocation.latitude] };
     
-    // Create a notification for the donor
+
     const donorEmail = donation.donorEmail;
     const message = `Your donation is on its way! The volunteer is now heading towards your location.`;
 
@@ -466,7 +466,6 @@ app.get("/ngo-acceptedDonations", authenticateRole(["NGO"]), async (req, res) =>
   }
 });
 
-// ✅ NGO - Update Donation Rating
 // ✅ NGO - Update Donation Rating
 app.post("/update-donation-rating", authenticateRole(["NGO"]), async (req, res) => {
   try {
