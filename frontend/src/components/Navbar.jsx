@@ -58,7 +58,7 @@ const Navbar = () => {
             <Link to="/donor-dashboard" onClick={() => setIsMenuOpen(false)}>Donor Dashboard</Link>
             <Link to="/donor-notifications" onClick={() => setIsMenuOpen(false)}>Notifications</Link>
             <Link to="/my-donations" onClick={() => setIsMenuOpen(false)}>My Donations</Link>
-            <Link to="/donate" onClick={() => setIsMenuOpen(false)}>Donate NGO</Link>
+            <Link to="/donate" onClick={() => setIsMenuOpen(false)} className="marg">Donate NGO</Link>
           </>
         )}
       </div>
