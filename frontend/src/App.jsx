@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import './App.css'; // Make sure this is imported
-
+import ChatButton from "./pages/ChatButton";
 import MissionSection from './pages/MissionSection'
 import HeroSection from './pages/HeroSection'
 import HowItWorks from './pages/HowItWorks'
@@ -41,6 +41,10 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 const App = () => {
   return (
     <Router>
+      {/* Display ChatButton on all pages */}
+      <div style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: 1000 }}>
+        <ChatButton />
+      </div>
       {/* <Navbar /> */}
       <Routes>
         <Route path="/signup" element={<Signup />} />
