@@ -131,6 +131,15 @@ const HomePage = () => {
 
       {/* Features Section */}
       <FeaturesSection />
+      <div className="iframe-button-container">
+        <button 
+          className="open-streamlit-btn"
+          onClick={() => window.open("http://localhost:8501")}
+        >
+          Click to open ML page 
+        </button>
+      </div>
+      <br />
     </div>
     <Footer/>
     </div>
