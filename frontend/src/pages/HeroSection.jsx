@@ -1,9 +1,11 @@
 import React from "react";
 import "./HeroSection.css";
 import { Link, useNavigate } from "react-router-dom";
-import img1 from '../assets/tc1.webp'
+import img1 from '../assets/tc1.webp';
 
 const HeroSection = () => {
+  const streamlitURL = "http://localhost:8501/";
+
   return (
     <div className="hero-container">
       <div className="hero-text">
@@ -18,7 +20,6 @@ const HeroSection = () => {
         <div className="hero-input">
           <input type="email" placeholder="Enter your email" />
           <Link to="/signup"><button className="signup-btn">Sign up</button></Link>
-          
         </div>
         <br />
         
@@ -27,8 +28,10 @@ const HeroSection = () => {
           We are committed to protecting your data and ensuring your privacy.
         </p>
       </div>
-     
+      {/* Button to open Streamlit app in a new tab */}
+    
     </div>
+    
   );
 };
 
