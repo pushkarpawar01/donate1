@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google"; // Import GoogleOAuthProvider
 import './App.css'; // Make sure this is imported
 import ChatButton from "./pages/ChatButton";
 import FunFactGenerator from "./pages/FunFactGenerator";
@@ -29,7 +30,7 @@ import DonationDrives from "./pages/DonationDrives";
 import MapPage from "./pages/MapPage";
 import RequestFoodForm from "./pages/RequestFoodForm";
 
-
+// Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const token = localStorage.getItem("token");
   const userRole = localStorage.getItem("role");
@@ -41,94 +42,98 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 };
 
 const App = () => {
+  const CLIENT_ID = "AlzaSyCxjQQacq1Jh93rd-if6VdE496o3zV8rLo"; // Replace with your Google Client ID
+
   return (
-    <Router>
-      {/* Display ChatButton on all pages */}
-      <div style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: 1000 }}>
-        <ChatButton />
-      </div>
-      {/* <Navbar /> */}
-      <Routes>
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
+    <GoogleOAuthProvider clientId={CLIENT_ID}>
+      <Router>
+        {/* Display ChatButton on all pages */}
+        <div style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: 1000 }}>
+          <ChatButton />
+        </div>
 
-        <Route
-          path="/donor-dashboard"
-          element={
-            <ProtectedRoute allowedRoles={["Donor"]}>
-              <DonorDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/donor-notifications"
-          element={
-            <ProtectedRoute allowedRoles={["Donor"]}>
-              <DonorNotifications />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/my-donations"
-          element={
-            <ProtectedRoute allowedRoles={["Donor"]}>
-              <MyDonations />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/ngo-dashboard"
-          element={
-            <ProtectedRoute allowedRoles={["NGO"]}>
-              <NGODashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/food-request-form"
-          element={
-            <ProtectedRoute allowedRoles={["NGO"]}>
-              <RequestFoodForm />
-            </ProtectedRoute>
-          }
-        />
+        <Routes>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
 
-        <Route
-          path="/ngo-donations"
-          element={
-            <ProtectedRoute allowedRoles={["NGO"]}>
-              <NGODonations />
-            </ProtectedRoute>
-          }
-        />
+          {/* Protected Routes */}
+          <Route
+            path="/donor-dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["Donor"]}>
+                <DonorDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/donor-notifications"
+            element={
+              <ProtectedRoute allowedRoles={["Donor"]}>
+                <DonorNotifications />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-donations"
+            element={
+              <ProtectedRoute allowedRoles={["Donor"]}>
+                <MyDonations />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ngo-dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["NGO"]}>
+                <NGODashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/food-request-form"
+            element={
+              <ProtectedRoute allowedRoles={["NGO"]}>
+                <RequestFoodForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ngo-donations"
+            element={
+              <ProtectedRoute allowedRoles={["NGO"]}>
+                <NGODonations />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/volunteer-dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["Volunteer"]}>
+                <VolunteerDashboard />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/volunteer-dashboard"
-          element={
-            <ProtectedRoute allowedRoles={["Volunteer"]}>
-              <VolunteerDashboard />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/donate" element={<Donate />} />
-        <Route path="/donation-drives" element={<DonationDrives />} />
-        <Route path="/mission" element={<MissionSection />} />
-        <Route path="/hero" element={<HeroSection />} />
-        <Route path="/how-it-works" element={<HowItWorks />} />
-        <Route path="/footer" element={<Footer />} />
-        <Route path="/support-ngos" element={<SupportNGOs />} />
-        <Route path="/contact" element={<ContactSection />} />
-        <Route path="/hero-2" element={<HeroSection2 />} />
-        <Route path="/features" element={<FeaturesSection />} />
-        <Route path="/contact-form" element={<Contact_form />} />
-        <Route path="/support-form" element={<SupportForm />} />
-        <Route path="*" element={<Navigate to="/login" />} />
-        <Route path="/map" element={<MapPage />} />s
-      </Routes>
-    </Router>
+          {/* Public Routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/donate" element={<Donate />} />
+          <Route path="/donation-drives" element={<DonationDrives />} />
+          <Route path="/mission" element={<MissionSection />} />
+          <Route path="/hero" element={<HeroSection />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/footer" element={<Footer />} />
+          <Route path="/support-ngos" element={<SupportNGOs />} />
+          <Route path="/contact" element={<ContactSection />} />
+          <Route path="/hero-2" element={<HeroSection2 />} />
+          <Route path="/features" element={<FeaturesSection />} />
+          <Route path="/contact-form" element={<Contact_form />} />
+          <Route path="/support-form" element={<SupportForm />} />
+          <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="/map" element={<MapPage />} />
+        </Routes>
+      </Router>
+    </GoogleOAuthProvider>
   );
 };
 

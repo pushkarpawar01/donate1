@@ -183,6 +183,52 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(AlzaSyCxjQQacq1Jh93rd-if6VdE496o3zV8rLo); // Use your Google Client ID
+
+app.post('/auth/google', async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: AlzaSyCxjQQacq1Jh93rd-if6VdE496o3zV8rLo, // Your Google Client ID
+    });
+
+    const payload = ticket.getPayload(); // Get user info from the token
+    const email = payload.email;
+    const name = payload.name;
+    const googleId = payload.sub;
+
+    // Check if the user exists in the database
+    let user = await User.findOne({ email });
+
+    // If user doesn't exist, create a new user
+    if (!user) {
+      user = new User({
+        email,
+        name,
+        username: googleId,
+        role: "Donor", // Set default role, or update this logic based on your app
+      });
+      await user.save();
+    }
+
+    // Create a JWT token and send it in the response
+    const jwtToken = jwt.sign(
+      { email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token: jwtToken, role: user.role, message: "Login successful" });
+  } catch (error) {
+    console.error("Google auth error:", error);
+    res.status(500).json({ message: "Error with Google login" });
+  }
+});
+
+
 
 // ✅ Login Route
 app.post("/login", async (req, res) => {
