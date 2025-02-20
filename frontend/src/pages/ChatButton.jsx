@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./ChatButton.css";
 
 const ChatButton = () => {
   // const [chatUrl, setChatUrl] = useState("");
@@ -11,8 +12,11 @@ const ChatButton = () => {
   // }, []);
 
   return (
-    <a href=" http://localhost:3000/">heyy</a>
-    
+    <div className="chatbo">
+
+   
+    <a href=" http://localhost:3000/">Click  here to chat</a>
+    </div>
   );
 };
 
