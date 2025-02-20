@@ -37,6 +37,10 @@ const MapPage = () => {
   }, []);
 
   // If location is still being fetched or there's an error, show loading/error message
+  if (locationError) {
+    return <div>{locationError}</div>;
+  }
+
   if (!volunteerLocation) {
     return <div>Loading map...</div>;
   }
