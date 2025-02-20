@@ -42,7 +42,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 };
 
 const App = () => {
-  const CLIENT_ID = "AlzaSyCxjQQacq1Jh93rd-if6VdE496o3zV8rLo"; // Replace with your Google Client ID
+  const CLIENT_ID = "1047403268522-mcrb7eb9ila347tfvr6v5f9j55fua92k.apps.googleusercontent.com"; // Replace with your Google Client ID
 
   return (
     <GoogleOAuthProvider clientId={CLIENT_ID}>
