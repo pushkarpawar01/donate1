@@ -17,7 +17,6 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Roboto', sans-serif; /* Apply Roboto to all headings */
 }
 
-/* Root container */
 #root {
   max-width: 100%;
   margin: 0 auto;
@@ -25,7 +24,6 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 
-/* Logo styling */
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -38,32 +36,16 @@ h1, h2, h3, h4, h5, h6 {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-/* Logo spin animation */
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
 }
-
-/* Card container */
 .card {
   padding: 2em;
 }
 
-/* Styling for "Read the Docs" link */
 .read-the-docs {
   color: #888;
 }

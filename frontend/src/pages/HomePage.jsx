@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import "./HomePage.css";
 import HeroSection from "./HeroSection";
 import MissionSection from "./MissionSection";
+import FunFactGenerator from "./FunFactGenerator";
 import SupportNGOs from "./SupportNGOs";
 import FeaturesSection from "./FeaturesSection";
 import Navbar from "../components/Navbar";
@@ -22,6 +23,7 @@ const HomePage = () => {
       {/* Mission Section */}
 
       <SupportNGOs/>
+      <FunFactGenerator/>
 
       {/* Supporting NGOs Section */}
       <motion.section

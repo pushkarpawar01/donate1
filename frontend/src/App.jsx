@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import './App.css'; // Make sure this is imported
-
+import FunFactGenerator from "./pages/FunFactGenerator";
 import MissionSection from './pages/MissionSection'
 import HeroSection from './pages/HeroSection'
 import HowItWorks from './pages/HowItWorks'
