@@ -308,13 +308,8 @@ app.post("/volunteer-deliver-donation", authenticateRole(["Volunteer"]), async (
 app.post("/donate", authenticateRole(["Donor"]), async (req, res) => {
   try {
     const { donorEmail, peopleFed, contact, expiryDate, location } = req.body;
-
     if (!donorEmail || !peopleFed || !contact || !expiryDate || !location) {
       return res.status(400).json({ message: "All fields are required" });
-    }
-
-    if (!location.latitude || !location.longitude) {
-      return res.status(400).json({ message: "Invalid location format. Must include latitude and longitude." });
     }
 
     // Parse the submitted expiry date
@@ -324,20 +319,22 @@ app.post("/donate", authenticateRole(["Donor"]), async (req, res) => {
     }
 
     // ✅ Expiry Date Validation (Must be at least 1 day later than today)
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0); // Remove time to compare only the date
+// Get today's date in local timezone
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0); // Remove time to compare only the date
 
-    // Adjust for the timezone offset
-    const timezoneOffset = currentDate.getTimezoneOffset() * 60000; // Convert minutes to milliseconds
-    const localDate = new Date(currentDate.getTime() - timezoneOffset);
+  // Adjust for the timezone offset
+  const timezoneOffset = currentDate.getTimezoneOffset() * 60000; // Convert minutes to milliseconds
+  const localDate = new Date(currentDate.getTime() - timezoneOffset);
 
-    const minExpiryDate = new Date(localDate);
-    minExpiryDate.setDate(localDate.getDate() + 1); // Expiry date must be at least tomorrow
+  const minExpiryDate = new Date(localDate);
+  minExpiryDate.setDate(localDate.getDate() + 1); // Expiry date must be at least tomorrow
 
-    // Debug Logs
-    console.log("🟢 Current Local Date:", localDate.toISOString().split("T")[0]);
-    console.log("🟢 Minimum Allowed Expiry Date:", minExpiryDate.toISOString().split("T")[0]);
-    console.log("🟡 Submitted Expiry Date:", expiryDate);
+  // Debug Logs
+  console.log("🟢 Current Local Date:", localDate.toISOString().split("T")[0]);
+  console.log("🟢 Minimum Allowed Expiry Date:", minExpiryDate.toISOString().split("T")[0]);
+  console.log("🟡 Submitted Expiry Date:", expiryDate);
+
 
     // ❌ Reject if expiry date is not at least 1 day later
     if (parsedExpiryDate < minExpiryDate) {
@@ -345,18 +342,7 @@ app.post("/donate", authenticateRole(["Donor"]), async (req, res) => {
     }
 
     // ✅ Save the donation if all validations pass
-    const newDonation = new Donation({
-      donorEmail,
-      peopleFed,
-      contact,
-      expiryDate: parsedExpiryDate,
-      donorLocation: {
-        type: "Point",
-        coordinates: [location.longitude, location.latitude], // Store in GeoJSON format
-      },
-      status: "Pending",
-    });
-
+    const newDonation = new Donation({ donorEmail, peopleFed, contact, expiryDate: parsedExpiryDate, location });
     await newDonation.save();
 
     res.status(201).json({ message: "Donation submitted successfully" });
@@ -365,7 +351,6 @@ app.post("/donate", authenticateRole(["Donor"]), async (req, res) => {
     res.status(500).json({ message: "Error submitting donation" });
   }
 });
-
 
 
 
