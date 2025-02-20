@@ -184,7 +184,7 @@ app.post("/signup", async (req, res) => {
 });
 
 const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client(AlzaSyCxjQQacq1Jh93rd-if6VdE496o3zV8rLo); // Use your Google Client ID
+const client = new OAuth2Client(1047403268522-mcrb7eb9ila347tfvr6v5f9j55fua92k.apps.googleusercontent.com); // Use your Google Client ID
 
 app.post('/auth/google', async (req, res) => {
   const { token } = req.body;
@@ -192,7 +192,7 @@ app.post('/auth/google', async (req, res) => {
   try {
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: AlzaSyCxjQQacq1Jh93rd-if6VdE496o3zV8rLo, // Your Google Client ID
+      audience: 1047403268522-mcrb7eb9ila347tfvr6v5f9j55fua92k.apps.googleusercontent.com, // Your Google Client ID
     });
 
     const payload = ticket.getPayload(); // Get user info from the token
@@ -308,25 +308,25 @@ app.get("/volunteer-acceptedDonations", authenticateRole(["Volunteer"]), async (
 // ✅ Volunteer - Deliver Donation and Notify Donor
 app.post("/volunteer-deliver-donation", authenticateRole(["Volunteer"]), async (req, res) => {
   try {
-    const { donationId } = req.body;
+    const { donationId, volunteerLocation } = req.body;
     const { email: volunteerEmail } = req.user; // Get volunteer email from the logged-in user
     
-
-    if (!donationId) {
-      return res.status(400).json({ message: "Donation ID is required" });
+    // Ensure valid donationId and volunteer location
+    if (!donationId || !volunteerLocation) {
+      return res.status(400).json({ message: "Donation ID and volunteer location are required" });
     }
 
-
+    // Find the donation
     const donation = await Donation.findById(donationId);
 
     if (!donation || donation.status !== "Accepted") {
       return res.status(404).json({ message: "Donation not found or not accepted" });
     }
 
-
-    // donation.volunteerLocation = { coordinates: [volunteerLocation.longitude, volunteerLocation.latitude] };
+    // Update the donation with volunteer's location
+    donation.volunteerLocation = { coordinates: [volunteerLocation.longitude, volunteerLocation.latitude] };
     
-
+    // Create a notification for the donor
     const donorEmail = donation.donorEmail;
     const message = `Your donation is on its way! The volunteer is now heading towards your location.`;
 
@@ -466,6 +466,7 @@ app.get("/ngo-acceptedDonations", authenticateRole(["NGO"]), async (req, res) =>
   }
 });
 
+// ✅ NGO - Update Donation Rating
 // ✅ NGO - Update Donation Rating
 app.post("/update-donation-rating", authenticateRole(["NGO"]), async (req, res) => {
   try {
