@@ -1,38 +1,44 @@
 import React, { useState, useEffect } from "react";
 import DonateDriveButton from "./DonateDriveButton";
 import "./Donate.css";
-import "../components/Footer.jsx"
 import Footer from "../components/Footer.jsx";
 import Navbar from "../components/Navbar.jsx";
 
 const Donate = () => {
     const [amount, setAmount] = useState("");
     const [ngoName, setNgoName] = useState("");
-    const [upiId, setUpiId] = useState(""); // Added UPI ID input (optional)
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
-        // Load Razorpay script dynamically
         const script = document.createElement("script");
         script.src = "https://checkout.razorpay.com/v1/checkout.js";
         script.async = true;
         document.body.appendChild(script);
 
         return () => {
-            document.body.removeChild(script); // Clean up script on component unmount
+            document.body.removeChild(script);
         };
     }, []);
 
-    const handleDonate = async () => {
-        if (!amount || !ngoName) {
-            alert("Please enter both NGO name and donation amount.");
+    const handleAmountSelect = (selectedAmount) => {
+        setAmount(selectedAmount.toString());
+    };
+
+    const handleCustomAmountChange = (e) => {
+        setAmount(e.target.value);
+    };
+
+    const handlePayment = async () => {
+        if (!ngoName || !amount || Number(amount) <= 0) {
+            alert("Please enter a valid amount and NGO name.");
             return;
         }
 
+        setShowModal(false);
+
         const response = await fetch("http://localhost:5000/create-order", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ amount, ngoName }),
         });
 
@@ -58,12 +64,6 @@ const Donate = () => {
                 contact: "9999999999",
             },
             theme: { color: "#3399cc" },
-            method: {
-                netbanking: true,
-                card: true,
-                upi: true, // Enables UPI
-                wallet: true,
-            },
         };
 
         if (window.Razorpay) {
@@ -76,37 +76,57 @@ const Donate = () => {
 
     return (
         <div>
-            <Navbar/>
-        <div className="donate-container">
-            <h2>Donate to an NGO</h2>
-            <input
-                type="text"
-                placeholder="NGO Name"
-                value={ngoName}
-                onChange={(e) => setNgoName(e.target.value)}
-            />
-            <input
-                type="number"
-                placeholder="Amount (INR)"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-            />
-            {/* <input
-                type="text"
-                placeholder="Your UPI ID (optional)"
-                value={upiId}
-                onChange={(e) => setUpiId(e.target.value)}
-            /> */}
-            <button onClick={handleDonate}>Donate with Razorpay</button>
+            <Navbar />
+            <div className="donate-container">
+                <h2>Donate to an NGO</h2>
+                <button onMouseEnter={() => setShowModal(true)}>Donate</button>
+            </div>
 
-        </div>
-        <div>
             <DonateDriveButton />
-        </div>
-        <Footer/>
+            <Footer />
 
-        </div>
+            {/* Payment Modal */}
+            {showModal && (
+                <div className="modal-overlay">
+                    <div className="modal">
+                        <h3>Select Donation Amount</h3>
+                        <div className="options">
+                            <button className="option-btn" onClick={() => handleAmountSelect(750)}>₹750 (50 meals)</button>
+                            <button className="option-btn" onClick={() => handleAmountSelect(1500)}>₹1500 (100 meals)</button>
+                            <button className="option-btn" onClick={() => handleAmountSelect(3000)}>₹3000 (200 meals)</button>
+                        </div>
 
+                        {/* Manual Amount Entry */}
+                        <input
+                            type="number"
+                            placeholder="Enter custom amount (INR)"
+                            value={amount}
+                            onChange={handleCustomAmountChange}
+                            className="ngo-input"
+                        />
+
+                        {/* NGO Name Input */}
+                        <input
+                            type="text"
+                            placeholder="Enter NGO Name"
+                            value={ngoName}
+                            onChange={(e) => setNgoName(e.target.value)}
+                            className="ngo-input"
+                        />
+
+                        <p className="info-text">
+                            To address malnutrition in India, we need to serve 250 nutritious meals per child every academic year.
+                        </p>
+
+                        <button className="pledge-btn" onClick={handlePayment} disabled={!ngoName || !amount}>
+                            Pledge your contribution here
+                        </button>
+
+                        <button className="close-btn" onClick={() => setShowModal(false)}>Close</button>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 };
 

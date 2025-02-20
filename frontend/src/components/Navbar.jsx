@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Navbar.css";
+import img1 from "../assets/karanlogo.png"; // Corrected image import
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role"); // NGO or Donor
+  const role = localStorage.getItem("role")?.toLowerCase(); // Case-insensitive check
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
@@ -22,11 +23,11 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <Link to="/" className="logo">
-        Surplus<span>Link</span>
+        <img src={img1} alt="Logo" />
       </Link>
 
       {/* Mobile Menu Icon */}
-      <div className="menu-icon" onClick={toggleMenu}>
+      <div className="menu-icon" onClick={toggleMenu} aria-label="Toggle menu">
         ☰
       </div>
 
@@ -42,23 +43,21 @@ const Navbar = () => {
         )}
 
         {/* NGO-Specific Dashboard (Only for NGOs) */}
-        {token && role === "NGO" && (
+        {token && role === "ngo" && (
           <>
             <Link to="/ngo-dashboard" onClick={() => setIsMenuOpen(false)}>NGO Dashboard</Link>
             <Link to="/ngo-donations" onClick={() => setIsMenuOpen(false)}>Donations</Link>
-            <Link to="/food-request-form"  onClick={() => setIsMenuOpen(false)}>Request Food</Link>
-            {/* <Link to="/accepted-donations" onClick={() => setIsMenuOpen(false)}>Accepted Donations</Link>
-            <Link to="/donation-history" onClick={() => setIsMenuOpen(false)}>History</Link> */}
+            <Link to="/food-request-form" onClick={() => setIsMenuOpen(false)}>Request Food</Link>
           </>
         )}
 
         {/* Donor-Specific Dashboard (Only for Donors) */}
-        {token && role === "Donor" && (
+        {token && role === "donor" && (
           <>
             <Link to="/donor-dashboard" onClick={() => setIsMenuOpen(false)}>Donor Dashboard</Link>
             <Link to="/donor-notifications" onClick={() => setIsMenuOpen(false)}>Notifications</Link>
             <Link to="/my-donations" onClick={() => setIsMenuOpen(false)}>My Donations</Link>
-            <Link to="/donate" onClick={() => setIsMenuOpen(false)}>Donate NGO</Link>
+            <Link to="/donate" onClick={() => setIsMenuOpen(false)} className="marg">Donate NGO</Link>
           </>
         )}
       </div>
