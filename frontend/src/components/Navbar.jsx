@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Navbar.css";
-import img1 from "../assets/karanlogo.png"; // Corrected image import
+import img1 from "../assets/logo1.png"; // Corrected image import
 
 const Navbar = () => {
   const navigate = useNavigate();
