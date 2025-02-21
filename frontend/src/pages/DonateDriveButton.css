@@ -1,0 +1,37 @@
+/* General Container */
+.donate-drive-container {
+    text-align: center;
+    margin-top: 20px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 40px auto;
+}
+
+/* Text Styling */
+.donate-drive-text {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+/* Donate Button */
+.donate-drive-button {
+    padding: 12px 24px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.donate-drive-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
