@@ -34,8 +34,9 @@ const MyDonations = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="my-donations-container">
-      <Navbar/>
       <br />
       <br />
       <br />
@@ -86,6 +87,7 @@ const MyDonations = () => {
       )}
       <Footer/>
     </div>
+    </>
   );
 };
 
