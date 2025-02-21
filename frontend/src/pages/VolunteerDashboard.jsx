@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./VolunteerDashboard.css"; // Import the CSS file
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import ChatButton from "./ChatButton";
 
 const VolunteerDashboard = () => {
   const [ngoEmail, setNgoEmail] = useState("");
@@ -94,6 +95,7 @@ const VolunteerDashboard = () => {
   return (
     <div className="volunteer-dashboard">
       <Navbar/>
+      <ChatButton/>
       <h1 className="dashboard-title">Volunteer Dashboard</h1>
 
       {/* Form Section */}
