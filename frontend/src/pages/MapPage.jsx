@@ -1,79 +1,62 @@
-import { useEffect, useState } from "react";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+// src/components/MapPage.jsx
+import React, { useState, useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { Icon } from 'leaflet';
 
 const MapPage = () => {
-  const [map, setMap] = useState(null);
-  const [userLocation, setUserLocation] = useState(null); // To store the user's location
+  const [currentLocation, setCurrentLocation] = useState(null);
 
   useEffect(() => {
-    const initMap = async () => {
-      const L = await import('leaflet');
+    // Get user's current location using Geolocation API
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setCurrentLocation([latitude, longitude]); // Set current position
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+          alert('Unable to retrieve your location.');
+        }
+      );
+    } else {
+      alert('Geolocation is not supported by this browser.');
+    }
+  }, []);
 
-      const mapInstance = L.map("map", {
-        zoomControl: false,
-        maxBounds: [
-          [33.5, -119.0], // Southwest corner
-          [34.5, -117.5], // Northeast corner
-        ],
-        maxBoundsViscosity: 1.0, // Keeps user inside the bounds
-      }).setView([34.0522, -118.2437], 12); // Center on LA initially
-
-      // Define tile layers
-      const lightTiles = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      });
-
-      lightTiles.addTo(mapInstance);
-
-      // Adding zoom controls
-      L.control.zoom({
-        position: "topright",
-      }).addTo(mapInstance);
-
-      // Store map instance
-      setMap(mapInstance);
-
-      // Get user's current location with high accuracy
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            setUserLocation([lat, lng]);
-
-            // Set map view to user's location
-            mapInstance.setView([lat, lng], 13); // Zoom level can be adjusted
-
-            // Add a marker for the user's location
-            L.marker([lat, lng])
-              .addTo(mapInstance)
-              .bindPopup("You are here")
-              .openPopup();
-          },
-          (error) => {
-            console.error("Error getting location:", error);
-            alert("Could not get accurate location.");
-          },
-          {
-            enableHighAccuracy: true, // This improves the accuracy
-            timeout: 5000, // Set a timeout for how long the browser should try to get the location
-            maximumAge: 0, // Do not use a cached position
-          }
-        );
-      }
-    };
-
-    initMap();
-
-    // Cleanup
-    return () => {
-      if (map) map.remove();
-    };
-  }, []); // Initial map setup
+  // Custom Marker Icon (optional)
+  const customIcon = new Icon({
+    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png', // Leaflet default marker icon URL
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+  });
 
   return (
-    <div id="map" className="w-full h-screen z-10" />
+    <div style={{ height: '100vh' }}>
+      {/* Only render the map if we have the user's current location */}
+      {currentLocation ? (
+        <MapContainer
+          center={currentLocation} // Set the map center to the current location
+          zoom={15} // Zoom level (adjust as needed)
+          style={{ width: '100%', height: '100%' }}
+        >
+          {/* TileLayer: You can use any tile source, here we use OpenStreetMap */}
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          {/* Marker for the user's current location */}
+          <Marker position={currentLocation} icon={customIcon}>
+            <Popup>
+              <span>You are here</span>
+            </Popup>
+          </Marker>
+        </MapContainer>
+      ) : (
+        <div>Loading map...</div>
+      )}
+    </div>
   );
 };
 
