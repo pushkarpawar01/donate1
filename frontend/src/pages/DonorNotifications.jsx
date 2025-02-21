@@ -58,6 +58,9 @@ const DonorNotifications = () => {
     <div className="notifications-container">
       <Navbar/>
       <br />
+      <br />
+      <br />
+      <br />
       <h1 className="title">Your Notifications</h1>
       {notifications.length === 0 ? (
         <p className="no-notifications">No notifications</p>

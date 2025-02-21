@@ -61,7 +61,9 @@ export default function SupportForm() {
   };
 
   return (
+
     <div className="support-container">
+      
       <form
         onSubmit={handleSubmit}
         className={`support-form ${isValid ? '' : 'validated-form'}`}

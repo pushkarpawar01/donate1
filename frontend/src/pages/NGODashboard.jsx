@@ -50,6 +50,7 @@ const NGODashboard = () => {
     <div className="dashboard-container">
       <br />
       <Navbar />
+      
       <div className="dashboard-content">
         <div className="dashboard-card">
           <h1 className="dashboard-title">NGO Dashboard</h1>

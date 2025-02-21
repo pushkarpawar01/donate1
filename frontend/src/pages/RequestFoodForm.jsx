@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "./RequestFoodForm.css"; // Import CSS file
+
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -53,6 +55,7 @@ const RequestFoodForm = () => {
   
 
   return (
+    <>
     <div className="request-food-form">
       <Navbar />
       <h2>Request Food from Donors</h2>
@@ -108,8 +111,10 @@ const RequestFoodForm = () => {
 
       {message && <p>{message}</p>} {/* Show success or error message */}
       
-      <Footer />
     </div>
+          <Footer />
+          </>
+
   );
 };
 

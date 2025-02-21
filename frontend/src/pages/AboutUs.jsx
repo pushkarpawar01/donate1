@@ -8,6 +8,9 @@ const AboutUs = () => {
   return (
     <div>
       <Navbar/>
+      <br />
+      <br />
+      <br />
       <Sustainability/>
       <Footer/>
     </div>

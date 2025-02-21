@@ -33,6 +33,11 @@ const ContactSection = () => {
   return (
     <div>
       <Navbar/>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     <div className="contact-container hidden" ref={sectionRef}>
             <h4>GET IN TOUCH</h4>
 
@@ -73,6 +78,7 @@ const ContactSection = () => {
         </div>
       </div>
     </div>
+
     <SupportForm/>
     <Footer/>
     </div>
