@@ -5,7 +5,7 @@ import Footer from "../components/Footer.jsx";
 import Navbar from "../components/Navbar.jsx";
 
 const Donate = () => {
-    const [amount, setAmount] = useState("");
+    const [amount, setAmount] = useState(""); 
     const [ngoName, setNgoName] = useState("");
     const [showModal, setShowModal] = useState(false);
 
@@ -36,41 +36,45 @@ const Donate = () => {
 
         setShowModal(false);
 
-        const response = await fetch("http://localhost:5000/create-order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ amount, ngoName }),
-        });
+        try {
+            const response = await fetch("http://localhost:5000/create-order", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ amount, ngoName }),
+            });
 
-        const data = await response.json();
-        if (!data.orderId || !data.key) {
-            alert("Error creating order. Please try again.");
-            return;
-        }
+            const data = await response.json();
+            if (!data.orderId || !data.key) {
+                alert("Error creating order. Please try again.");
+                return;
+            }
 
-        const options = {
-            key: data.key,
-            amount: amount * 100,
-            currency: "INR",
-            name: "Food Donation",
-            description: `Donation to ${ngoName}`,
-            order_id: data.orderId,
-            handler: function (response) {
-                alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
-            },
-            prefill: {
-                name: "Donor Name",
-                email: "donor@example.com",
-                contact: "9999999999",
-            },
-            theme: { color: "#3399cc" },
-        };
+            const options = {
+                key: data.key,
+                amount: amount * 100,
+                currency: "INR",
+                name: "Food Donation",
+                description: `Donation to ${ngoName}`,
+                order_id: data.orderId,
+                handler: function (response) {
+                    alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
+                },
+                prefill: {
+                    name: "Donor Name",
+                    email: "donor@example.com",
+                    contact: "9999999999",
+                },
+                theme: { color: "#3399cc" },
+            };
 
-        if (window.Razorpay) {
-            const rzp = new window.Razorpay(options);
-            rzp.open();
-        } else {
-            alert("Razorpay SDK not loaded. Please refresh and try again.");
+            if (window.Razorpay) {
+                const rzp = new window.Razorpay(options);
+                rzp.open();
+            } else {
+                alert("Razorpay SDK not loaded. Please refresh and try again.");
+            }
+        } catch (error) {
+            alert("An error occurred while processing the payment.");
         }
     };
 
@@ -79,7 +83,7 @@ const Donate = () => {
             <Navbar />
             <div className="donate-container">
                 <h2>Donate to an NGO</h2>
-                <button onMouseEnter={() => setShowModal(true)}>Donate</button>
+                <button onClick={() => setShowModal(true)}>Donate</button>
             </div>
 
             <DonateDriveButton />
@@ -96,7 +100,7 @@ const Donate = () => {
                             <button className="option-btn" onClick={() => handleAmountSelect(3000)}>₹3000 (200 meals)</button>
                         </div>
 
-                        {/* Manual Amount Entry */}
+                        {/* Custom Amount Input */}
                         <input
                             type="number"
                             placeholder="Enter custom amount (INR)"
