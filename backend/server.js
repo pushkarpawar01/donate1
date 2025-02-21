@@ -144,6 +144,24 @@ const authenticateRole = (allowedRoles) => {
   };
 };
 
+app.post("/validate-ngo-email", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const existingNgo = await User.findOne({ email: email }); // Check email in database
+
+    if (existingNgo) {
+      return res.json({ exists: true, message: "Email is registered" });
+    } else {
+      return res.json({ exists: false, message: "This NGO email is not registered." });
+    }
+  } catch (error) {
+    console.error("Error checking email:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 
 // ✅ Signup Routes
 app.post("/signup", async (req, res) => {
