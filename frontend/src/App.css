@@ -10,13 +10,14 @@
 
 /* Apply fonts globally */
 body, p, span, div, input, textarea, button, label {
-  font-family: 'Poppins', sans-serif; /* Apply Poppins to most elements */
+  font-family: 'Roboto', sans-serif; /* Use Roboto for general text */
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Roboto', sans-serif; /* Apply Roboto to all headings */
+  font-family: 'Poppins', sans-serif; /* Use Poppins for headings */
 }
 
+/* Centering root container */
 #root {
   max-width: 100%;
   margin: 0 auto;
@@ -24,28 +25,31 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 
+/* Logo styling */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
-  cursor: pointer; /* Add cursor pointer for better UX */
+  cursor: pointer;
 }
 
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
 
-
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
 }
+
+/* Card styling */
 .card {
   padding: 2em;
 }
 
+/* Documentation link styling */
 .read-the-docs {
   color: #888;
 }
