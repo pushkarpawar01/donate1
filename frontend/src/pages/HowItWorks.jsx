@@ -9,6 +9,11 @@ const HowItWorks = () => {
   return (
     <div>
       <Navbar/>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     <motion.div
       className="how-it-works-container"
       initial={{ opacity: 0, scale: 0.9 }}
