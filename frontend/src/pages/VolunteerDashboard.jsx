@@ -83,13 +83,36 @@ const VolunteerDashboard = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (ngoEmail.trim()) {
-      fetchDonations();
-    } else {
-      setError("Please enter a valid NGO email.");
+  const validateNgoEmail = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/validate-ngo-email", { email: ngoEmail });
+  
+      if (response.data.exists) {
+        return true; // NGO exists, proceed
+      } else {
+        setError("This NGO email is not registered.");
+        return false; // Stop execution
+      }
+    } catch (error) {
+      setError("Error validating NGO email. Please try again.");
+      return false;
     }
+  };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    if (!ngoEmail.trim()) {
+      setError("Please enter a valid NGO email.");
+      return;
+    }
+  
+    const isValidNgo = await validateNgoEmail();
+    if (!isValidNgo) {
+      return; // Stop execution if NGO does not exist
+    }
+  
+    fetchDonations(); // Proceed to fetch donations
   };
 
   return (
