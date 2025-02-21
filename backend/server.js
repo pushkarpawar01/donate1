@@ -193,7 +193,7 @@ app.post('/auth/google', async (req, res) => {
   try {
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: 1047403268522-mcrb7eb9ila347tfvr6v5f9j55fua92k.apps.googleusercontent.com, // Your Google Client ID
+      audience: "1047403268522-mcrb7eb9ila347tfvr6v5f9j55fua92k.apps.googleusercontent.com", // Your Google Client ID
     });
 
     const payload = ticket.getPayload(); // Get user info from the token
