@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import "./MapPage.css";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const MapPage = () => {
   const [location, setLocation] = useState(null);
@@ -26,6 +28,8 @@ const MapPage = () => {
   }
 
   return (
+    <div>
+      <Navbar/>
     <LoadScript googleMapsApiKey="AIzaSyCxjQQacq1Jh93rd-if6VdE496o3zV8rLo">
       <GoogleMap
         mapContainerStyle={{
@@ -39,6 +43,7 @@ const MapPage = () => {
         <Marker position={location} />
       </GoogleMap>
     </LoadScript>
+    </div>
   );
 };
 
