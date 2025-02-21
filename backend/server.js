@@ -9,6 +9,7 @@ const Razorpay = require("razorpay");
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 app.use(cors());
 
 // MongoDB Connection
@@ -184,7 +185,7 @@ app.post("/signup", async (req, res) => {
 });
 
 const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client(1047403268522-mcrb7eb9ila347tfvr6v5f9j55fua92k.apps.googleusercontent.com); // Use your Google Client ID
+const client = new OAuth2Client("1047403268522-mcrb7eb9ila347tfvr6v5f9j55fua92k.apps.googleusercontent.com"); // Use your Google Client ID
 
 app.post('/auth/google', async (req, res) => {
   const { token } = req.body;
