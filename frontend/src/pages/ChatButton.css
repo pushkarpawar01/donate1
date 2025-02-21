@@ -1,11 +1,48 @@
-.chatbo{
+/* Chat Button Container */
+.chatbo {
     display: flex;
+    align-items: center;
+    justify-content: center;
     position: fixed;
-    left: 10px;
+    left: 20px;
     bottom: 20px;
-    background-color: white;
-    padding: 10px 18px;
-    margin: 5px;
-    border-radius: 4px;
-}
-
+    background-color: #2c7c31;
+    padding: 12px 20px;
+    border-radius: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* Chat Button Hover Effect */
+  .chatbo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Chat Button Link */
+  .chatbo a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  /* Chat Button Click Effect */
+  .chatbo:active {
+    transform: scale(0.98);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .chatbo {
+      left: 10px;
+      bottom: 15px;
+      padding: 10px 15px;
+    }
+    
+    .chatbo a {
+      font-size: 0.9rem;
+    }
+  }
+  
