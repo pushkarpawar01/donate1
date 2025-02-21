@@ -78,3 +78,24 @@
     color: #c62828;
   }
   
+  /* Reduce size of the delete button */
+.delete-btn {
+  background: none;
+  border: none;
+  color: #e53935;
+  font-size: 1rem; /* Reduced from 1.5rem */
+  cursor: pointer;
+  padding: 5px; /* Add slight padding for better spacing */
+  width: 25px; /* Adjust width */
+  height: 25px; /* Adjust height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%; /* Makes it circular */
+  transition: transform 0.2s ease;
+}
+
+.delete-btn:hover {
+  color: #c62828;
+  transform: scale(1.1); /* Slight increase on hover */
+}
