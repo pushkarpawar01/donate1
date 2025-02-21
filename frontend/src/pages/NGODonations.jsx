@@ -19,35 +19,57 @@ const NGODonations = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
+  
         setDonations(response.data);
+  
+        // Store initial ratings
+        const initialRatings = {};
+        response.data.forEach((donation) => {
+          initialRatings[donation._id] = donation.rating || 0; // Default to 0 if not rated
+        });
+        setRatings(initialRatings);
       } catch (error) {
         console.error("Error fetching donations", error);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchDonations();
   }, []);
+  
 
   const handleRating = async (donationId, rating) => {
     try {
+      console.log(`🔹 Sending rating: ${rating} for donationId: ${donationId}`);
+      const token = localStorage.getItem("token");
+  
+      // Optimistically update UI before API call
       setRatings((prevRatings) => ({
         ...prevRatings,
         [donationId]: rating,
       }));
-
-      const token = localStorage.getItem("token");
-      await axios.post(
+  
+      const response = await axios.post(
         "http://localhost:5000/rate-donation",
         { donationId, rating },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      console.log("Api response:",response.data);
+      console.log("🔹 Updated Ratings State:", ratings);
+      
     } catch (error) {
+      console.error("❌ API Error:", error.response ? error.response.data : error.message);
       alert("Failed to update rating. Please try again.");
+  
+      // Revert UI change if API fails
+      setRatings((prevRatings) => ({
+        ...prevRatings,
+        [donationId]: prevRatings[donationId] || 0,
+      }));
     }
   };
+  
 
   return (
     <div>
@@ -79,9 +101,11 @@ const NGODonations = () => {
                       key={star}
                       onClick={() => handleRating(donation._id, star)}
                       className={`star-button ${ratings[donation._id] >= star ? "selected" : ""}`}
+                      disabled={ratings[donation._id] > 0} // Disable if already rated
                     >
                       ★
                     </button>
+
                   ))}
                 </div>
               </div>
