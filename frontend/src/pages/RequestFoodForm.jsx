@@ -36,6 +36,11 @@ const RequestFoodForm = () => {
       setMessage("Please provide all the required NGO details.");
       return;
     }
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(ngoContact)) {
+      setMessage("Please enter a valid 10-digit contact number.");
+      return;
+    }
 
     // Validate if NGO email exists
     const isNgoEmailValid = await validateNgoEmail(ngoEmail);
