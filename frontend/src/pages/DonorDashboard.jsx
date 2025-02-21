@@ -4,6 +4,7 @@ import "./DonorDashboard.css";  // Importing the CSS file
 import Donate from "./Donate";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import ChatButton from "./ChatButton";
 
 const DonorDashboard = () => {
   const [donation, setDonation] = useState({
@@ -154,6 +155,8 @@ const DonorDashboard = () => {
           Submit Donation
         </button>
       </div>
+      <ChatButton/>
+      <Footer/>
     </div>
   );
 };

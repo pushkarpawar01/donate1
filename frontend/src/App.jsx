@@ -47,10 +47,6 @@ const App = () => {
   return (
     <GoogleOAuthProvider clientId={CLIENT_ID}>
       <Router>
-        {/* Display ChatButton on all pages */}
-        <div style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: 1000 }}>
-          <ChatButton />
-        </div>
 
         <Routes>
           <Route path="/signup" element={<Signup />} />
