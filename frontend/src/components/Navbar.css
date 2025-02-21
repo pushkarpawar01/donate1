@@ -1,5 +1,3 @@
-
-
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -11,7 +9,7 @@
   height: 100px;
   top: 0;
   width: 100%;
-  max-width: 1460px; /* Prevents it from becoming too wide on large screens */
+  /* max-width: 1460px;  */
   z-index: 1000;
   margin: 0 auto; /* Centers the navbar */
 }
