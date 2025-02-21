@@ -82,6 +82,8 @@ const Donate = () => {
         <div>
             <Navbar />
             <br />
+            <br />
+            <br />
             <div className="donate-container">
                 <h2>Donate to an NGO</h2>
                 <button onClick={() => setShowModal(true)}>Donate</button>
