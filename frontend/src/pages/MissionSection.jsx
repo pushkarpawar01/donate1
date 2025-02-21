@@ -8,6 +8,12 @@ const MissionSection = () => {
   return (
     <div>
       <Navbar/>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      
     <motion.div
       className="mission-container"
       initial={{ opacity: 0, y: 30 }}
