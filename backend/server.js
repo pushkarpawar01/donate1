@@ -605,10 +605,14 @@ app.get("/user", authenticateRole(["NGO"]), async (req, res) => {
 // POST request to send food request to all donors
 app.post("/request-food", authenticateRole(["NGO"]), async (req, res) => {
   try {
-    const { numPeople } = req.body;  // Now we only need the number of people
+    const { numPeople, ngoName, ngoEmail, ngoContact } = req.body;  
 
     if (!numPeople || numPeople <= 0) {
       return res.status(400).json({ message: "Number of people is required" });
+    }
+
+    if (!ngoName || !ngoEmail || !ngoContact) {
+      return res.status(400).json({ message: "All NGO details are required" });
     }
 
     // Fetch the logged-in NGO details using JWT token (User schema)
@@ -616,31 +620,28 @@ app.post("/request-food", authenticateRole(["NGO"]), async (req, res) => {
     if (!ngo) {
       return res.status(404).json({ message: "NGO not found" });
     }
-    console.log("🔹 ngoName:", ngoName);
-    console.log("🔹 ngoEmail:", ngoEmail);
-    console.log("🔹 ngoContact:", ngoContact);
-    console.log("🔹 numPeople:", numPeople);
 
-    // Create a message to notify all donors
-    const message = `${ngo.name} needs food donations for ${numPeople} people. Contact: ${ngo.contact}. Email: ${ngo.email}`;
+    console.log("🔹 NGO Details:", { ngoName, ngoEmail, ngoContact, numPeople });
 
-    // Find all donors and send them a notification
+    // Find all donors
     const donors = await User.find({ role: "Donor" });
+    console.log("🔹 Found donors:", donors.length);
 
     for (const donor of donors) {
       const notification = new Notification({
         donorEmail: donor.email,
-        message,
+        message: `${ngoName} needs food for ${numPeople} people. Contact: ${ngoContact}, Email: ${ngoEmail}`,
       });
-      await notification.save();  // Save notification to the DB
+      await notification.save();
     }
 
-    res.status(200).json({ message: "Food request sent to all donors" });
+    res.status(200).json({ message: "Food request sent successfully" });
   } catch (error) {
-    console.error("❌ Error sending food request:", error);
-    res.status(500).json({ message: "Error sending food request" });
+    console.error("❌ Server Error:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 });
+
 
 
 
