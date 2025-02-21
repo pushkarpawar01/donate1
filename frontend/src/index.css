@@ -7,7 +7,7 @@
 }
 
 :root {
-  font-family: Poppins, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Roboto, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -36,6 +36,15 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+}
+
+/* Apply fonts globally */
+body, p, span, div, input, textarea, button, label {
+  font-family: 'Roboto', sans-serif; /* Apply Roboto to general text */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif; /* Apply Poppins to all headings */
 }
 
 h1 {
@@ -73,17 +82,4 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
-
-/* Import Google Fonts */
-
-
-
-/* Apply fonts globally */
-body, p, span, div, input, textarea, button, label {
-  font-family: 'Poppins', sans-serif; /* Apply Poppins to most elements */
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Roboto', sans-serif; /* Apply Roboto to all headings */
 }
