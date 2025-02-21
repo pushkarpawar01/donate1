@@ -476,93 +476,77 @@ app.get("/ngo-acceptedDonations", authenticateRole(["NGO"]), async (req, res) =>
 
 // ✅ NGO - Update Donation Rating
 // ✅ NGO - Update Donation Rating
-app.post("/update-donation-rating", authenticateRole(["NGO"]), async (req, res) => {
+app.post("/rate-donation", authenticateRole(["NGO"]), async (req, res) => {
   try {
+    console.log("🔹 Incoming Request Body:", req.body);
     const { donationId, rating } = req.body;
 
-    // Check if donationId and rating are provided
-    if (!donationId || rating === undefined) {
-      return res.status(400).json({ message: "Donation ID and rating are required" });
+    // Validate input
+    if (!donationId || rating === undefined || rating < 1 || rating > 5) {
+      console.log("❌ Invalid input: donationId or rating missing/invalid");
+      return res.status(400).json({ message: "Invalid rating input" });
     }
 
-    // Validate donationId (should be a valid MongoDB ObjectId)
     if (!mongoose.Types.ObjectId.isValid(donationId)) {
       return res.status(400).json({ message: "Invalid donation ID" });
     }
 
-    // Validate the rating (make sure it is between 0 and 5)
-    if (rating < 0 || rating > 5) {
-      return res.status(400).json({ message: "Rating must be between 0 and 5" });
-    }
-
-    // Find the donation and update the rating field
-    const updatedDonation = await Donation.findByIdAndUpdate(
-      donationId,
-      { rating },
-      { new: true }
-    );
-
-    if (!updatedDonation) {
-      return res.status(404).json({ message: "Donation not found" });
-    }
-
-    res.status(200).json({ message: "Donation rating updated successfully", updatedDonation });
-  } catch (error) {
-    console.error("❌ Error updating donation rating:", error);
-    res.status(500).json({ message: "Error updating donation rating" });
-  }
-});
-
-
-// ✅ Rate Donation (Allow NGOs to rate donations they've accepted)
-app.post("/rate-donation", authenticateRole(["NGO"]), async (req, res) => {
-  try {
-    const { donationId, rating } = req.body;
-
-    if (!donationId || !rating || rating < 1 || rating > 5) {
-      return res.status(400).json({ message: "Invalid rating" });
-    }
-
-    // Ensure that the rating is updated only for donations accepted by the NGO
+    // Find donation
     const donation = await Donation.findById(donationId);
-
     if (!donation) {
+      console.log("❌ Donation not found for ID:", donationId);
       return res.status(404).json({ message: "Donation not found" });
     }
 
-    // Make sure the logged-in NGO is the one that accepted the donation
+    if (!donation.ngoDetails?.ngoEmail) {
+      console.log("❌ donation.ngoDetails is missing!", donation);
+      return res.status(500).json({ message: "Donation data is corrupted" });
+    }
+
+    // Ensure logged-in NGO is the one that accepted the donation
     if (donation.ngoDetails.ngoEmail !== req.user.email) {
+      console.log("❌ Unauthorized: NGO email mismatch");
       return res.status(403).json({ message: "You cannot rate this donation" });
     }
 
-    // Update the rating
+    // Update the donation rating
     donation.rating = rating;
     await donation.save();
 
-    // Update donor's average rating
-    const donor = await User.findOne({ email: donation.donorEmail, role: "Donor" });
+    // Recalculate donor's average rating
+    const ratedDonations = await Donation.find({ donorEmail: donation.donorEmail, rating: { $gt: 0 } });
+    const avgRating = ratedDonations.reduce((sum, d) => sum + d.rating, 0) / ratedDonations.length;
+
+    // Update donor's rating and freeze account if necessary
+    const donor = await User.findOneAndUpdate(
+      { email: donation.donorEmail, role: "Donor" },
+      { 
+        rating: avgRating, 
+        totalRatings: ratedDonations.length, 
+        frozen: avgRating < 2.5 
+      },
+      { new: true }
+    );
+
     if (!donor) {
+      console.log("❌ Donor not found or update failed!");
       return res.status(404).json({ message: "Donor not found" });
     }
 
-    const ratedDonations = await Donation.find({ donorEmail: donor.email, rating: { $gt: 0 } });
-    const avgRating = ratedDonations.reduce((sum, d) => sum + d.rating, 0) / ratedDonations.length;
+    console.log("✅ Rating updated successfully:", { avgRating, frozen: donor.frozen });
 
-    donor.rating = avgRating;
-    donor.totalRatings = ratedDonations.length;
-
-    // Freeze donor account if rating drops below 2.5
-    if (avgRating < 2.5) {
-      donor.frozen = true;
-    }
-    await donor.save();
-
-    res.status(200).json({ message: "Rating updated successfully", donation });
+    res.status(200).json({ 
+      message: "Rating updated successfully", 
+      donation, 
+      donor: { email: donor.email, avgRating, frozen: donor.frozen } 
+    });
   } catch (error) {
-    console.error("❌ Error rating donation:", error);
-    res.status(500).json({ message: "Error rating donation" });
+    console.error("❌ Server Error:", error);
+    res.status(500).json({ message: "Error rating donation", error: error.message });
   }
 });
+
+
 
 
 
