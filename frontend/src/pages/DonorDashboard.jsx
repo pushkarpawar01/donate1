@@ -43,32 +43,32 @@ const DonorDashboard = () => {
       const token = localStorage.getItem("token");
 
       // Fetch location dynamically before submitting
-      if (!("geolocation" in navigator)) {
-        alert("Geolocation is not supported by your browser.");
-        return;
+      // if (!("geolocation" in navigator)) {
+      //   alert("Geolocation is not supported by your browser.");
+      //   return;
+      // }
+
+      // navigator.geolocation.getCurrentPosition(
+        // async (position) => {
+          // const { latitude, longitude } = position.coords;
+      const updatedDonation = {
+        ...donation
+        // location: `${latitude}, ${longitude}`, // Store coordinates as a string
+      };
+
+      await axios.post("http://localhost:5000/donate", updatedDonation, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      alert("Donation submitted successfully!");
+      setDonation({ donorEmail: "", peopleFed: "", contact: "", expiryDate: "", location: "" });
       }
-
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-          const updatedDonation = {
-            ...donation,
-            location: `${latitude}, ${longitude}`, // Store coordinates as a string
-          };
-
-          await axios.post("http://localhost:5000/donate", updatedDonation, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-
-          alert("Donation submitted successfully!");
-          setDonation({ donorEmail: "", peopleFed: "", contact: "", expiryDate: "", location: "" });
-        },
-        (error) => {
-          console.error("Error fetching location:", error);
-          alert("Failed to fetch location. Please enable location services.");
-        }
-      );
-    } catch (error) {
+      //   (error) => {
+      //     console.error("Error fetching location:", error);
+      //     alert("Failed to fetch location. Please enable location services.");
+      //   }
+      // );
+      catch (error) {
       alert("Failed to submit donation. Please try again.");
     }
   };
@@ -142,9 +142,9 @@ const DonorDashboard = () => {
               type="text"
               name="location"
               id="location"
-              placeholder="Location will be auto-filled"
-              // value={donation.location}
-              // onChange={handleInputChange}
+              placeholder="Enter Your Location"
+              value={donation.location}
+              onChange={handleInputChange}
               className="input-field"
               //disabled
             />
