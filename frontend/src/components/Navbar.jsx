@@ -45,7 +45,7 @@ const Navbar = () => {
         {/* NGO-Specific Dashboard (Only for NGOs) */}
         {token && role === "ngo" && (
           <>
-            <Link to="/ngo-dashboard" onClick={() => setIsMenuOpen(false)}>NGO Dashboard</Link>
+            <Link to="/ngo-dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
             <Link to="/ngo-donations" onClick={() => setIsMenuOpen(false)}>Donations</Link>
             <Link to="/food-request-form" onClick={() => setIsMenuOpen(false)}>Request Food</Link>
           </>
@@ -54,10 +54,17 @@ const Navbar = () => {
         {/* Donor-Specific Dashboard (Only for Donors) */}
         {token && role === "donor" && (
           <>
-            <Link to="/donor-dashboard" onClick={() => setIsMenuOpen(false)}>Donor Dashboard</Link>
+            <Link to="/donor-dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
             <Link to="/donor-notifications" onClick={() => setIsMenuOpen(false)}>Notifications</Link>
             <Link to="/my-donations" onClick={() => setIsMenuOpen(false)}>My Donations</Link>
             <Link to="/donate" onClick={() => setIsMenuOpen(false)} className="marg">Donate NGO</Link>
+          </>
+        )}
+
+        {/* Volunteer-Specific Dashboard (Only for Donors) */}
+        {token && role === "donor" && (
+          <>
+            <Link to="/volunteer-dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
           </>
         )}
       </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./DonorDashboard.css";  // Importing the CSS file
+import "./DonorDashboard.css";  
 import Donate from "./Donate";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -15,6 +15,7 @@ const DonorDashboard = () => {
     location: "",
   });
 
+  const [errors, setErrors] = useState({});
   const [notifications, setNotifications] = useState([]);
 
   // Fetch notifications for the donor
@@ -38,23 +39,50 @@ const DonorDashboard = () => {
     setDonation({ ...donation, [e.target.name]: e.target.value });
   };
 
+  // **Validation Function**
+  const validateForm = () => {
+    let newErrors = {};
+
+    // Email Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!donation.donorEmail || !emailRegex.test(donation.donorEmail)) {
+      newErrors.donorEmail = "Enter a valid email address.";
+    }
+
+    // People Fed Validation (should be > 0)
+    if (!donation.peopleFed || parseInt(donation.peopleFed) <= 0) {
+      newErrors.peopleFed = "Must be at least 1 person.";
+    }
+
+    // Contact Validation (should be exactly 10 digits)
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!donation.contact || !phoneRegex.test(donation.contact)) {
+      newErrors.contact = "Contact number must be exactly 10 digits.";
+    }
+
+    // Expiry Date Validation (should not be empty)
+    if (!donation.expiryDate) {
+      newErrors.expiryDate = "Expiry date is required.";
+    }
+
+    // Location Validation (should not be empty)
+    if (!donation.location.trim()) {
+      newErrors.location = "Location is required.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async () => {
+    if (!validateForm()) {
+      return; // Stop submission if validation fails
+    }
+
     try {
       const token = localStorage.getItem("token");
 
-      // Fetch location dynamically before submitting
-      // if (!("geolocation" in navigator)) {
-      //   alert("Geolocation is not supported by your browser.");
-      //   return;
-      // }
-
-      // navigator.geolocation.getCurrentPosition(
-        // async (position) => {
-          // const { latitude, longitude } = position.coords;
-      const updatedDonation = {
-        ...donation
-        // location: `${latitude}, ${longitude}`, // Store coordinates as a string
-      };
+      const updatedDonation = { ...donation };
 
       await axios.post("http://localhost:5000/donate", updatedDonation, {
         headers: { Authorization: `Bearer ${token}` },
@@ -62,20 +90,15 @@ const DonorDashboard = () => {
 
       alert("Donation submitted successfully!");
       setDonation({ donorEmail: "", peopleFed: "", contact: "", expiryDate: "", location: "" });
-      }
-      //   (error) => {
-      //     console.error("Error fetching location:", error);
-      //     alert("Failed to fetch location. Please enable location services.");
-      //   }
-      // );
-      catch (error) {
+      setErrors({});
+    } catch (error) {
       alert("Failed to submit donation. Please try again.");
     }
   };
 
   return (
     <div className="donor-dashboard-container">
-      <Navbar/>
+      <Navbar />
       <br />
       <br />
       <br />
@@ -96,8 +119,9 @@ const DonorDashboard = () => {
               onChange={handleInputChange}
               className="input-field"
             />
+            {errors.donorEmail && <p className="error-text">{errors.donorEmail}</p>}
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="peopleFed" className="form-label">People Fed</label>
             <input
@@ -109,6 +133,7 @@ const DonorDashboard = () => {
               onChange={handleInputChange}
               className="input-field"
             />
+            {errors.peopleFed && <p className="error-text">{errors.peopleFed}</p>}
           </div>
 
           <div className="form-group">
@@ -122,6 +147,7 @@ const DonorDashboard = () => {
               onChange={handleInputChange}
               className="input-field"
             />
+            {errors.contact && <p className="error-text">{errors.contact}</p>}
           </div>
 
           <div className="form-group">
@@ -134,6 +160,7 @@ const DonorDashboard = () => {
               onChange={handleInputChange}
               className="input-field"
             />
+            {errors.expiryDate && <p className="error-text">{errors.expiryDate}</p>}
           </div>
 
           <div className="form-group">
@@ -146,17 +173,17 @@ const DonorDashboard = () => {
               value={donation.location}
               onChange={handleInputChange}
               className="input-field"
-              //disabled
             />
+            {errors.location && <p className="error-text">{errors.location}</p>}
           </div>
         </div>
-        
+
         <button onClick={handleSubmit} className="submit-button">
           Submit Donation
         </button>
       </div>
-      <ChatButton/>
-      <Footer/>
+      <ChatButton />
+      <Footer />
     </div>
   );
 };
