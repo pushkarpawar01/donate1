@@ -14,7 +14,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div>   
       <Navbar/>
     <div className="homepage">
       {/* Hero Section */}
