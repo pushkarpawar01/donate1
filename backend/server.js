@@ -106,8 +106,8 @@ DonationSchema.index({ "ngoDetails.ngoEmail": 1, status: 1 });
 
 
 // Add geospatial indexes
-DonationSchema.index({ donorLocation: "2dsphere" });
-DonationSchema.index({ volunteerLocation: "2dsphere" });
+// DonationSchema.index({ donorLocation: "2dsphere" });
+// DonationSchema.index({ volunteerLocation: "2dsphere" });
 
 
 const Donation = mongoose.model("Donation", DonationSchema);
@@ -367,9 +367,9 @@ app.post("/donate", authenticateRole(["Donor"]), async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    if (!location.latitude || !location.longitude) {
-      return res.status(400).json({ message: "Invalid location format. Must include latitude and longitude." });
-    }
+    // if (!location.latitude || !location.longitude) {
+    //   return res.status(400).json({ message: "Invalid location format. Must include latitude and longitude." });
+    // }
 
     // Parse the submitted expiry date
     const parsedExpiryDate = new Date(expiryDate);
@@ -404,10 +404,11 @@ app.post("/donate", authenticateRole(["Donor"]), async (req, res) => {
       peopleFed,
       contact,
       expiryDate: parsedExpiryDate,
-      donorLocation: {
-        type: "Point",
-        coordinates: [location.longitude, location.latitude], // Store in GeoJSON format
-      },
+      location,
+      // donorLocation: {
+      //   type: "Point",
+      //   coordinates: [location.longitude, location.latitude], // Store in GeoJSON format
+      // },
       status: "Pending",
     });
 
