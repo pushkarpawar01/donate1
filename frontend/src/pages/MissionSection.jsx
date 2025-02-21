@@ -28,6 +28,8 @@ const MissionSection = () => {
         food to those in need.
       </p>
 
+      
+
       <div className="mission-cards">
         <motion.div
           className="mission-card"
@@ -43,6 +45,7 @@ const MissionSection = () => {
             Our goal is to minimize food waste while ensuring that surplus food reaches those who need it most.
             Join us in making a difference.
           </p>
+          <br />
         </motion.div>
 
         <motion.div
@@ -77,6 +80,18 @@ const MissionSection = () => {
           </p>
         </motion.div>
       </div>
+      <br />
+      <br />
+      <h1>Our Vision</h1>
+      <p className="mission-text">
+        Feeding India is a non-profit organization dedicated to eradicating hunger and improving malnutrition outcomes in India.
+      </p>
+      <p className="mission-text">
+        We work toward this mission by supporting large-scale systemic interventions as well as providing essential food support to underserved communities in the form of raw grains and freshly cooked food.
+      </p>
+      <p className="mission-text">
+        Feeding India works with on-ground non-profit partners working on education and child/maternal malnutrition by providing regular meals to dependents.
+      </p>
     </motion.div>
     <Footer/>
     </div>
