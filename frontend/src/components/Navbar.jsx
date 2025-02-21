@@ -62,7 +62,7 @@ const Navbar = () => {
         )}
 
         {/* Volunteer-Specific Dashboard (Only for Donors) */}
-        {token && role === "donor" && (
+        {token && role === "volunteer" && (
           <>
             <Link to="/volunteer-dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
           </>
