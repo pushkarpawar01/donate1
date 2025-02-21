@@ -1,39 +1,107 @@
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f4f4f4;
-  }
-  
-  .card {
-    background: white;
-    /* padding: 20px; */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    /* max-width: 400px; */
-  }
-  
-  .fact-text {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    display: flex;
-    flex-direction: row;
-  }
-  
-  .generate-button {
-    margin-top: 10px;
-    /* padding: 10px 15px; */
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .generate-button:hover {
-    background-color: #0056b3;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+.carousel-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Poppins', sans-serif;
+}
+
+.carousel-slide {
+  flex-grow: 1;
+  transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+  text-align: center;
+  opacity: 1;
+}
+
+.fade-out {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.fact-text {
+  font-size: 18px;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+/* Static effect lines */
+.static-lines {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.line {
+  width: 30px;
+  height: 4px;
+  margin: 0 5px;
+  background-color: #007bff;
+  border-radius: 5px;
+  transition: background-color 0.8s ease-in-out;
+}
+
+/* Dynamic color effect */
+.line.change-color {
+  background-color: #ff5733;
+}
+
+/* Navigation buttons */
+.nav-button {
+  background: none;
+  border: none;
+  /* font-size: 30px; */
+  cursor: pointer;
+  color: #007bff;
+  /* padding: 10px; */
+  transition: color 0.3s ease-in-out;
+}
+
+.nav-button:hover {
+  color: #0056b3;
+}
+
+.left {
+  margin-left: 1px;
+}
+
+.right {
+  margin-right: 1px;
+}
+
+/* Navigation buttons */
+.nav-button {
+  background: none;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  color: #007bff;
+  padding: 10px;
+  transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Reduce size on hover */
+.nav-button:hover {
+  color: #0056b3;
+  transform: scale(0.85); /* Shrinks the button */
+}
+
+/* Adjust positioning */
+.left {
+  margin-left: 1px;
+}
+
+.right {
+  margin-right: 1px;
+}

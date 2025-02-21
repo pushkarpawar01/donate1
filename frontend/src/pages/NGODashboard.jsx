@@ -50,6 +50,7 @@ const NGODashboard = () => {
     <div className="dashboard-container">
       <br />
       <Navbar />
+      <br />
       
       <div className="dashboard-content">
         <div className="dashboard-card">
@@ -92,6 +93,18 @@ const NGODashboard = () => {
           </div>
         </div>
       </div>
+      <div className="iframe-button-container">
+        <p className="ml-model-description">
+          Upload an image to our AI-powered food recognition tool to identify food items instantly and assist in efficient distribution.
+        </p>
+        <button 
+          className="open-streamlit-btn"
+          onClick={() => window.open("http://localhost:8501")}
+        >
+           Identify Food
+        </button>
+      </div>
+      <br />
       <Footer />
     </div>
   );

@@ -15,23 +15,48 @@ const facts = [
 ];
 
 const FunFactGenerator = () => {
-  const [fact, setFact] = useState("");
-  const [showFact, setShowFact] = useState(true);
+  const [currentFactIndex, setCurrentFactIndex] = useState(0);
+  const [fade, setFade] = useState(true);
 
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * facts.length);
-    setFact(facts[randomIndex].replace(/\s+/g, ' '));
+    const interval = setInterval(() => {
+      handleNextFact();
+    }, 10000); // Change fact every 10 seconds
+
+    return () => clearInterval(interval);
   }, []);
 
+  const handleNextFact = () => {
+    setFade(false);
+    setTimeout(() => {
+      setCurrentFactIndex((prevIndex) => (prevIndex + 1) % facts.length);
+      setFade(true);
+    }, 300);
+  };
+
+  const handlePrevFact = () => {
+    setFade(false);
+    setTimeout(() => {
+      setCurrentFactIndex((prevIndex) =>
+        prevIndex === 0 ? facts.length - 1 : prevIndex - 1
+      );
+      setFade(true);
+    }, 300);
+  };
+
   return (
-    showFact && (
-      <div className="container">
-        <div className="card">
-          <p className="fact-text">{fact}</p>
-          <button onClick={() => setShowFact(false)} className="close-button">✖</button>
+    <div className="carousel-container">
+      <button className="nav-button left" onClick={handlePrevFact}>‹</button>
+      <div className={`carousel-slide ${fade ? "fade-in" : "fade-out"}`}>
+        <p className="fact-text">{facts[currentFactIndex]}</p>
+        <div className="static-lines">
+          <div className="line"></div>
+          <div className="line"></div>
+          <div className="line"></div>
         </div>
       </div>
-    )
+      <button className="nav-button right" onClick={handleNextFact}>›</button>
+    </div>
   );
 };
 
