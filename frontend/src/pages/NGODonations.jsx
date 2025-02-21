@@ -40,7 +40,7 @@ const NGODonations = () => {
 
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:5000/update-donation-rating",
+        "http://localhost:5000/rate-donation",
         { donationId, rating },
         { headers: { Authorization: `Bearer ${token}` } }
       );

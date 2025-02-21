@@ -25,6 +25,9 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, enum: ["Donor", "NGO", "Volunteer"], required: true },
+  rating:{type:Number,default:5.0},
+  totalRatings : {type:Number,default:0},
+  frozen :{type:Boolean,default:false},
   address: { 
     type: String, 
     validate: {
@@ -241,6 +244,10 @@ app.post("/login", async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "User not found" });
+
+    if(user.frozen){
+      return res.status(403).json({message:"Your account is frozen"});
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
@@ -531,6 +538,24 @@ app.post("/rate-donation", authenticateRole(["NGO"]), async (req, res) => {
     // Update the rating
     donation.rating = rating;
     await donation.save();
+
+    // Update donor's average rating
+    const donor = await User.findOne({ email: donation.donorEmail, role: "Donor" });
+    if (!donor) {
+      return res.status(404).json({ message: "Donor not found" });
+    }
+
+    const ratedDonations = await Donation.find({ donorEmail: donor.email, rating: { $gt: 0 } });
+    const avgRating = ratedDonations.reduce((sum, d) => sum + d.rating, 0) / ratedDonations.length;
+
+    donor.rating = avgRating;
+    donor.totalRatings = ratedDonations.length;
+
+    // Freeze donor account if rating drops below 2.5
+    if (avgRating < 2.5) {
+      donor.frozen = true;
+    }
+    await donor.save();
 
     res.status(200).json({ message: "Rating updated successfully", donation });
   } catch (error) {
