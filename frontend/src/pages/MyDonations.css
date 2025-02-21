@@ -1,129 +1,179 @@
 /* Main container for the My Donations page */
 .my-donations-container {
-    padding: 30px;
-    background-color: #f4f4f9;
-    min-height: 100vh;
-    font-family: 'Roboto', sans-serif;
-    display: flex;
-    justify-content: center; /* Center the content horizontally */
-    /* align-items: flex-start; Align items to the top */
-    flex-direction: column; /* Stack items vertically */
-    gap: 20px; /* Adds space between items */
+  padding: 30px;
+  background-color: #f4f4f9;
+  min-height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  justify-content: center; /* Center the content horizontally */
+  flex-direction: column; /* Stack items vertically */
+  gap: 20px; /* Adds space between items */
+  animation: fadeIn 0.8s ease-in-out; /* Smooth fade-in animation */
+}
+
+/* Title of the page */
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #2c7c31;
+  text-align: center;
+  margin-bottom: 20px;
+  animation: slideDown 0.6s ease-in-out; /* Title slides in */
+}
+
+/* Message when no donations are present */
+.no-donations-text {
+  font-size: 1.2rem;
+  color: #555;
+  text-align: center;
+}
+
+/* Styling the list of donations */
+.donation-list {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  max-width: 800px; /* Set a max width for the donation cards */
+  margin: 0 auto; /* Center the list horizontally */
+}
+
+/* Each donation item */
+.donation-item {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeUp 0.6s ease-in-out; /* Fade-up effect when loading */
+}
+
+/* Hover effect on donation items */
+.donation-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Location Title */
+.donation-location {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c7c31;
+  margin-bottom: 10px;
+}
+
+.donation-item p {
+  margin: 5px 0;
+  color: #333;
+}
+
+/* Rating Stars */
+.rating-container {
+  margin-top: 15px;
+}
+
+.stars {
+  display: flex;
+}
+
+.star {
+  font-size: 1.5rem;
+  color: gray;
+  margin-right: 3px;
+  transition: transform 0.3s ease; /* Smooth effect when rating appears */
+}
+
+.star.rated {
+  color: gold;
+  transform: scale(1.1); /* Slightly enlarges rated stars */
+}
+
+/* Buttons */
+.donation-actions {
+  margin-top: 15px;
+}
+
+.btn {
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  margin-right: 10px;
+  width: auto;
+  min-width: fit-content;
+  white-space: nowrap;
+}
+
+/* Button Click Effect */
+.btn:active {
+  transform: scale(0.95); /* Slight press effect when clicked */
+}
+
+.track-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.track-btn:hover {
+  background-color: #0056b3;
+}
+
+.donate-again-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.donate-again-btn:hover {
+  background-color: #218838;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .my-donations-container {
+    padding: 15px;
   }
-  
-  /* Title of the page */
-  .title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    font-weight: 600;
-    color: #2c7c31;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  /* Message when no donations are present */
-  .no-donations-text {
-    font-size: 1.2rem;
-    color: #555;
-    text-align: center;
-  }
-  
-  /* Styling the list of donations */
-  .donation-list {
-    list-style: none;
-    padding: 0;
-    width: 100%;
-    max-width: 800px; /* Set a max width for the donation cards */
-    margin: 0 auto; /* Center the list horizontally */
-  }
-  
-  /* Each donation item */
+
   .donation-item {
-    background-color: white;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+    padding: 15px;
   }
-  
-  .donation-item:hover {
-    transform: translateY(-5px); /* Slight raise on hover */
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
   }
-  
-  .donation-location {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #2c7c31;
-    margin-bottom: 10px;
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
-  
-  .donation-item p {
-    margin: 5px 0;
-    color: #333;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  .rating-container {
-    margin-top: 15px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .stars {
-    display: flex;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
-  
-  .star {
-    font-size: 1.5rem;
-    color: gray;
-    margin-right: 3px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .star.rated {
-    color: gold;
-  }
-  
-  .donation-actions {
-    margin-top: 15px;
-  }
-  
-  .btn {
-    padding: 10px 15px;
-    font-size: 1rem;
-    font-weight: 500;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-right: 10px;
-  }
-  
-  .track-btn {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .track-btn:hover {
-    background-color: #0056b3;
-  }
-  
-  .donate-again-btn {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .donate-again-btn:hover {
-    background-color: #218838;
-  }
-  
-  /* Responsive Styles */
-  @media (max-width: 768px) {
-    .my-donations-container {
-      padding: 15px;
-    }
-  
-    .donation-item {
-      padding: 15px;
-    }
-  }
-  
+}
