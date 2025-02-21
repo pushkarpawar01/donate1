@@ -36,6 +36,9 @@ const MyDonations = () => {
   return (
     <div className="my-donations-container">
       <Navbar/>
+      <br />
+      <br />
+      <br />
       <h1 className="title">My Donations</h1>
 
       {donations.length === 0 ? (
