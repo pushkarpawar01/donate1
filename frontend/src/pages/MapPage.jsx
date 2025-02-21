@@ -1,23 +1,38 @@
-// src/components/MapPage.jsx
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { Icon } from 'leaflet';
 
 const MapPage = () => {
   const [currentLocation, setCurrentLocation] = useState(null);
+  const [locationAccuracy, setLocationAccuracy] = useState(null);
 
   useEffect(() => {
-    // Get user's current location using Geolocation API
+    // Check if geolocation is available and get user's position
     if (navigator.geolocation) {
+      const geoOptions = {
+        enableHighAccuracy: true,  // Attempt to get the most accurate location
+        timeout: 10000,  // Timeout after 10 seconds
+        maximumAge: 0,   // Don't use cached location
+      };
+
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const { latitude, longitude } = position.coords;
+          const { latitude, longitude, accuracy } = position.coords;
+          console.log(`Location accuracy: ${accuracy} meters`);
+
+          // If accuracy is greater than a threshold, notify the user
+          if (accuracy > 100) {
+            alert('Location accuracy is poor. You might be on a desktop or using a non-GPS device.');
+          }
+
           setCurrentLocation([latitude, longitude]); // Set current position
+          setLocationAccuracy(accuracy); // Set the accuracy in state
         },
         (error) => {
           console.error('Error getting location:', error);
           alert('Unable to retrieve your location.');
-        }
+        },
+        geoOptions
       );
     } else {
       alert('Geolocation is not supported by this browser.');
@@ -50,6 +65,7 @@ const MapPage = () => {
           <Marker position={currentLocation} icon={customIcon}>
             <Popup>
               <span>You are here</span>
+              {locationAccuracy && <p>Accuracy: {locationAccuracy} meters</p>}
             </Popup>
           </Marker>
         </MapContainer>
