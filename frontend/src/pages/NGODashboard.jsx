@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import axios from "axios";
 import "./NGODashboard.css"; // Import external CSS
+import ChatButton from "./ChatButton";
 
 const NGODashboard = () => {
   const [donations, setDonations] = useState([]);
@@ -50,6 +51,7 @@ const NGODashboard = () => {
     <div className="dashboard-container">
       <br />
       <Navbar />
+      <ChatButton/>
       <br />
       
       <div className="dashboard-content">
