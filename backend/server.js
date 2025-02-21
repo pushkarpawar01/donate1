@@ -9,6 +9,7 @@ const Razorpay = require("razorpay");
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 app.use(cors());
 
 // MongoDB Connection
@@ -24,6 +25,9 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, enum: ["Donor", "NGO", "Volunteer"], required: true },
+  rating:{type:Number,default:5.0},
+  totalRatings : {type:Number,default:0},
+  frozen :{type:Boolean,default:false},
   address: { 
     type: String, 
     validate: {
@@ -183,6 +187,52 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client("1047403268522-mcrb7eb9ila347tfvr6v5f9j55fua92k.apps.googleusercontent.com"); // Use your Google Client ID
+
+app.post('/auth/google', async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: "1047403268522-mcrb7eb9ila347tfvr6v5f9j55fua92k.apps.googleusercontent.com", // Your Google Client ID
+    });
+
+    const payload = ticket.getPayload(); // Get user info from the token
+    const email = payload.email;
+    const name = payload.name;
+    const googleId = payload.sub;
+
+    // Check if the user exists in the database
+    let user = await User.findOne({ email });
+
+    // If user doesn't exist, create a new user
+    if (!user) {
+      user = new User({
+        email,
+        name,
+        username: googleId,
+        role: "Donor", // Set default role, or update this logic based on your app
+      });
+      await user.save();
+    }
+
+    // Create a JWT token and send it in the response
+    const jwtToken = jwt.sign(
+      { email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token: jwtToken, role: user.role, message: "Login successful" });
+  } catch (error) {
+    console.error("Google auth error:", error);
+    res.status(500).json({ message: "Error with Google login" });
+  }
+});
+
+
 
 // ✅ Login Route
 app.post("/login", async (req, res) => {
@@ -194,6 +244,10 @@ app.post("/login", async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "User not found" });
+
+    if(user.frozen){
+      return res.status(403).json({message:"Your account is frozen"});
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
@@ -485,6 +539,24 @@ app.post("/rate-donation", authenticateRole(["NGO"]), async (req, res) => {
     donation.rating = rating;
     await donation.save();
 
+    // Update donor's average rating
+    const donor = await User.findOne({ email: donation.donorEmail, role: "Donor" });
+    if (!donor) {
+      return res.status(404).json({ message: "Donor not found" });
+    }
+
+    const ratedDonations = await Donation.find({ donorEmail: donor.email, rating: { $gt: 0 } });
+    const avgRating = ratedDonations.reduce((sum, d) => sum + d.rating, 0) / ratedDonations.length;
+
+    donor.rating = avgRating;
+    donor.totalRatings = ratedDonations.length;
+
+    // Freeze donor account if rating drops below 2.5
+    if (avgRating < 2.5) {
+      donor.frozen = true;
+    }
+    await donor.save();
+
     res.status(200).json({ message: "Rating updated successfully", donation });
   } catch (error) {
     console.error("❌ Error rating donation:", error);
@@ -558,10 +630,14 @@ app.get("/user", authenticateRole(["NGO"]), async (req, res) => {
 // POST request to send food request to all donors
 app.post("/request-food", authenticateRole(["NGO"]), async (req, res) => {
   try {
-    const { numPeople } = req.body;  // Now we only need the number of people
+    const { numPeople, ngoName, ngoEmail, ngoContact } = req.body;  
 
     if (!numPeople || numPeople <= 0) {
       return res.status(400).json({ message: "Number of people is required" });
+    }
+
+    if (!ngoName || !ngoEmail || !ngoContact) {
+      return res.status(400).json({ message: "All NGO details are required" });
     }
 
     // Fetch the logged-in NGO details using JWT token (User schema)
@@ -569,31 +645,28 @@ app.post("/request-food", authenticateRole(["NGO"]), async (req, res) => {
     if (!ngo) {
       return res.status(404).json({ message: "NGO not found" });
     }
-    console.log("🔹 ngoName:", ngoName);
-    console.log("🔹 ngoEmail:", ngoEmail);
-    console.log("🔹 ngoContact:", ngoContact);
-    console.log("🔹 numPeople:", numPeople);
 
-    // Create a message to notify all donors
-    const message = `${ngo.name} needs food donations for ${numPeople} people. Contact: ${ngo.contact}. Email: ${ngo.email}`;
+    console.log("🔹 NGO Details:", { ngoName, ngoEmail, ngoContact, numPeople });
 
-    // Find all donors and send them a notification
+    // Find all donors
     const donors = await User.find({ role: "Donor" });
+    console.log("🔹 Found donors:", donors.length);
 
     for (const donor of donors) {
       const notification = new Notification({
         donorEmail: donor.email,
-        message,
+        message: `${ngoName} needs food for ${numPeople} people. Contact: ${ngoContact}, Email: ${ngoEmail}`,
       });
-      await notification.save();  // Save notification to the DB
+      await notification.save();
     }
 
-    res.status(200).json({ message: "Food request sent to all donors" });
+    res.status(200).json({ message: "Food request sent successfully" });
   } catch (error) {
-    console.error("❌ Error sending food request:", error);
-    res.status(500).json({ message: "Error sending food request" });
+    console.error("❌ Server Error:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 });
+
 
 
 

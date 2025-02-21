@@ -12,51 +12,45 @@ const RequestFoodForm = () => {
 
   // Handle form submission
   const handleSendRequest = async () => {
-    // Check if the form fields are valid
+    console.log("Sending request with:", { ngoName, ngoEmail, ngoContact, numPeople });
+  
     if (!numPeople || numPeople <= 0) {
       setMessage("Please provide a valid number of people.");
+      console.error("Validation error: Invalid number of people.");
       return;
     }
     if (!ngoName || !ngoEmail || !ngoContact) {
       setMessage("Please provide all the required NGO details.");
+      console.error("Validation error: Missing NGO details.");
       return;
     }
-
+  
     try {
-      // Get the token from localStorage (make sure user is logged in)
       const token = localStorage.getItem("token");
       if (!token) {
         setMessage("User is not authenticated");
+        console.error("Auth error: No token found.");
         return;
       }
-
-      // Send food request data (NGO details and number of people) to the backend
+  
       const response = await axios.post(
-        "http://localhost:5000/request-food",  // Update the URL if required
-        {
-          ngoName,
-          ngoEmail,
-          ngoContact,
-          numPeople,  // Include the number of people to feed
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        "http://localhost:5000/request-food",
+        { ngoName, ngoEmail, ngoContact, numPeople },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      // Set success message and clear inputs after submission
+  
+      console.log("✅ Request successful:", response.data);
       setMessage(response.data.message);
       setNumPeople(""); 
       setNgoName("");
       setNgoEmail("");
       setNgoContact("");
     } catch (error) {
-      console.error("Error sending food request:", error);
-      setMessage("Error sending food request. Please try again.");
+      console.error("❌ Error sending food request:", error.response?.data || error);
+      setMessage(error.response?.data?.message || "Error sending food request. Please try again.");
     }
   };
+  
 
   return (
     <div className="request-food-form">
