@@ -78,6 +78,10 @@ const ContactSection = () => {
         </div>
       </div>
     </div>
+    <br />
+    <br />
+    <br />
+    <br />
 
     <SupportForm/>
     <Footer/>
