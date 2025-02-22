@@ -189,9 +189,11 @@ const NGODashboard = () => {
         >
           Identify Food
         </button>
+        
       </div>
       <br />
       <Footer />
+      <br />
     </div>
   );
 };

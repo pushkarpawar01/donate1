@@ -70,6 +70,7 @@ const HowItWorks = () => {
         </motion.div>
       </div>
     </motion.div>
+    <br />
     <HeroSection2/>
     <Footer/>
     </div>

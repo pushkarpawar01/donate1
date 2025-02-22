@@ -3,11 +3,13 @@ import axios from "axios";
 import "./NGODonations.css"; // Import CSS file
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Circles } from "react-loader-spinner"; // Import Loader Spinner
 
 const NGODonations = () => {
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [ratings, setRatings] = useState({});
+  const [error, setError] = useState(""); // Handle errors
 
   useEffect(() => {
     const fetchDonations = async () => {
@@ -18,8 +20,9 @@ const NGODonations = () => {
         });
 
         setDonations(response.data);
+        setError(""); // Clear previous errors if successful
 
-        // Get ratings from localStorage if available, else use backend data
+        // Load ratings from localStorage or backend
         const storedRatings = JSON.parse(localStorage.getItem("ngoRatings")) || {};
         const initialRatings = {};
 
@@ -30,6 +33,7 @@ const NGODonations = () => {
         setRatings(initialRatings);
       } catch (error) {
         console.error("Error fetching donations", error);
+        setError("Failed to load accepted donations. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -38,7 +42,11 @@ const NGODonations = () => {
     fetchDonations();
   }, []);
 
+  // Function to update ratings with confirmation
   const handleRating = async (donationId, rating) => {
+    const confirmAction = window.confirm(`Are you sure you want to rate this ${rating} stars?`);
+    if (!confirmAction) return;
+
     try {
       const token = localStorage.getItem("token");
       await axios.post(
@@ -52,6 +60,7 @@ const NGODonations = () => {
       setRatings(newRatings);
       localStorage.setItem("ngoRatings", JSON.stringify(newRatings));
 
+      alert("Rating updated successfully!");
     } catch (error) {
       alert("Failed to update rating. Please try again.");
     }
@@ -61,10 +70,20 @@ const NGODonations = () => {
     <div>
       <br />
       <Navbar />
+      <br />
+      {/* <br /> */}
+      
       <div className="ngo-donations-container">
         <h1 className="title">Accepted Donations</h1>
+
+        {/* Display error message if an error occurs */}
+        {error && <p className="error-text">{error}</p>}
+
         {loading ? (
-          <p className="loading-text">Loading...</p>
+          <div className="loading-container">
+            <Circles height="50" width="50" color="#007bff" />
+            <p>Loading...</p>
+          </div>
         ) : donations.length === 0 ? (
           <p className="no-donations-text">No accepted donations found.</p>
         ) : (
@@ -74,7 +93,9 @@ const NGODonations = () => {
                 <h3 className="donor-email">{donation.donorEmail}</h3>
                 <p><strong>People Fed:</strong> {donation.peopleFed}</p>
                 <p><strong>Location:</strong> {donation.location}</p>
-                <p><strong>Expiry Date:</strong> {new Date(donation.expiryDate).toLocaleDateString()}</p>
+                <p>
+                  <strong>Expiry Date:</strong> {donation.expiryDate ? new Date(donation.expiryDate).toLocaleDateString() : "N/A"}
+                </p>
 
                 {/* Rating Section */}
                 <div className="rating-section">
@@ -85,7 +106,6 @@ const NGODonations = () => {
                         key={star}
                         onClick={() => handleRating(donation._id, star)}
                         className={`star-button ${ratings[donation._id] >= star ? "selected" : ""}`}
-                        disabled={ratings[donation._id] > 0} // Disable if already rated
                       >
                         ★
                       </button>
@@ -104,5 +124,3 @@ const NGODonations = () => {
 };
 
 export default NGODonations;
-
-//disabled={ratings[donation._id] > 0} // Disable if already rated
