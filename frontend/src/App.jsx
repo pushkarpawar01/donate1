@@ -30,6 +30,7 @@ import DonationDrives from "./pages/DonationDrives";
 import MapPage from "./pages/MapPage";
 import RequestFoodForm from "./pages/RequestFoodForm";
 import Certificate from "./pages/Certificate";
+import VolunteerForm from "./pages/VolunteerForm";
 
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -122,6 +123,15 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/volunteer-form"
+            element={
+              <ProtectedRoute allowedRoles={["Volunteer"]}>
+                <VolunteerForm />
+              </ProtectedRoute>
+            }
+          />
+
 
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
