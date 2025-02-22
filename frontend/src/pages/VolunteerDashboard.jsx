@@ -151,9 +151,12 @@ const VolunteerDashboard = () => {
   return (
     <div className="volunteer-dashboard">
       <Navbar/>
+      <br />
+      <br />
+      <br />
       <ChatButton/>
       <h1 className="dashboard-title">Volunteer Dashboard</h1>
-
+      <h2>Enter NGO's Email</h2>
       {/* Form Section */}
       <form onSubmit={handleSubmit} className="volunteer-form">
         <div className="form-group">
@@ -206,7 +209,9 @@ const VolunteerDashboard = () => {
           ))
         )}
       </div>
+      {/* <br /> */}
       <Footer/>
+
     </div>
   );
 };

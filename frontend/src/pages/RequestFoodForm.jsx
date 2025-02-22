@@ -12,6 +12,7 @@ const RequestFoodForm = () => {
   const [ngoContact, setNgoContact] = useState("");
   const [message, setMessage] = useState("");
   const [emailError, setEmailError] = useState(""); // Error message for invalid NGO email
+  const [loading, setLoading] = useState(false); // State for loading spinner
 
   // Function to check if NGO email exists
   const validateNgoEmail = async (email) => {
@@ -58,6 +59,8 @@ const RequestFoodForm = () => {
         return;
       }
 
+      setLoading(true); // Start loading state
+
       const response = await axios.post(
         "http://localhost:5000/request-food",
         { ngoName, ngoEmail, ngoContact, numPeople },
@@ -70,16 +73,21 @@ const RequestFoodForm = () => {
       setNgoName("");
       setNgoEmail("");
       setNgoContact("");
+      setEmailError("");  // Reset email error
     } catch (error) {
       console.error("❌ Error sending food request:", error.response?.data || error);
       setMessage(error.response?.data?.message || "Error sending food request. Please try again.");
+    } finally {
+      setLoading(false); // End loading state
     }
   };
 
   return (
     <>
+    <Navbar />
       <div className="request-food-form">
-        <Navbar />
+        
+        
         <h2>Request Food from Donors</h2>
 
         <div>
@@ -129,12 +137,14 @@ const RequestFoodForm = () => {
         </div>
 
         <div>
-          <button onClick={handleSendRequest}>Send Request</button>
+          <button onClick={handleSendRequest} disabled={loading}>
+            {loading ? "Sending..." : "Send Request"}
+          </button>
         </div>
 
         {message && <p>{message}</p>} {/* Show success or error message */}
       </div>
-      <Footer />
+          <Footer />
     </>
   );
 };
