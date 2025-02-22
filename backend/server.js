@@ -117,6 +117,7 @@ const Donation = mongoose.model("Donation", DonationSchema);
 // Notification Schema
 const NotificationSchema = new mongoose.Schema({
   donorEmail: { type: String, required: true },
+  ngoEmail: { type: String },
   message: { type: String, required: true },
   date: { type: Date, default: Date.now },
   isRead: { type: Boolean, default: false }, // To track whether the donor has read the notification
@@ -364,6 +365,16 @@ app.post("/volunteer-deliver-donation", authenticateRole(["Volunteer"]), async (
     });
 
     await notification.save();
+
+    const ngoEmail = donation.ngoEmail;
+    const message1 = `Volunteer is on the Way! The volunteer is now heading towards donor location.`;
+
+    const notification1 = new Notification({
+      ngoEmail,
+      message1,
+    });
+
+    await notification1.save();
     
     // Save the donation with updated location
     await donation.save();
