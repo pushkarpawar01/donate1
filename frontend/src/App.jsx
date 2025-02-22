@@ -33,6 +33,7 @@ import Certificate from "./pages/Certificate";
 import VolunteerForm from "./pages/VolunteerForm";
 import NGONotifications from "./pages/NGONotifications";
 import AdminDashboard from "./pages/AdminDashboard";
+import UploadImage from "./pages/UploadImage";
 
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -55,6 +56,7 @@ const App = () => {
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/upload-image" element={<UploadImage />} />
           {/* <Route path="/admin-dashboard" element={<AdminDashboard />} /> */}
 
           {/* Protected Routes */}

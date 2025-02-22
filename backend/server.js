@@ -1,11 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const multer = require("multer");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
 const Razorpay = require("razorpay");
+const path = require('path');
 
+// dotenv.config();
 
 const app = express();
 app.use(express.json());
@@ -121,7 +124,45 @@ DonationSchema.index({ "ngoDetails.ngoEmail": 1, status: 1 });
 
 
 
+// Define Image Schema
+const imageSchema = new mongoose.Schema({
+  imageUrl: String,
+});
+const Image = mongoose.model("Image", imageSchema);
 
+// Multer Storage Configuration
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, "uploads/"); // Store files in 'uploads' directory
+  },
+  filename: (req, file, cb) => {
+      cb(null, Date.now() + path.extname(file.originalname)); // Add unique timestamp to filenames
+  },
+});
+
+const upload = multer({ storage });
+
+// Serve static files from the 'uploads' folder
+app.use("/uploads", express.static("uploads"));
+
+// Upload Route
+app.post("/api/users/upload", upload.single("image"), async (req, res) => {
+  try {
+      if (!req.file) {
+          return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      const newImage = new Image({ imageUrl: `/uploads/${req.file.filename}` });
+      await newImage.save();
+
+      res.status(200).json({
+          message: "Image uploaded successfully",
+          imageUrl: newImage.imageUrl,
+      });
+  } catch (error) {
+      res.status(500).json({ message: "Error uploading image", error });
+  }
+});
 // Add geospatial indexes
 // DonationSchema.index({ donorLocation: "2dsphere" });
 // DonationSchema.index({ volunteerLocation: "2dsphere" });
