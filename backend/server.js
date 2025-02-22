@@ -52,6 +52,18 @@ const UserSchema = new mongoose.Schema({
       },
       message: "The provided NGO email does not exist."
     }
+  },
+  darpan_id: { 
+    type: String, 
+    validate: {
+      validator: function(value) {
+        if (this.role === "NGO") {
+          return darpanRegex.test(value);
+        }
+        return true; // No validation needed for non-NGOs
+      },
+      message: "Invalid Darpan ID format."
+    }
   }
 });
 
@@ -169,7 +181,11 @@ app.post("/validate-ngo-email", async (req, res) => {
 // ✅ Signup Routes
 app.post("/signup", async (req, res) => {
   try {
-    const { name, username, email, password, role, address, ngo_mail } = req.body;
+    const { name, username, email, password, role, address, ngo_mail,darpanId } = req.body;
+    // Ensure NGOs provide a valid Darpan ID
+    if (role === "NGO" && (!darpanId || !/^(AP|AR|AS|BR|CG|GA|GJ|HR|HP|JH|KA|KL|MP|MH|MN|ML|MZ|NL|OD|PB|RJ|SK|TN|TS|TR|UP|UK|WB)\/\d{4}\/\d{7}$/.test(darpanId))) {
+      return res.status(400).json({ message: "Invalid or missing Darpan ID" });
+    }
 
     // Check if all required fields are provided
     if (!name || !username || !email || !password || !role) {
@@ -198,7 +214,16 @@ app.post("/signup", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create the new user
-    const user = new User({ name, username, email, password: hashedPassword, role, address, ngo_mail });
+    const user = new User({ 
+      name, 
+      username, 
+      email, 
+      password: hashedPassword, 
+      role, 
+      address, 
+      ngo_mail, 
+      darpan_id: darpanId // ✅ Match the schema field
+    });
     await user.save();
 
     res.status(201).json({ message: "Signup successful" });
