@@ -1,49 +1,101 @@
-.approval-div{
-    margin-top: 300px;
+.approval-div {
+  margin-top: 50px; /* Reduced from 300px for better alignment */
+  padding: 20px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.admin-dashboard {
-    
-    padding: 20px;
+
+/* Admin Dashboard Header */
+.admin-dashboard h1 {
+  text-align: center;
+  font-size: 28px;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+/* Pending NGOs Section */
+.user-list {
+  margin-top: 20px;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #f9f9f9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.user-table th, 
+.user-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.user-table th {
+  background-color: #3498db;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.user-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Buttons */
+button {
+  padding: 8px 14px;
+  margin: 5px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.approve-btn {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.approve-btn:hover {
+  background-color: #27ae60;
+}
+
+.reject-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.reject-btn:hover {
+  background-color: #c0392b;
+}
+
+button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .approval-div {
+      padding: 15px;
+      margin-top: 20px;
   }
-  
-  .admin-dashboard h1 {
-    text-align: center;
+
+  .user-table th, 
+  .user-table td {
+      padding: 8px;
+      font-size: 14px;
   }
-  
-  .user-list {
-    margin-top: 30px;
-  }
-  
-  .user-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .user-table th, .user-table td {
-    padding: 10px;
-    text-align: left;
-    border: 1px solid #ddd;
-  }
-  
-  .user-table th {
-    background-color: #f2f2f2;
-  }
-  
+
   button {
-    padding: 5px 10px;
-    margin: 5px;
-    cursor: pointer;
-    border: none;
-    background-color: #3498db;
-    color: white;
+      padding: 6px 12px;
   }
-  
-  button:hover {
-    background-color: #2980b9;
-  }
-  
-  button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
+}
