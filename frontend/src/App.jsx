@@ -55,7 +55,7 @@ const App = () => {
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          {/* <Route path="/admin-dashboard" element={<AdminDashboard />} /> */}
 
           {/* Protected Routes */}
           <Route
@@ -63,6 +63,14 @@ const App = () => {
             element={
               <ProtectedRoute allowedRoles={["Donor"]}>
                 <DonorDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin-dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["Admin"]}>
+                <AdminDashboard />
               </ProtectedRoute>
             }
           />

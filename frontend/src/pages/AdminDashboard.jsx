@@ -1,6 +1,7 @@
 // AdminDashboard.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Navbar from '../components/Navbar';
 
 const AdminDashboard = () => {
   const [ngos, setNgos] = useState([]);
@@ -29,6 +30,9 @@ const AdminDashboard = () => {
 
   return (
     <div>
+        <Navbar/>
+    <div className='approval-div'>
+        
       <h1>Admin Dashboard</h1>
       <h2>Pending NGOs for Approval</h2>
       <ul>
@@ -39,6 +43,7 @@ const AdminDashboard = () => {
           </li>
         ))}
       </ul>
+    </div>
     </div>
   );
 };

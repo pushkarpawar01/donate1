@@ -11,10 +11,13 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
+      
       const response = await axios.post("http://localhost:5000/login", { email, password });
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("role", response.data.role);
-
+      if(response.data.role === "Admin") {
+        navigate("/admin-dashboard")
+      }
       if (response.data.role === "Donor") {
         navigate("/donor-dashboard");
       } else if (response.data.role === "NGO") {
@@ -29,15 +32,14 @@ const Login = () => {
 
   const handleGoogleLogin = async (response) => {
     try {
+      
       const googleToken = response.credential; // Get the token from the response
       const res = await axios.post("http://localhost:5000/auth/google", { token: googleToken });
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
 
       // Navigate based on role
-      if(res.data.email === "admin@example.com") {
-        navigate("/admin-dashboard");
-      }
+      
       if (res.data.role === "Donor") {
         navigate("/donor-dashboard");
       } else if (res.data.role === "NGO") {
