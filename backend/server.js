@@ -17,6 +17,7 @@ mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("❌ DB Connection Error:", err));
+const darpanRegex = /^(AP|AR|AS|BR|CG|GA|GJ|HR|HP|JH|KA|KL|MP|MH|MN|ML|MZ|NL|OD|PB|RJ|SK|TN|TS|TR|UP|UK|WB)\/\d{4}\/\d{7}$/;
 
 // User Schema (Donor & NGO Authentication)
 const UserSchema = new mongoose.Schema({
@@ -51,6 +52,18 @@ const UserSchema = new mongoose.Schema({
         return true; // If not Volunteer, no validation needed
       },
       message: "The provided NGO email does not exist."
+    }
+  },
+  darpan_id: { 
+    type: String, 
+    validate: {
+      validator: function(value) {
+        if (this.role === "NGO") {
+          return darpanRegex.test(value);
+        }
+        return true; // No validation needed for non-NGOs
+      },
+      message: "Invalid Darpan ID format."
     }
   }
 });
@@ -117,6 +130,7 @@ const Donation = mongoose.model("Donation", DonationSchema);
 // Notification Schema
 const NotificationSchema = new mongoose.Schema({
   donorEmail: { type: String, required: true },
+  ngoEmail: { type: String },
   message: { type: String, required: true },
   date: { type: Date, default: Date.now },
   isRead: { type: Boolean, default: false }, // To track whether the donor has read the notification
@@ -168,7 +182,11 @@ app.post("/validate-ngo-email", async (req, res) => {
 // ✅ Signup Routes
 app.post("/signup", async (req, res) => {
   try {
-    const { name, username, email, password, role, address, ngo_mail } = req.body;
+    const { name, username, email, password, role, address, ngo_mail,darpanId } = req.body;
+    // Ensure NGOs provide a valid Darpan ID
+    if (role === "NGO" && (!darpanId || !/^(AP|AR|AS|BR|CG|GA|GJ|HR|HP|JH|KA|KL|MP|MH|MN|ML|MZ|NL|OD|PB|RJ|SK|TN|TS|TR|UP|UK|WB)\/\d{4}\/\d{7}$/.test(darpanId))) {
+      return res.status(400).json({ message: "Invalid or missing Darpan ID" });
+    }
 
     // Check if all required fields are provided
     if (!name || !username || !email || !password || !role) {
@@ -197,7 +215,16 @@ app.post("/signup", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create the new user
-    const user = new User({ name, username, email, password: hashedPassword, role, address, ngo_mail });
+    const user = new User({ 
+      name, 
+      username, 
+      email, 
+      password: hashedPassword, 
+      role, 
+      address, 
+      ngo_mail, 
+      darpan_id: darpanId // ✅ Match the schema field
+    });
     await user.save();
 
     res.status(201).json({ message: "Signup successful" });
@@ -364,6 +391,16 @@ app.post("/volunteer-deliver-donation", authenticateRole(["Volunteer"]), async (
     });
 
     await notification.save();
+
+    const ngoEmail = donation.ngoEmail;
+    const message1 = `Volunteer is on the Way! The volunteer is now heading towards donor location.`;
+
+    const notification1 = new Notification({
+      ngoEmail,
+      message1,
+    });
+
+    await notification1.save();
     
     // Save the donation with updated location
     await donation.save();

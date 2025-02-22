@@ -11,42 +11,37 @@ const Signup = () => {
   const [role, setRole] = useState("Donor");
   const [address, setAddress] = useState("");
   const [ngoMail, setNgoMail] = useState("");
+  const [darpanId, setDarpanId] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const darpanRegex = /^(AP|AR|AS|BR|CG|GA|GJ|HR|HP|JH|KA|KL|MP|MH|MN|ML|MZ|NL|OD|PB|RJ|SK|TN|TS|TR|UP|UK|WB)\/\d{4}\/\d{7}$/;
+
 
   // **Validation Function**
   const validateForm = () => {
     let newErrors = {};
 
-    // Name validation
-    if (!name.trim()) {
-      newErrors.name = "Name is required.";
-    }
-
-    // Username validation (at least 3 characters)
-    if (!username.trim() || username.length < 3) {
-      newErrors.username = "Username must be at least 3 characters.";
-    }
-
-    // Email validation (valid email format)
+    if (!name.trim()) newErrors.name = "Name is required.";
+    if (!username.trim() || username.length < 3) newErrors.username = "Username must be at least 3 characters.";
+    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.trim() || !emailRegex.test(email)) {
-      newErrors.email = "Enter a valid email address.";
-    }
+    if (!email.trim() || !emailRegex.test(email)) newErrors.email = "Enter a valid email address.";
+    if (!password || password.length < 6) newErrors.password = "Password must be at least 6 characters.";
 
-    // Password validation (minimum 6 characters)
-    if (!password || password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters.";
-    }
-
-    // Address validation (required for Donor/NGO)
     if ((role === "Donor" || role === "NGO") && !address.trim()) {
       newErrors.address = "Address is required.";
     }
-
-    // NGO email validation (required for Volunteers)
+    
     if (role === "Volunteer" && (!ngoMail.trim() || !emailRegex.test(ngoMail))) {
       newErrors.ngoMail = "Enter a valid NGO email.";
+    }
+
+    // Validate Darpan ID for NGOs
+    if (role === "NGO") {
+      if (!darpanId.trim() || !darpanRegex.test(darpanId)) {
+        newErrors.darpanId = "Enter a valid Darpan ID (e.g., RJ/2024/1234567).";
+      }
     }
 
     setErrors(newErrors);
@@ -60,7 +55,7 @@ const Signup = () => {
 
     try {
       await axios.post("http://localhost:5000/signup", {
-        name, username, email, password, role, address, ngo_mail: ngoMail,
+        name, username, email, password, role, address, ngo_mail: ngoMail,darpanId
       });
       navigate("/login");
     } catch (err) {
@@ -119,6 +114,19 @@ const Signup = () => {
             <label>NGO Email</label>
             <input type="email" placeholder="Enter NGO email" onChange={(e) => setNgoMail(e.target.value)} />
             {errors.ngoMail && <p className="error-text">{errors.ngoMail}</p>}
+          </div>
+        )}
+                {/* Darpan ID field for NGOs */}
+        {role === "NGO" && (
+          <div className="form-group">
+            <label>Darpan ID</label>
+            <input
+              type="text"
+              placeholder="Enter Darpan ID (e.g., RJ/2024/1234567)"
+              value={darpanId} 
+              onChange={(e) => setDarpanId(e.target.value)}
+            />
+            {errors.darpanId && <p className="error-text">{errors.darpanId}</p>}
           </div>
         )}
 
