@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import "./Signup.css";
 import { useNavigate } from "react-router-dom";
+import UploadImage from "./UploadImage";  // Import the UploadImage component
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -13,10 +14,10 @@ const Signup = () => {
   const [ngoMail, setNgoMail] = useState("");
   const [darpanId, setDarpanId] = useState("");
   const [errors, setErrors] = useState({});
+  const [image, setImage] = useState(null); // State for the uploaded image
   const navigate = useNavigate();
 
   const darpanRegex = /^(AP|AR|AS|BR|CG|GA|GJ|HR|HP|JH|KA|KL|MP|MH|MN|ML|MZ|NL|OD|PB|RJ|SK|TN|TS|TR|UP|UK|WB)\/\d{4}\/\d{7}$/;
-
 
   // **Validation Function**
   const validateForm = () => {
@@ -53,10 +54,17 @@ const Signup = () => {
       return; // Stop submission if validation fails
     }
 
+    const formData = {
+      name, username, email, password, role, address, ngo_mail: ngoMail, darpanId
+    };
+
     try {
-      await axios.post("http://localhost:5000/signup", {
-        name, username, email, password, role, address, ngo_mail: ngoMail,darpanId
-      });
+      // If the role is NGO, add the image URL to the form data before submitting
+      if (role === "NGO" && image) {
+        formData.imageUrl = image; // Attach the image URL if uploaded
+      }
+
+      await axios.post("http://localhost:5000/signup", formData);
       navigate("/login");
     } catch (err) {
       alert("Signup failed: " + (err.response?.data?.message || "Please try again."));
@@ -116,7 +124,8 @@ const Signup = () => {
             {errors.ngoMail && <p className="error-text">{errors.ngoMail}</p>}
           </div>
         )}
-                {/* Darpan ID field for NGOs */}
+
+        {/* Darpan ID field for NGOs */}
         {role === "NGO" && (
           <div className="form-group">
             <label>Darpan ID</label>
@@ -128,6 +137,11 @@ const Signup = () => {
             />
             {errors.darpanId && <p className="error-text">{errors.darpanId}</p>}
           </div>
+        )}
+
+        {/* Image upload for NGOs */}
+        {role === "NGO" && (
+          <UploadImage token={localStorage.getItem("token")} />
         )}
 
         <button onClick={handleSignup}>Signup</button>
