@@ -73,6 +73,7 @@ const RequestFoodForm = () => {
       setNgoName("");
       setNgoEmail("");
       setNgoContact("");
+      setEmailError("");  // Reset email error
     } catch (error) {
       console.error("❌ Error sending food request:", error.response?.data || error);
       setMessage(error.response?.data?.message || "Error sending food request. Please try again.");
@@ -83,8 +84,9 @@ const RequestFoodForm = () => {
 
   return (
     <>
+    <Navbar />
       <div className="request-food-form">
-        <Navbar />
+        
         
         <h2>Request Food from Donors</h2>
 
@@ -142,8 +144,7 @@ const RequestFoodForm = () => {
 
         {message && <p>{message}</p>} {/* Show success or error message */}
       </div>
-      
-      <Footer />
+          <Footer />
     </>
   );
 };
