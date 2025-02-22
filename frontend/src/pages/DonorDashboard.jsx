@@ -13,6 +13,7 @@ const DonorDashboard = () => {
     contact: "",
     expiryDate: "",
     location: "",
+    coordinates: [],  // Store coordinates here
   });
 
   const [errors, setErrors] = useState({});
@@ -39,33 +40,27 @@ const DonorDashboard = () => {
     setDonation({ ...donation, [e.target.name]: e.target.value });
   };
 
-  // **Validation Function**
   const validateForm = () => {
     let newErrors = {};
 
-    // Email Validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!donation.donorEmail || !emailRegex.test(donation.donorEmail)) {
       newErrors.donorEmail = "Enter a valid email address.";
     }
 
-    // People Fed Validation (should be > 0)
     if (!donation.peopleFed || parseInt(donation.peopleFed) <= 0) {
       newErrors.peopleFed = "Must be at least 1 person.";
     }
 
-    // Contact Validation (should be exactly 10 digits)
     const phoneRegex = /^[0-9]{10}$/;
     if (!donation.contact || !phoneRegex.test(donation.contact)) {
       newErrors.contact = "Contact number must be exactly 10 digits.";
     }
 
-    // Expiry Date Validation (should not be empty)
     if (!donation.expiryDate) {
       newErrors.expiryDate = "Expiry date is required.";
     }
 
-    // Location Validation (should not be empty)
     if (!donation.location.trim()) {
       newErrors.location = "Location is required.";
     }
@@ -74,22 +69,76 @@ const DonorDashboard = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const getCoordinatesFromLocation = async (location) => {
+    try {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=AIzaSyC1-bVbHAWMsKiXcOJ7FKs_e2ERVkhfpYQ`
+      );
+      if (response.data.status === "OK") {
+        const { lat, lng } = response.data.results[0].geometry.location;
+        return [lng, lat]; // [longitude, latitude]
+      }
+      throw new Error("Invalid location");
+    } catch (error) {
+      console.error("Error geocoding location:", error);
+      return null;
+    }
+  };
+
+  const getCurrentLocation = () => {
+    return new Promise((resolve, reject) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            resolve([longitude, latitude]); // [longitude, latitude]
+          },
+          (error) => {
+            reject("Error getting location");
+          }
+        );
+      } else {
+        reject("Geolocation not available");
+      }
+    });
+  };
+
   const handleSubmit = async () => {
     if (!validateForm()) {
       return; // Stop submission if validation fails
     }
 
+    let coordinates = null;
+
+    // If location is entered, use geocoding API to get coordinates
+    if (donation.location.trim()) {
+      coordinates = await getCoordinatesFromLocation(donation.location);
+    }
+
+    // If no valid location entered or geocoding fails, use current location
+    if (!coordinates) {
+      try {
+        coordinates = await getCurrentLocation();
+      } catch (error) {
+        alert("Could not determine location.");
+        return;
+      }
+    }
+
     try {
       const token = localStorage.getItem("token");
 
-      const updatedDonation = { ...donation };
+      const updatedDonation = { 
+        ...donation,
+        coordinates,  // Store the coordinates
+      };
 
       await axios.post("http://localhost:5000/donate", updatedDonation, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       alert("Donation submitted successfully!");
-      setDonation({ donorEmail: "", peopleFed: "", contact: "", expiryDate: "", location: "" });
+      setDonation({ donorEmail: "", peopleFed: "", contact: "", expiryDate: "", location: "", coordinates: [] });
       setErrors({});
     } catch (error) {
       alert("Failed to submit donation. Please try again.");

@@ -91,18 +91,18 @@ const DonationSchema = new mongoose.Schema({
   contact: { type: String, required: true },
   expiryDate: { type: Date, required: true },
   location: { type: String, required: true },
+  coordinates: { type: [Number], required: true },  // [longitude, latitude]
   status: { type: String, default: "Pending" },
   ngoDetails: {
-    ngoName: { type: String },  // Optional field, no need to specify `required: false`
-    ngoEmail: { type: String }, // Optional field
-    ngoContact: { type: String }, // Optional field
+    ngoName: { type: String },
+    ngoEmail: { type: String },
+    ngoContact: { type: String },
   },
-  // donorLocation: { type: { type: String, default: "Point" }, coordinates: [Number] }, // Optional field, no `required: false`
-  // volunteerLocation: { type: { type: String, default: "Point" }, coordinates: [Number] }, // Optional field
-  rating: { type: Number, min: 0, max: 5, default: 0 }, // Optional field, no `required: false`
+  rating: { type: Number, min: 0, max: 5, default: 0 },
 });
 
 DonationSchema.index({ "ngoDetails.ngoEmail": 1, status: 1 });
+
 
 
 // Add geospatial indexes
