@@ -35,6 +35,9 @@ const Login = () => {
       localStorage.setItem("role", res.data.role);
 
       // Navigate based on role
+      if(res.data.email === "admin@example.com") {
+        navigate("/admin-dashboard");
+      }
       if (res.data.role === "Donor") {
         navigate("/donor-dashboard");
       } else if (res.data.role === "NGO") {

@@ -26,47 +26,49 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, enum: ["Donor", "NGO", "Volunteer"], required: true },
-  rating:{type:Number,default:5.0},
-  totalRatings : {type:Number,default:0},
-  frozen :{type:Boolean,default:false},
-  address: { 
-    type: String, 
+  rating: { type: Number, default: 5.0 },
+  totalRatings: { type: Number, default: 0 },
+  frozen: { type: Boolean, default: false },
+  address: {
+    type: String,
     validate: {
-      validator: function(value) {
+      validator: function (value) {
         if (this.role === "Donor" || this.role === "NGO") {
           return !!value; // Ensures value is not empty
         }
         return true; // If not Donor/NGO, no validation needed
       },
-      message: "Address is required for Donor and NGO"
-    }
+      message: "Address is required for Donor and NGO",
+    },
   },
-  ngo_mail: { 
-    type: String, 
+  ngo_mail: {
+    type: String,
     validate: {
-      validator: async function(value) {
+      validator: async function (value) {
         if (this.role === "Volunteer") {
           const ngoUser = await User.findOne({ email: value });
           return !!ngoUser; // Ensures NGO email exists
         }
         return true; // If not Volunteer, no validation needed
       },
-      message: "The provided NGO email does not exist."
-    }
+      message: "The provided NGO email does not exist.",
+    },
   },
-  darpan_id: { 
-    type: String, 
+  darpan_id: {
+    type: String,
     validate: {
-      validator: function(value) {
+      validator: function (value) {
         if (this.role === "NGO") {
           return darpanRegex.test(value);
         }
         return true; // No validation needed for non-NGOs
       },
-      message: "Invalid Darpan ID format."
-    }
-  }
+      message: "Invalid Darpan ID format.",
+    },
+  },
+  isApproved: { type: Boolean, default: false }, // New field for approval status
 });
+
 
 const razorpay = new Razorpay({
   key_id: "rzp_test_BFlJZGyBOvGkkx",  // Replace with your Razorpay Test Key ID
@@ -182,7 +184,8 @@ app.post("/validate-ngo-email", async (req, res) => {
 // ✅ Signup Routes
 app.post("/signup", async (req, res) => {
   try {
-    const { name, username, email, password, role, address, ngo_mail,darpanId } = req.body;
+    const { name, username, email, password, role, address, ngo_mail, darpanId } = req.body;
+
     // Ensure NGOs provide a valid Darpan ID
     if (role === "NGO" && (!darpanId || !/^(AP|AR|AS|BR|CG|GA|GJ|HR|HP|JH|KA|KL|MP|MH|MN|ML|MZ|NL|OD|PB|RJ|SK|TN|TS|TR|UP|UK|WB)\/\d{4}\/\d{7}$/.test(darpanId))) {
       return res.status(400).json({ message: "Invalid or missing Darpan ID" });
@@ -214,25 +217,30 @@ app.post("/signup", async (req, res) => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create the new user
-    const user = new User({ 
-      name, 
-      username, 
-      email, 
-      password: hashedPassword, 
-      role, 
-      address, 
-      ngo_mail, 
-      darpan_id: darpanId // ✅ Match the schema field
+    // Create the new user (NGO with unapproved status)
+    const user = new User({
+      name,
+      username,
+      email,
+      password: hashedPassword,
+      role,
+      address,
+      ngo_mail,
+      darpan_id: darpanId,
+      isApproved: role === "NGO" ? false : true, // NGOs are not approved initially
     });
     await user.save();
 
-    res.status(201).json({ message: "Signup successful" });
+    // Notify the admin (you can use email, push notification, etc. Here we can console log as an example)
+    console.log(`New NGO signup! Please approve manually. Email: ${email}`);
+
+    res.status(201).json({ message: "Signup successful, awaiting admin approval" });
   } catch (error) {
     console.error("❌ Signup error:", error);
     res.status(500).json({ message: "Error registering user" });
   }
 });
+
 
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client("1047403268522-mcrb7eb9ila347tfvr6v5f9j55fua92k.apps.googleusercontent.com"); // Use your Google Client ID
@@ -289,11 +297,26 @@ app.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
+    // Hardcoded admin credentials
+    const adminEmail = "admin@example.com";  // You can change this to your preferred admin email
+    const adminPassword = "admin123";  // You can change this to your preferred admin password
+
+    // Check if the email and password match the hardcoded admin credentials
+    if (email === adminEmail && password === adminPassword) {
+      const token = jwt.sign({ email, role: "Admin" }, process.env.JWT_SECRET, { expiresIn: "1h" });
+      return res.status(200).json({ token, role: "Admin", message: "Admin login successful" });
+    }
+
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "User not found" });
 
-    if(user.frozen){
-      return res.status(403).json({message:"Your account is frozen"});
+    // If the user is an NGO and not approved
+    if (user.role === "NGO" && !user.isApproved) {
+      return res.status(403).json({ message: "Your NGO account is awaiting approval from the admin." });
+    }
+
+    if (user.frozen) {
+      return res.status(403).json({ message: "Your account is frozen" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -307,6 +330,7 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ message: "Error logging in" });
   }
 });
+
 
 app.get("/volunteer-acceptedDonations", authenticateRole(["Volunteer"]), async (req, res) => {
   try {
@@ -474,6 +498,30 @@ app.post("/donate", authenticateRole(["Donor"]), async (req, res) => {
 
 
 
+// Admin route to get unapproved NGOs
+app.get("/admin/ngos", async (req, res) => {
+  try {
+    const ngos = await User.find({ role: "NGO", isApproved: false });
+    res.status(200).json(ngos);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching NGOs" });
+  }
+});
+
+// Admin route to approve an NGO
+app.post("/admin/approve-ngo/:ngoId", async (req, res) => {
+  try {
+    const ngo = await User.findById(req.params.ngoId);
+    if (!ngo) {
+      return res.status(404).json({ message: "NGO not found" });
+    }
+    ngo.isApproved = true;
+    await ngo.save();
+    res.status(200).json({ message: "NGO approved" });
+  } catch (error) {
+    res.status(500).json({ message: "Error approving NGO" });
+  }
+});
 
 
 
