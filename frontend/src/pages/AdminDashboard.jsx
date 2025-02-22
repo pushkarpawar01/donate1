@@ -22,26 +22,38 @@ const AdminDashboard = () => {
     fetchUnapprovedNGOs();
   }, []);
 
+  // Approve NGO
   const handleApprove = async (ngoId) => {
     const confirmApproval = window.confirm("Are you sure you want to approve this NGO?");
     if (!confirmApproval) return;
 
     try {
       await axios.post(`http://localhost:5000/admin/approve-ngo/${ngoId}`);
-      setNgos(ngos.filter(ngo => ngo._id !== ngoId));
+      setNgos(ngos.filter(ngo => ngo._id !== ngoId)); // Remove approved NGO from the list
     } catch (error) {
       setError("Failed to approve NGO. Please try again.");
       console.error("Error approving NGO:", error);
     }
   };
 
+  // Decline NGO
+  const handleDecline = async (ngoId) => {
+    const confirmDecline = window.confirm("Are you sure you want to decline this NGO?");
+    if (!confirmDecline) return;
+
+    try {
+      await axios.post(`http://localhost:5000/admin/decline-ngo/${ngoId}`);
+      setNgos(ngos.filter(ngo => ngo._id !== ngoId)); // Remove declined NGO from the list
+    } catch (error) {
+      setError("Failed to decline NGO. Please try again.");
+      console.error("Error declining NGO:", error);
+    }
+  };
+
   return (
     <div>
       <Navbar />
-      <br />
-      <br />
-      <br />
-      <br />
+      <br /><br /><br /><br />
       <div className='approval-div'>
         <h1>Admin Dashboard</h1>
         <h2>Pending NGOs for Approval</h2>
@@ -57,7 +69,8 @@ const AdminDashboard = () => {
             {ngos.map(ngo => (
               <li key={ngo._id}>
                 {ngo.name} - {ngo.email}
-                <button onClick={() => handleApprove(ngo._id)}>Approve</button>
+                <button className="approve-btn" onClick={() => handleApprove(ngo._id)}>Approve</button>
+                <button className="decline-btn" onClick={() => handleDecline(ngo._id)}>Decline</button>
               </li>
             ))}
           </ul>
