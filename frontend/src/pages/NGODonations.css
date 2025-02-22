@@ -1,61 +1,60 @@
-/* Container for the NGO Donations */
+/* Container for NGO Donations */
 .ngo-donations-container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    text-align: center;
-    font-family: "Poppins", sans-serif;
-  }
-  
-  /* Donation List */
-  .donations-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  /* Donation Card */
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Donation List */
+.donations-list {
+  list-style: none;
+  padding: 0;
+}
+
+/* Donation Card */
+.donation-card {
+  background: white;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+/* Rating Section */
+.rating-section {
+  margin-top: 10px;
+}
+
+.star-rating {
+  display: flex;
+  gap: 5px;
+}
+
+.star-button {
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: gray;
+  transition: color 0.3s ease-in-out, transform 0.2s;
+}
+
+.star-button:hover,
+.star-button.selected {
+  color: gold;
+  transform: scale(1.2);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
   .donation-card {
-    background: white;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: left;
+    padding: 10px;
   }
-  
-  /* Rating Section */
-  .rating-section {
-    margin-top: 10px;
-  }
-  
-  .star-rating {
-    display: flex;
-    gap: 5px;
-  }
-  
+
   .star-button {
-    font-size: 20px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: gray;
-    transition: color 0.3s ease-in-out, transform 0.2s;
+    font-size: 18px;
   }
-  
-  .star-button:hover,
-  .star-button.selected {
-    color: gold;
-    transform: scale(1.2);
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 600px) {
-    .donation-card {
-      padding: 10px;
-    }
-  
-    .star-button {
-      font-size: 18px;
-    }
-  }
-  
+}
