@@ -356,7 +356,7 @@ app.post("/volunteer-deliver-donation", authenticateRole(["Volunteer"]), async (
     
     // Create a notification for the donor
     const donorEmail = donation.donorEmail;
-    const message = `Your donation is on its way! The volunteer is now heading towards your location.`;
+    const message = `Volunteer is on the Way! The volunteer is now heading towards your location.`;
 
     const notification = new Notification({
       donorEmail,

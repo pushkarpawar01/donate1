@@ -45,7 +45,7 @@ const VolunteerDashboard = () => {
 
   const fetchDonations = async () => {
     try {
-      navigate("/map");
+      //navigate("/map");
       const token = localStorage.getItem("token");
       const response = await axios.get("http://localhost:5000/volunteer-acceptedDonations", {
         params: { ngoEmail },
@@ -65,7 +65,7 @@ const VolunteerDashboard = () => {
     }
 
     try {
-      navigate("/map", { state: { volunteerLocation } });
+      // navigate("/map", { state: { volunteerLocation } });  
       const token = localStorage.getItem("token");
       const response = await axios.post(
         "http://localhost:5000/volunteer-deliver-donation",
@@ -113,6 +113,39 @@ const VolunteerDashboard = () => {
     }
   
     fetchDonations(); // Proceed to fetch donations
+  };
+  const handleNotifyPickup = async (donation) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:5000/notify-pickup",
+        {
+          donationId: donation._id,
+          ngoEmail: donation.ngoEmail,
+          donorEmail: donation.donorEmail,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert(response.data.message);
+    } catch (err) {
+      alert("Failed to notify pickup. Please try again.");
+    }
+  };
+  const handleNotifyDelivery = async (donation) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:5000/notify-delivery",
+        {
+          donationId: donation._id,
+          donorEmail: donation.donorEmail,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert(response.data.message);
+    } catch (err) {
+      alert("Failed to notify delivery. Please try again.");
+    }
   };
 
   return (
@@ -162,6 +195,12 @@ const VolunteerDashboard = () => {
                 className="deliver-button"
               >
                 Deliver
+              </button>
+              <button onClick={() => handleNotifyPickup(donation)} className="pickup-button">
+                Notify Pickup
+              </button>
+              <button onClick={() => handleNotifyDelivery(donation)} className="delivery-button">
+                Notify Delivery
               </button>
             </div>
           ))
