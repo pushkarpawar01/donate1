@@ -29,6 +29,7 @@ import Donate from "./pages/Donate";
 import DonationDrives from "./pages/DonationDrives";
 import MapPage from "./pages/MapPage";
 import RequestFoodForm from "./pages/RequestFoodForm";
+import Certificate from "./pages/Certificate";
 
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -110,6 +111,14 @@ const App = () => {
             element={
               <ProtectedRoute allowedRoles={["Volunteer"]}>
                 <VolunteerDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/certificate"
+            element={
+              <ProtectedRoute allowedRoles={["Volunteer"]}>
+                <Certificate />
               </ProtectedRoute>
             }
           />

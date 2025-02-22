@@ -1,0 +1,130 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    padding: 20px;
+  }
+  
+  .container {
+    background: white;
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  input {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  button {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    border-radius: 5px;
+  }
+  
+  button:hover {
+    opacity: 0.8;
+  }
+  
+  button:first-of-type {
+    background: green;
+    color: white;
+  }
+  
+  button:last-of-type {
+    background: blue;
+    color: white;
+  }
+  
+  .certificate {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 800px;
+    height: 600px;
+    background: white;
+    text-align: center;
+    padding: 40px;
+    margin: auto;
+    position: relative;
+    border: 10px solid gold;
+  }
+  
+  .certificate-border {
+    /* border: 15px solid gold; */
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .certificate-content {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+  }
+  
+  h2 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  
+  .sub-text {
+    font-size: 20px;
+    color: #777;
+  }
+  
+  .name {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #222;
+  }
+  
+  .footer-cert {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+    font-size: 16px;
+    align-items: center;
+    padding-bottom: 20px;
+    position: relative;
+  }
+  
+  .footer-cert::after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background-color: gold;
+  }
+  
+  .signature {
+    text-align: center;
+    font-size: 14px;
+  }
+  
