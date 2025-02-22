@@ -13,6 +13,7 @@ const DonorDashboard = () => {
     contact: "",
     expiryDate: "",
     location: "",
+    description: "", // Add description to the state
     coordinates: [],  // Store coordinates here
   });
 
@@ -65,6 +66,10 @@ const DonorDashboard = () => {
       newErrors.location = "Location is required.";
     }
 
+    if (!donation.description.trim()) {
+      newErrors.description = "Description is required.";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -107,14 +112,14 @@ const DonorDashboard = () => {
     if (!validateForm()) {
       return; // Stop submission if validation fails
     }
-
+  
     let coordinates = null;
-
+  
     // If location is entered, use geocoding API to get coordinates
     if (donation.location.trim()) {
       coordinates = await getCoordinatesFromLocation(donation.location);
     }
-
+  
     // If no valid location entered or geocoding fails, use current location
     if (!coordinates) {
       try {
@@ -124,26 +129,28 @@ const DonorDashboard = () => {
         return;
       }
     }
-
+  
     try {
       const token = localStorage.getItem("token");
-
+  
       const updatedDonation = { 
         ...donation,
         coordinates,  // Store the coordinates
+        description: donation.description, // Ensure description is passed
       };
-
+  
       await axios.post("http://localhost:5000/donate", updatedDonation, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
+  
       alert("Donation submitted successfully!");
-      setDonation({ donorEmail: "", peopleFed: "", contact: "", expiryDate: "", location: "", coordinates: [] });
+      setDonation({ donorEmail: "", peopleFed: "", contact: "", expiryDate: "", location: "", description: "", coordinates: [] });
       setErrors({});
     } catch (error) {
       alert("Failed to submit donation. Please try again.");
     }
   };
+  
 
   return (
     <div className="donor-dashboard-container">
@@ -224,6 +231,19 @@ const DonorDashboard = () => {
               className="input-field"
             />
             {errors.location && <p className="error-text">{errors.location}</p>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="description" className="form-label">Description</label>
+            <textarea
+              name="description"
+              id="description"
+              placeholder="Enter a description of the donation"
+              value={donation.description}
+              onChange={handleInputChange}
+              className="input-field"
+            />
+            {errors.description && <p className="error-text">{errors.description}</p>}
           </div>
         </div>
 

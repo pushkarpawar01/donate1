@@ -91,17 +91,19 @@ const DonationSchema = new mongoose.Schema({
   contact: { type: String, required: true },
   expiryDate: { type: Date, required: true },
   location: { type: String, required: true },
-  coordinates: { type: [Number], required: true },  // [longitude, latitude]
+  description: { type: String, required: true },  // Add description field
+  coordinates: { type: [Number], required: true }, // Store coordinates
   status: { type: String, default: "Pending" },
   ngoDetails: {
-    ngoName: { type: String },
-    ngoEmail: { type: String },
-    ngoContact: { type: String },
+    ngoName: { type: String },  // Optional field
+    ngoEmail: { type: String }, // Optional field
+    ngoContact: { type: String }, // Optional field
   },
-  rating: { type: Number, min: 0, max: 5, default: 0 },
+  rating: { type: Number, min: 0, max: 5, default: 0 }, // Optional field
 });
 
 DonationSchema.index({ "ngoDetails.ngoEmail": 1, status: 1 });
+
 
 
 
@@ -379,15 +381,12 @@ app.post("/volunteer-deliver-donation", authenticateRole(["Volunteer"]), async (
 // ✅ Donor - Submit Food Donation
 app.post("/donate", authenticateRole(["Donor"]), async (req, res) => {
   try {
-    const { donorEmail, peopleFed, contact, expiryDate, location } = req.body;
+    const { donorEmail, peopleFed, contact, expiryDate, location, description } = req.body;
 
-    if (!donorEmail || !peopleFed || !contact || !expiryDate || !location) {
+    // Validate all required fields
+    if (!donorEmail || !peopleFed || !contact || !expiryDate || !location || !description) {
       return res.status(400).json({ message: "All fields are required" });
     }
-
-    // if (!location.latitude || !location.longitude) {
-    //   return res.status(400).json({ message: "Invalid location format. Must include latitude and longitude." });
-    // }
 
     // Parse the submitted expiry date
     const parsedExpiryDate = new Date(expiryDate);
@@ -423,21 +422,19 @@ app.post("/donate", authenticateRole(["Donor"]), async (req, res) => {
       contact,
       expiryDate: parsedExpiryDate,
       location,
-      // donorLocation: {
-      //   type: "Point",
-      //   coordinates: [location.longitude, location.latitude], // Store in GeoJSON format
-      // },
+      description, // Ensure description is stored
       status: "Pending",
     });
 
     await newDonation.save();
 
-    res.status(201).json({ message: "Donation submitted successfully" });
+    res.status(201).json({ message: "Donation submitted successfully!", donation: newDonation });
   } catch (error) {
-    console.error("❌ Donation submission error:", error);
-    res.status(500).json({ message: "Error submitting donation" });
+    console.error("Error saving donation:", error);
+    res.status(500).json({ message: "Failed to submit donation. Please try again." });
   }
 });
+
 
 
 
