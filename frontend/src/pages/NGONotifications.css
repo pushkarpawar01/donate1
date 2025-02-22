@@ -1,0 +1,37 @@
+.ngo-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+  }
+  
+  .ngo-notification.success {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .ngo-notification.error {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .ngo-notification.warning {
+    background-color: #ffc107;
+    color: white;
+  }
+  
+  .ngo-notification .close-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  

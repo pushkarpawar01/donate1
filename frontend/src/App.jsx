@@ -31,6 +31,7 @@ import MapPage from "./pages/MapPage";
 import RequestFoodForm from "./pages/RequestFoodForm";
 import Certificate from "./pages/Certificate";
 import VolunteerForm from "./pages/VolunteerForm";
+import NGONotifications from "./pages/NGONotifications";
 
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -84,6 +85,15 @@ const App = () => {
             element={
               <ProtectedRoute allowedRoles={["NGO"]}>
                 <NGODashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/ngo-notifications"
+            element={
+              <ProtectedRoute allowedRoles={["NGO"]}>
+                <NGONotifications />
               </ProtectedRoute>
             }
           />
