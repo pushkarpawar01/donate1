@@ -13,8 +13,8 @@ const Signup = () => {
   const [address, setAddress] = useState("");
   const [ngoMail, setNgoMail] = useState("");
   const [darpanId, setDarpanId] = useState("");
-  const [errors, setErrors] = useState({});
   const [image, setImage] = useState(null); // State for the uploaded image
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const darpanRegex = /^(AP|AR|AS|BR|CG|GA|GJ|HR|HP|JH|KA|KL|MP|MH|MN|ML|MZ|NL|OD|PB|RJ|SK|TN|TS|TR|UP|UK|WB)\/\d{4}\/\d{7}$/;
@@ -43,6 +43,11 @@ const Signup = () => {
       if (!darpanId.trim() || !darpanRegex.test(darpanId)) {
         newErrors.darpanId = "Enter a valid Darpan ID (e.g., RJ/2024/1234567).";
       }
+
+      // Check if image is selected for NGOs
+      if (!image) {
+        newErrors.image = "Image is required for NGO signup.";
+      }
     }
 
     setErrors(newErrors);
@@ -54,17 +59,23 @@ const Signup = () => {
       return; // Stop submission if validation fails
     }
 
-    const formData = {
-      name, username, email, password, role, address, ngo_mail: ngoMail, darpanId
-    };
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("username", username);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("role", role);
+    formData.append("address", address);
+    formData.append("ngo_mail", ngoMail);
+    formData.append("darpanId", darpanId);
+    formData.append("image", image); // Attach the image file to form data
 
     try {
-      // If the role is NGO, add the image URL to the form data before submitting
-      if (role === "NGO" && image) {
-        formData.imageUrl = image; // Attach the image URL if uploaded
-      }
-
-      await axios.post("http://localhost:5000/signup", formData);
+      await axios.post("http://localhost:5000/signup", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Important for file uploads
+        },
+      });
       navigate("/login");
     } catch (err) {
       alert("Signup failed: " + (err.response?.data?.message || "Please try again."));
@@ -141,7 +152,14 @@ const Signup = () => {
 
         {/* Image upload for NGOs */}
         {role === "NGO" && (
-          <UploadImage token={localStorage.getItem("token")} />
+          <div className="form-group">
+            <label>Upload Image</label>
+            <input
+              type="file"
+              onChange={(e) => setImage(e.target.files[0])}
+            />
+            {errors.image && <p className="error-text">{errors.image}</p>}
+          </div>
         )}
 
         <button onClick={handleSignup}>Signup</button>

@@ -8,7 +8,6 @@ require("dotenv").config();
 const Razorpay = require("razorpay");
 const path = require('path');
 
-
 // dotenv.config();
 
 const app = express();
@@ -134,14 +133,14 @@ const Image = mongoose.model("Image", imageSchema);
 // Multer Storage Configuration
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, "uploads/"); // Store files in 'uploads' directory
+    cb(null, "uploads/");  // Set upload directory
   },
   filename: (req, file, cb) => {
-      cb(null, Date.now() + path.extname(file.originalname)); // Add unique timestamp to filenames
+    cb(null, Date.now() + path.extname(file.originalname)); // Add unique timestamp to filenames
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 // Serve static files from the 'uploads' folder
 app.use("/uploads", express.static("uploads"));
@@ -224,7 +223,9 @@ app.post("/validate-ngo-email", async (req, res) => {
 
 
 // ✅ Signup Routes
-app.post("/signup", async (req, res) => {
+
+// POST route for signup
+app.post("/signup", upload.single("image"), async (req, res) => {
   try {
     const { name, username, email, password, role, address, ngo_mail, darpanId } = req.body;
 
@@ -259,6 +260,9 @@ app.post("/signup", async (req, res) => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Handle image URL if uploaded
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+
     // Create the new user (NGO with unapproved status)
     const user = new User({
       name,
@@ -269,8 +273,10 @@ app.post("/signup", async (req, res) => {
       address,
       ngo_mail,
       darpan_id: darpanId,
+      image_url: imageUrl, // Save the image URL
       isApproved: role === "NGO" ? false : true, // NGOs are not approved initially
     });
+
     await user.save();
 
     // Notify the admin (you can use email, push notification, etc. Here we can console log as an example)
