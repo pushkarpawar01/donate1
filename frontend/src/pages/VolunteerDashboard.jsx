@@ -147,6 +147,23 @@ const VolunteerDashboard = () => {
       alert("Failed to notify delivery. Please try again.");
     }
   };
+  const handleFoodQualityCheck = async (donationId) => {
+    console.log("Checking food quality for donation ID:", donationId); // Log the donation ID being passed
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:5000/food-quality-check", 
+        { donationId, quality: "Good" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log("Response from server:", response.data); // Log the response from the backend
+      alert(response.data.message); // Show the response message
+    } catch (err) {
+      console.error("Error in food quality check:", err); // Log the error if the request fails
+      alert("Failed to mark food quality. Please try again.");
+    }
+  };
+  
 
   return (
     <div className="volunteer-dashboard">
@@ -204,6 +221,13 @@ const VolunteerDashboard = () => {
               </button>
               <button onClick={() => handleNotifyDelivery(donation)} className="delivery-button">
                 Notify Delivery
+              </button>
+              {/* New button to mark food quality as good */}
+              <button
+                onClick={() => handleFoodQualityCheck(donation._id)}
+                className="check-quality-button"
+              >
+                Check Food Quality (Good)
               </button>
             </div>
           ))
