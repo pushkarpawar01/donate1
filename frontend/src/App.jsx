@@ -4,7 +4,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google"; // Import GoogleOAuth
 import './App.css'; // Make sure this is imported
 import ChatButton from "./pages/ChatButton";
 import FunFactGenerator from "./pages/FunFactGenerator";
-
+import AdminNotifications from "./pages/AdminNotifications";
 import MissionSection from './pages/MissionSection'
 import HeroSection from './pages/HeroSection'
 import HowItWorks from './pages/HowItWorks'
@@ -76,6 +76,15 @@ const App = () => {
             element={
               <ProtectedRoute allowedRoles={["Admin"]}>
                 <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+        <Route
+            path="/admin-notifications"
+            element={
+              <ProtectedRoute allowedRoles={["Admin"]}>
+                <AdminNotifications />
               </ProtectedRoute>
             }
           />

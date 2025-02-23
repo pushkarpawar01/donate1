@@ -42,7 +42,7 @@ const Navbar = () => {
           </>
         )}
 
-        {/* NGO-Specific Dashboard (Only for NGOs) */}
+        {/* NGO-Specific Dashboard */}
         {token && role === "ngo" && (
           <>
             <Link to="/ngo-dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
@@ -52,7 +52,7 @@ const Navbar = () => {
           </>
         )}
 
-        {/* Donor-Specific Dashboard (Only for Donors) */}
+        {/* Donor-Specific Dashboard */}
         {token && role === "donor" && (
           <>
             <Link to="/donor-dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
@@ -62,11 +62,20 @@ const Navbar = () => {
           </>
         )}
 
-        {/* Volunteer-Specific Dashboard (Only for Volunteers) */}
+        {/* Volunteer-Specific Dashboard */}
         {token && role === "volunteer" && (
           <>
             <Link to="/volunteer-dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
             <Link to="/volunteer-delivery" onClick={() => setIsMenuOpen(false)}>Image Upload</Link>
+          </>
+        )}
+
+        {/* Admin-Specific Dashboard */}
+        {token && role === "admin" && (
+          <>
+            <Link to="/admin-dashboard" onClick={() => setIsMenuOpen(false)}>Approve Requests</Link>
+            {/* <Link to="/manage-users" onClick={() => setIsMenuOpen(false)}>Manage Users</Link> */}
+            <Link to="/admin-notifications" onClick={() => setIsMenuOpen(false)}>Notifications</Link>
           </>
         )}
       </div>

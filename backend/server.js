@@ -116,7 +116,11 @@ const DonationSchema = new mongoose.Schema({
   location: { type: String, required: true },
   description: { type: String, required: false },  // Add description field
   coordinates: { type: [Number], required: true }, // Store coordinates
-  status: { type: String, default: "Pending" },
+  status: { type: String, default: "Pending" },  
+  foodQuality: {
+    type: String,
+    default: 'Not Checked', 
+  },
   ngoDetails: {
     ngoName: { type: String },  // Optional field
     ngoEmail: { type: String }, // Optional field
@@ -715,6 +719,37 @@ app.post("/rate-donation", authenticateRole(["NGO"]), async (req, res) => {
 });
 
 
+
+
+// const handleFoodQualityCheck = async (donationId) => {
+//   try {
+//     const token = localStorage.getItem("token");
+//     const response = await axios.post(
+//       "http://localhost:5000/food-quality-check",
+//       { donationId, quality: "Good" },
+//       { headers: { Authorization: `Bearer ${token}` } }
+//     );
+//     console.log("response:..",response.data);
+//     alert(response.data.message);
+//   } catch (err) {
+//     alert("Failed to mark food quality. Please try again.");
+//   }
+// };
+app.post('/food-quality-check', async (req, res) => {
+  const { donationId, quality } = req.body;
+  console.log("Received food quality check:", { donationId, quality });
+
+  // Your logic for handling the donation update
+  const donation = await Donation.findById(donationId);
+  if (!donation) {
+    return res.status(404).json({ message: 'Donation not found' });
+  }
+
+  // Updating the donation food quality
+  donation.foodQuality = quality;
+  await donation.save();
+  res.status(200).json({ message: 'Food quality checked and marked as good.' });
+});
 
 
 

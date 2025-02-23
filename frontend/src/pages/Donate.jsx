@@ -90,6 +90,9 @@ const Donate = () => {
             </div>
 
             <DonateDriveButton />
+            <br />
+            <br />
+            <br />
             <Footer />
 
             {/* Payment Modal */}

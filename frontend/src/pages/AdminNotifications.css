@@ -1,0 +1,93 @@
+/* Admin Notifications Styling */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@300;400&display=swap');
+
+.notification-container {
+  font-family: 'Poppins', sans-serif;
+  max-width: 800px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.notification-container h2 {
+  font-size: 24px;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.notification {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 6px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.notification.success {
+  background: #eafaf1;
+  color: #2ecc71;
+  border-left: 6px solid #2ecc71;
+}
+
+.notification.error {
+  background: #fdecea;
+  color: #e74c3c;
+  border-left: 6px solid #e74c3c;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #777;
+  padding: 5px;
+  transition: color 0.3s;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .notification-container {
+    padding: 15px;
+  }
+
+  .notification {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: #777;
+    padding: 4px 6px; /* Minimal padding */
+    max-width: 40px; /* Remove unnecessary width */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s;
+  }
+  
+  .close-btn:hover {
+    color: #333;
+  }
+  
