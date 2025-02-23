@@ -74,7 +74,7 @@ const Navbar = () => {
         {token && role === "admin" && (
           <>
             <Link to="/admin-dashboard" onClick={() => setIsMenuOpen(false)}>Approve Requests</Link>
-            <Link to="/manage-users" onClick={() => setIsMenuOpen(false)}>Manage Users</Link>
+            {/* <Link to="/manage-users" onClick={() => setIsMenuOpen(false)}>Manage Users</Link> */}
             <Link to="/admin-notifications" onClick={() => setIsMenuOpen(false)}>Notifications</Link>
           </>
         )}
