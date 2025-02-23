@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
+import "./VolunteerForm.jsx"
 import "./VolunteerDelivery.css"; // Importing CSS file
+import VolunteerForm from "./VolunteerForm.jsx";
 
 const VolunteerDelivery = () => {
   const [image, setImage] = useState(null);
@@ -51,6 +53,12 @@ const VolunteerDelivery = () => {
           ✅ Mark as Delivered
         </button>
       </div>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <VolunteerForm/>
     </div>
   );
 };
