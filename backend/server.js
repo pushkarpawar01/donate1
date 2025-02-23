@@ -234,45 +234,35 @@ app.post("/validate-ngo-email", async (req, res) => {
 // ✅ Signup Routes
 
 // POST route for signup
+
 app.post("/signup", upload.single("image"), async (req, res) => {
   try {
     const { name, username, email, password, role, address, ngo_mail, darpanId } = req.body;
 
-    // Ensure NGOs provide a valid Darpan ID
     if (role === "NGO" && (!darpanId || !/^(AP|AR|AS|BR|CG|GA|GJ|HR|HP|JH|KA|KL|MP|MH|MN|ML|MZ|NL|OD|PB|RJ|SK|TN|TS|TR|UP|UK|WB)\/\d{4}\/\d{7}$/.test(darpanId))) {
       return res.status(400).json({ message: "Invalid or missing Darpan ID" });
     }
 
-    // Check if all required fields are provided
     if (!name || !username || !email || !password || !role) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // Handle additional validation based on role
-    if (role === "Donor" || role === "NGO") {
-      if (!address) {
-        return res.status(400).json({ message: "Address is required for Donor and NGO" });
-      }
-    }
-    if (role === "Volunteer") {
-      if (!ngo_mail) {
-        return res.status(400).json({ message: "NGO Email is required for Volunteer" });
-      }
+    if ((role === "Donor" || role === "NGO") && !address) {
+      return res.status(400).json({ message: "Address is required for Donor and NGO" });
     }
 
-    // Check if the user already exists
+    if (role === "Volunteer" && !ngo_mail) {
+      return res.status(400).json({ message: "NGO Email is required for Volunteer" });
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Handle image URL if uploaded
     const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
-    // Create the new user (NGO with unapproved status)
     const user = new User({
       name,
       username,
@@ -282,21 +272,66 @@ app.post("/signup", upload.single("image"), async (req, res) => {
       address,
       ngo_mail,
       darpan_id: darpanId,
-      image_url: imageUrl, // Save the image URL
-      isApproved: role === "NGO" ? false : true, // NGOs are not approved initially
+      image_url: imageUrl,
+      isApproved: role === "NGO" || role === "Volunteer" ? false : true, // NGOs & Volunteers need approval
     });
 
     await user.save();
 
-    // Notify the admin (you can use email, push notification, etc. Here we can console log as an example)
-    console.log(`New NGO signup! Please approve manually. Email: ${email}`);
+    if (role === "Volunteer" && ngo_mail) {
+      const ngo = await User.findOne({ email: ngo_mail, role: "NGO" });
+      if (ngo) {
+        const notification = new Notification({
+          recipientEmail: ngo.email,
+          message: `${name} has signed up as a Volunteer. Approve or Reject in Dashboard.`,
+          type: "volunteer_signup",
+        });
+        await notification.save();
+      }
+    }
 
-    res.status(201).json({ message: "Signup successful, awaiting admin approval" });
+    res.status(201).json({ message: "Signup successful, awaiting NGO approval" });
   } catch (error) {
     console.error("❌ Signup error:", error);
     res.status(500).json({ message: "Error registering user" });
   }
 });
+
+app.get("/pending-volunteers/:ngoEmail", async (req, res) => {
+  try {
+    const { ngoEmail } = req.params;
+    const pendingVolunteers = await User.find({ ngo_mail: ngoEmail, role: "Volunteer", isApproved: false });
+
+    res.status(200).json(pendingVolunteers);
+  } catch (error) {
+    console.error("Error fetching pending volunteers:", error);
+    res.status(500).json({ message: "Error fetching pending volunteers" });
+  }
+});
+
+app.post("/approve-volunteer", async (req, res) => {
+  try {
+    const { volunteerId, approve } = req.body;
+    const volunteer = await User.findById(volunteerId);
+
+    if (!volunteer) {
+      return res.status(404).json({ message: "Volunteer not found" });
+    }
+
+    if (approve) {
+      volunteer.isApproved = true;
+      await volunteer.save();
+      return res.status(200).json({ message: "Volunteer approved successfully" });
+    } else {
+      await User.findByIdAndDelete(volunteerId);
+      return res.status(200).json({ message: "Volunteer rejected successfully" });
+    }
+  } catch (error) {
+    console.error("Error approving/rejecting volunteer:", error);
+    res.status(500).json({ message: "Error processing request" });
+  }
+});
+
 
 
 const { OAuth2Client } = require('google-auth-library');
@@ -466,11 +501,6 @@ app.post("/volunteer-deliver-donation", authenticateRole(["Volunteer"]), async (
     const donorEmail = donation.donorEmail;
     const message = `Volunteer is on the Way! The volunteer is now heading towards your location.`;
 
-    const notification = new Notification({
-      donorEmail,
-      message,
-    });
-
     await notification.save();
 
     const ngoEmail = donation.ngoEmail;
@@ -494,6 +524,21 @@ app.post("/volunteer-deliver-donation", authenticateRole(["Volunteer"]), async (
   }
 });
 
+const router = express.Router();
+
+// Get notifications for an NGO
+router.get("/notifications/:email", async (req, res) => {
+  try {
+    const { email } = req.params;
+    const notifications = await Notification.find({ recipientEmail: email }).sort({ createdAt: -1 });
+    res.json(notifications);
+  } catch (error) {
+    console.error("❌ Error fetching notifications:", error);
+    res.status(500).json({ message: "Error retrieving notifications" });
+  }
+});
+
+module.exports = router;
 
 
 // ✅ Donor - Submit Food Donation

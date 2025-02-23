@@ -1,32 +1,34 @@
 import React, { useState, useEffect } from "react";
-import "./NGONotifications.css"; // For styling
+import axios from "axios";
+import "./NGONotifications.css";
 
-const NGONotifications = ({ message, type, onClose }) => {
-  const [visible, setVisible] = useState(true);
+const NGONotifications = ({ ngoEmail }) => {
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    if (visible) {
-      const timer = setTimeout(() => {
-        handleClose();
-      }, 3000); // Automatically close after 3 seconds
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/notifications/${ngoEmail}`);
+        setNotifications(response.data);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
 
-      return () => clearTimeout(timer); // Cleanup timer on unmount
-    }
-  }, [visible]);
-
-  const handleClose = () => {
-    setVisible(false);
-    if (onClose && typeof onClose === "function") {
-      onClose(); // Ensure onClose is a valid function before calling
-    }
-  };
-
-  if (!visible) return null;
+    fetchNotifications();
+  }, [ngoEmail]);
 
   return (
-    <div className={`ngo-notification ${type}`}>
-      <span>{message}</span>
-      <button className="close-btn" onClick={handleClose}>X</button>
+    <div className="notification-container">
+      {notifications.length === 0 ? (
+        <p>No new notifications</p>
+      ) : (
+        notifications.map((notification, index) => (
+          <div key={index} className="ngo-notification">
+            <span>{notification.message}</span>
+          </div>
+        ))
+      )}
     </div>
   );
 };
