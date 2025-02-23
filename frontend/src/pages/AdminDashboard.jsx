@@ -45,7 +45,7 @@ const AdminDashboard = () => {
       await axios.post(`http://localhost:5000/admin/decline-ngo/${ngoId}`);
       setNgos(ngos.filter(ngo => ngo._id !== ngoId)); // Remove declined NGO from the list
     } catch (error) {
-      setError("Failed to decline NGO. Please try again.");
+      setError("Removed");
       console.error("Error declining NGO:", error);
     }
   };
