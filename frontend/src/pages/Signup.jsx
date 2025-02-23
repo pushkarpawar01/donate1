@@ -163,7 +163,9 @@ const Signup = () => {
         )}
 
         <button onClick={handleSignup}>Signup</button>
+        
       </div>
+      
     </div>
   );
 };
