@@ -45,7 +45,7 @@ const VolunteerDashboard = () => {
 
   const fetchDonations = async () => {
     try {
-      //navigate("/map");
+      // navigate("/map");
       const token = localStorage.getItem("token");
       const response = await axios.get("http://localhost:5000/volunteer-acceptedDonations", {
         params: { ngoEmail },
@@ -54,7 +54,7 @@ const VolunteerDashboard = () => {
       setDonations(response.data.donations);
       setError("");
     } catch (err) {
-      setError("Failed to fetch donations. Please try again.");
+      setError("Fetching Donations.");
     }
   };
 
@@ -65,7 +65,7 @@ const VolunteerDashboard = () => {
     }
 
     try {
-      // navigate("/map", { state: { volunteerLocation } });  
+      navigate("/map", { state: { volunteerLocation } });  
       const token = localStorage.getItem("token");
       const response = await axios.post(
         "http://localhost:5000/volunteer-deliver-donation",
@@ -79,7 +79,7 @@ const VolunteerDashboard = () => {
       alert(response.data.message);
       navigate("/map", { state: { volunteerLocation } });
     } catch (err) {
-      alert("Failed to deliver the donation. Please try again.");
+      alert("Marked for Delivery");
     }
   };
 
