@@ -69,8 +69,9 @@ const UserSchema = new mongoose.Schema({
       message: "Invalid Darpan ID format.",
     },
   },
-  isApproved: { type: Boolean, default: false }, // New field for approval status
-});
+  isApproved: { type: Boolean, default: false },
+   // New field for approval status
+},{timestamps:true});
 
 
 const razorpay = new Razorpay({
