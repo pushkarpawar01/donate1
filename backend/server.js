@@ -128,7 +128,7 @@ DonationSchema.index({ "ngoDetails.ngoEmail": 1, status: 1 });
 // Define Image Schema
 const imageSchema = new mongoose.Schema({
   imageUrl: String,
-});
+},{timestamps:true});
 const Image = mongoose.model("Image", imageSchema);
 
 // Multer Storage Configuration
