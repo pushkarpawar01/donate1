@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import axios from "axios";
 import "./NGODashboard.css"; // Import external CSS
 import ChatButton from "./ChatButton";
+import MlModel from "./MlModel";
 
 const NGODashboard = () => {
   const [donations, setDonations] = useState([]);
@@ -111,7 +112,9 @@ const NGODashboard = () => {
     <div className="dashboard-container">
       <br />
       <Navbar />
+      <MlModel/>
       <ChatButton />
+      {/* <br /> */}
       <br />
 
       <div className="dashboard-content">
@@ -119,7 +122,7 @@ const NGODashboard = () => {
           <h1 className="dashboard-title">NGO Dashboard</h1>
 
           {/* Pending Volunteers */}
-          <h2 className="section-title">Pending Volunteers</h2>
+          {/* <h2 className="section-title">Pending Volunteers</h2>
           <div className="table-container">
             {pendingVolunteers.length === 0 ? (
               <p>No pending volunteer requests</p>
@@ -150,7 +153,7 @@ const NGODashboard = () => {
                 </tbody>
               </table>
             )}
-          </div>
+          </div> */}
 
           {/* Pending Donations */}
           <h2 className="section-title">Pending Donations</h2>
@@ -183,6 +186,7 @@ const NGODashboard = () => {
                       >
                         Reject
                       </button>
+                      {/* <MlModel/> */}
                     </td>
                   </tr>
                 ))}
