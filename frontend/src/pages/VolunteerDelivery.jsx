@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import Certificate from "./Certificate";
+
 import "./VolunteerForm.jsx"
 import "./VolunteerDelivery.css"; // Importing CSS file
 import VolunteerForm from "./VolunteerForm.jsx";
@@ -59,6 +62,8 @@ const VolunteerDelivery = () => {
       <br />
       <br />
       <VolunteerForm/>
+      <Certificate/>
+      <Footer/>
     </div>
   );
 };
