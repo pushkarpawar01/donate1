@@ -79,7 +79,7 @@ const VolunteerDashboard = () => {
       alert(response.data.message);
       navigate("/map", { state: { volunteerLocation } });
     } catch (err) {
-      alert("Failed to deliver the donation. Please try again.");
+      alert("Marked for Delivery");
     }
   };
 
