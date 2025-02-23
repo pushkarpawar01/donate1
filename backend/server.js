@@ -66,8 +66,13 @@ const UserSchema = new mongoose.Schema({
         }
         return true; // No validation needed for non-NGOs
       },
+      
       message: "Invalid Darpan ID format.",
     },
+  },
+  image_url: {
+    type: String, // This will store the Cloudinary image URL
+    required: true, // Make it mandatory for the user to upload an image
   },
   isApproved: { type: Boolean, default: false },
    // New field for approval status
