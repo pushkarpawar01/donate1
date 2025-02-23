@@ -66,11 +66,17 @@ const UserSchema = new mongoose.Schema({
         }
         return true; // No validation needed for non-NGOs
       },
+      
       message: "Invalid Darpan ID format.",
     },
   },
-  isApproved: { type: Boolean, default: false }, // New field for approval status
-});
+  image_url: {
+    type: String, // This will store the Cloudinary image URL
+    required: true, // Make it mandatory for the user to upload an image
+  },
+  isApproved: { type: Boolean, default: false },
+   // New field for approval status
+},{timestamps:true});
 
 
 const razorpay = new Razorpay({
@@ -127,7 +133,7 @@ DonationSchema.index({ "ngoDetails.ngoEmail": 1, status: 1 });
 // Define Image Schema
 const imageSchema = new mongoose.Schema({
   imageUrl: String,
-});
+},{timestamps:true});
 const Image = mongoose.model("Image", imageSchema);
 
 // Multer Storage Configuration
