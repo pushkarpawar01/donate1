@@ -36,7 +36,6 @@ const NGONotifications = ({ ngoEmail }) => {
   const handleDismiss = (index) => {
     setNotifications((prev) => prev.filter((_, i) => i !== index));
   };
-
   return (
     <>
       <Navbar />
