@@ -34,6 +34,7 @@ import VolunteerForm from "./pages/VolunteerForm";
 import NGONotifications from "./pages/NGONotifications";
 import AdminDashboard from "./pages/AdminDashboard";
 import UploadImage from "./pages/UploadImage";
+import VolunteerDelivery from "./pages/VolunteerDelivery";
 
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -54,9 +55,11 @@ const App = () => {
       <Router>
 
         <Routes>
+          
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/upload-image" element={<UploadImage />} />
+          <Route path="/volunteer-delivery" element={<VolunteerDelivery />} />
           {/* <Route path="/admin-dashboard" element={<AdminDashboard />} /> */}
 
           {/* Protected Routes */}

@@ -48,7 +48,7 @@ const Navbar = () => {
             <Link to="/ngo-dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
             <Link to="/ngo-donations" onClick={() => setIsMenuOpen(false)}>Donations</Link>
             <Link to="/food-request-form" onClick={() => setIsMenuOpen(false)}>Request Food</Link>
-            <Link to="/ngo-notifications" onClich={() => setIsMenuOpen(false)}>Notifications</Link>
+            <Link to="/ngo-notifications" onClick={() => setIsMenuOpen(false)}>Notifications</Link>
           </>
         )}
 
@@ -62,10 +62,11 @@ const Navbar = () => {
           </>
         )}
 
-        {/* Volunteer-Specific Dashboard (Only for Donors) */}
+        {/* Volunteer-Specific Dashboard (Only for Volunteers) */}
         {token && role === "volunteer" && (
           <>
             <Link to="/volunteer-dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
+            <Link to="/volunteer-delivery" onClick={() => setIsMenuOpen(false)}>Image Upload</Link>
           </>
         )}
       </div>
