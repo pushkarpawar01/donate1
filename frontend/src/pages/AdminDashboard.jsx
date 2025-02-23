@@ -65,15 +65,27 @@ const AdminDashboard = () => {
         ) : ngos.length === 0 ? (
           <p>No pending NGO approvals.</p>
         ) : (
-          <ul>
-            {ngos.map(ngo => (
-              <li key={ngo._id}>
-                {ngo.name} - {ngo.email}
-                <button className="approve-btn" onClick={() => handleApprove(ngo._id)}>Approve</button>
-                <button className="decline-btn" onClick={() => handleDecline(ngo._id)}>Decline</button>
-              </li>
-            ))}
-          </ul>
+          <table className="ngo-table" border="1" cellSpacing="0" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ backgroundColor: '#f2f2f2' }}>
+                <th style={{ border: '1px solid black' }}>Name</th>
+                <th style={{ border: '1px solid black' }}>Email</th>
+                <th style={{ border: '1px solid black' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ngos.map(ngo => (
+                <tr key={ngo._id}>
+                  <td style={{ border: '1px solid black', padding: '8px' }}>{ngo.name}</td>
+                  <td style={{ border: '1px solid black', padding: '8px' }}>{ngo.email}</td>
+                  <td style={{ border: '1px solid black', padding: '8px' }}>
+                    <button className="approve-btn" onClick={() => handleApprove(ngo._id)}>Approve</button>
+                    <button className="decline-btn" onClick={() => handleDecline(ngo._id)}>Decline</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
     </div>

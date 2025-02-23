@@ -10,7 +10,7 @@ const HeroSection = () => {
     <div className="hero-container">
       <div className="hero-text">
         <h1>
-          Join the <span className="highlight">Fight</span> Against <br /> Food Waste
+          Join the Fight Against <br /> Food Waste
         </h1>
         <p>
           At SurplusLink, we connect surplus food with NGOs to reduce waste and support communities. 
