@@ -20,7 +20,7 @@ const HeroSection2 = () => {
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 1, delay: 0.3 }}
       >
-        Discover how <span className="highlight">SurplusLink</span> transforms surplus food into valuable 
+        Discover how <span className="highlight">Waste2Worth</span> transforms surplus food into valuable 
         resources for NGOs. Our platform identifies excess food, matches it with suitable 
         organizations, and ensures timely delivery, minimizing waste and supporting community needs.
       </motion.p>

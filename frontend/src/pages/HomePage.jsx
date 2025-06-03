@@ -52,7 +52,7 @@ const HomePage = () => {
           transition={{ duration: 0.7, ease: "easeOut" }}
           viewport={{ once: true }}
         >
-          SurplusLink is dedicated to empowering NGOs with the resources and tools they need to efficiently manage food distribution. Our platform offers real-time connections, ensuring that surplus food is quickly identified, matched, and delivered to those who need it most. By partnering with us, NGOs can enhance their mission to reduce hunger and minimize food waste.
+          Waste2Worth is dedicated to empowering NGOs with the resources and tools they need to efficiently manage food distribution. Our platform offers real-time connections, ensuring that surplus food is quickly identified, matched, and delivered to those who need it most. By partnering with us, NGOs can enhance their mission to reduce hunger and minimize food waste.
         </motion.p>
 
         {/* Features List */}
@@ -98,7 +98,7 @@ const HomePage = () => {
       >
         <h2>Join Our Mission</h2>
         <p>
-          Become a part of SurplusLink's network and help us create a sustainable future.
+          Become a part of Waste2Worth's network and help us create a sustainable future.
           Together, we can optimize food resources and reduce hunger.
         </p>
         <motion.button

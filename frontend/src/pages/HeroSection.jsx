@@ -13,7 +13,7 @@ const HeroSection = () => {
           Join the Fight Against <br /> Food Waste
         </h1>
         <p>
-          At SurplusLink, we connect surplus food with NGOs to reduce waste and support communities. 
+          At Waste2Worth, we connect surplus food with NGOs to reduce waste and support communities. 
           Our platform ensures that food is efficiently redistributed to those in need, creating a sustainable future.
         </p>
         

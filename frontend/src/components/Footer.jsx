@@ -31,7 +31,7 @@ const Footer = () => {
     <footer ref={footerRef} className={`footer ${isVisible ? "visible" : "hidden"}`}>
       <hr className="footer-divider" />
       <p className="footer-text">
-        © 2025 SurplusLink. All rights reserved. Join us in reducing food waste and supporting communities.
+        © 2025 Waste2Worth. All rights reserved. Join us in reducing food waste and supporting communities.
       </p>
       
       <div className="social-icons">

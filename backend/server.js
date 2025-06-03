@@ -79,8 +79,8 @@ const UserSchema = new mongoose.Schema({
 
 
 const razorpay = new Razorpay({
-  key_id: "rzp_test_BFlJZGyBOvGkkx",  // Replace with your Razorpay Test Key ID
-  key_secret: "kZlfisR8ju5SKoTfMbMJkb82",  // Replace with your Razorpay Test Secret Key
+  key_id: process.env.RAZORPAY_KEY_ID,  // Use environment variable for Razorpay Test Key ID
+  key_secret: process.env.RAZORPAY_KEY_SECRET,  // Use environment variable for Razorpay Test Secret Key
 });
 
 app.post("/create-order", async (req, res) => {
@@ -109,6 +109,9 @@ const User = mongoose.model("User", UserSchema);
 module.exports = User;
 
 const DonationSchema = new mongoose.Schema({
+  createdAt: { type: Date, default: Date.now }, // Track when the donation is created
+  acceptedAt: { type: Date }, // Track when the donation is accepted
+  deliveredAt: { type: Date }, // Track when the donation is delivered
   donorEmail: { type: String, required: true },
   peopleFed: { type: Number, required: true },
   contact: { type: String, required: true },
