@@ -338,16 +338,16 @@ app.post("/approve-volunteer", async (req, res) => {
 
 
 const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client("1047403268522-mcrb7eb9ila347tfvr6v5f9j55fua92k.apps.googleusercontent.com"); // Use your Google Client ID
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID); // Use environment variable for Google Client ID
 
 app.post('/auth/google', async (req, res) => {
   const { token } = req.body;
 
   try {
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: "1047403268522-mcrb7eb9ila347tfvr6v5f9j55fua92k.apps.googleusercontent.com", // Your Google Client ID
-    });
+const ticket = await client.verifyIdToken({
+  idToken: token,
+  audience: process.env.GOOGLE_CLIENT_ID, // Use environment variable for Google Client ID
+});
 
     const payload = ticket.getPayload(); // Get user info from the token
     const email = payload.email;
