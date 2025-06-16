@@ -91,6 +91,7 @@ const NGODonations = () => {
             {donations.map((donation) => (
               <li key={donation._id} className="donation-card">
                 <h3 className="donor-email">{donation.donorEmail}</h3>
+                <p><strong>Contact:</strong> {donation.contact}</p>
                 <p><strong>People Fed:</strong> {donation.peopleFed}</p>
                 <p><strong>Location:</strong> {donation.location}</p>
                 <p>

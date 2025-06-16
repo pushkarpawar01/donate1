@@ -30,7 +30,7 @@ EN-4 is a MERN (MongoDB, Express.js, React, Node.js) full-stack web application 
    ```
 2. **Backend Setup**
    ```bash
-   cd TEST1  # Backend folder
+   cd backend  # Backend folder
    npm install
    npm start
    ```
@@ -53,16 +53,37 @@ EN-4 is a MERN (MongoDB, Express.js, React, Node.js) full-stack web application 
 
 ## API Endpoints
 
-- **User Authentication**
-  - `POST /api/auth/register` - Register a new user
-  - `POST /api/auth/login` - Login user
-- **Donor Actions**
-  - `POST /api/donations` - Create a food donation
-  - `GET /api/donations` - Get all donations
-- **NGO Actions**
-  - `GET /api/donations` - View available donations
-  - `PUT /api/donations/:id/accept` - Accept a donation
-  - `PUT /api/donations/:id/decline` - Decline a donation
+### User Authentication
+- `POST /auth/google` - Authenticate user via Google OAuth
+- `POST /login` - Login user
+
+### Admin Endpoints
+- `GET /admin/ngos` - Get list of unapproved NGOs
+- `POST /admin/approve-ngo/:ngoId` - Approve an NGO by ID
+
+### Donation Endpoints
+- `POST /donate` - Create a food donation (Donor role required)
+- `POST /update-donation` - Update donation details (NGO role required)
+- `POST /rate-donation` - Rate a donation (NGO role required)
+- `POST /food-quality-check` - Perform food quality check
+- `GET /ngo-donations` - Get pending donations for NGO (NGO role required)
+- `GET /ngo-acceptedDonations` - Get accepted donations for NGO (NGO role required)
+
+### Notification Endpoints
+- `GET /notifications/:email` - Get notifications for a user by email
+- `GET /donor-notifications` - Get notifications for donors (Donor role required)
+- `POST /mark-notification-read` - Mark a notification as read (Donor role required)
+- `DELETE /clear-all-notifications` - Clear all notifications (Donor role required)
+- `DELETE /delete-notification` - Delete a notification (Donor role required)
+
+### User Endpoints
+- `POST /validate-ngo-email` - Validate NGO email
+- `POST /signup` - User signup with image upload
+
+### Volunteer Endpoints
+- `GET /pending-volunteers/:ngoEmail` - Get pending volunteers for an NGO
+- `POST /approve-volunteer` - Approve a volunteer
+- `POST /volunteer-deliver-donation` - Volunteer delivers donation (Volunteer role required)
 
 ## Future Enhancements
 
