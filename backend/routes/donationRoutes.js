@@ -11,4 +11,6 @@ router.post("/food-quality-check", donationController.foodQualityCheck);
 router.get("/ngo-donations", authenticateRole(["NGO"]), donationController.getPendingDonations);
 router.get("/ngo-acceptedDonations", authenticateRole(["NGO"]), donationController.getAcceptedDonations);
 
+router.get("/my-donations", authenticateRole(["Donor"]), donationController.getMyDonations);
+
 export default router;

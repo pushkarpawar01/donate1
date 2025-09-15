@@ -175,6 +175,23 @@ const getAcceptedDonations = async (req, res) => {
   }
 };
 
+const getMyDonations = async (req, res) => {
+  try {
+    const donorEmail = req.user.email; // Get donor's email from token
+
+    // Fetch donations with status 'Accepted' for the logged-in donor
+    const donations = await Donation.find({
+      donorEmail,
+      status: "Accepted",
+    }).sort({ date: -1 }); // Sort by most recent donation
+
+    res.status(200).json(donations);
+  } catch (error) {
+    console.error("❌ Error fetching donations:", error);
+    res.status(500).json({ message: "Error fetching donations" });
+  }
+};
+
 export default {
   donate,
   updateDonation,
@@ -182,4 +199,5 @@ export default {
   foodQualityCheck,
   getPendingDonations,
   getAcceptedDonations,
+  getMyDonations,
 };
